@@ -100,6 +100,12 @@ def test_reward_variants():
     longer = shaped_reward("Sure! Here is the query:\n" + right + "\nIt counts singers.", SINGERS, "length")
     assert 0.98 < short < 1.0 and longer < short                     # shorter correct answer wins
     assert shaped_reward("x" * 5000, SINGERS, "length") == -0.2        # penalty is capped
+    # the loophole that collapsed training: under "length" an empty answer beats a wrong one
+    assert shaped_reward("", SINGERS, "length") > shaped_reward(wrong, SINGERS, "length")
+    # length_correct closes it: giving up = wrong = 0, shorter correct answers still win
+    assert shaped_reward("", SINGERS, "length_correct") == shaped_reward(wrong, SINGERS, "length_correct") == 0.0
+    long_right = "Sure! Here is the query:\n" + right + "\nIt counts singers."
+    assert 1.0 > shaped_reward(right, SINGERS, "length_correct") > shaped_reward(long_right, SINGERS, "length_correct") > 0.9
     try:
         shaped_reward(right, SINGERS, "nope")
         assert False, "unknown variant must raise"

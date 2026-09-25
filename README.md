@@ -92,7 +92,7 @@ reward from `sql_env.py`. LoRA on all linear layers, no reference model by defau
 
 ```bash
 .venv/bin/python train_local.py                    # 200 train questions x 8 answers, 300 steps, ~70 min
-.venv/bin/python train_local.py --reward length    # reward variants: binary | format | length
+.venv/bin/python train_local.py --reward format    # reward variants: binary | format | length | length_correct
 .venv/bin/python evaluate.py --split val --adapter checkpoints/grpo_local_binary --tag grpo_local_binary
 ```
 
@@ -113,9 +113,26 @@ Run 4 vs. base on validation: 24 questions only run 4 solves, 7 only the base mo
 Outputs: `checkpoints/<run>/` (LoRA adapter), `results/<run>.json` (per-step log incl. one sample
 answer per step for spot checks), `results/<run>_reward.png`.
 
-Reward variants (`sql_env.shaped_reward`, cf. the grid-world reward-engineering lecture):
-`binary` 1/0; `format` 0.1 for a wrong but executable ` ```sql ` block; `length` binary minus
-0.0002 per character (max 0.2), so shorter correct answers win.
+Reward variants (`sql_env.shaped_reward`, cf. the grid-world reward-engineering lecture), each
+trained with the run-4 setting on the same 200 questions in the same order:
+
+| Variant | Reward | Validation | vs. base (McNemar z) | Tokens | ` ```sql ` block |
+|---|---|---|---|---|---|
+| base model | – | 49.4% | – | 32.8 | 100% |
+| `binary` | 1 if correct, else 0 | 56.7% | +3.05 | 29.9 | 100% |
+| `format` | + 0.1 for a wrong but executable ` ```sql ` block | 56.3% | +2.83 | 29.5 | 100% |
+| `length_correct` | correct: 1 - 0.0002 per char (max 0.2); else 0 | 55.8% | +2.69 | 20.5 | 0% |
+| `length` | binary - 0.0002 per char (max 0.2) on every answer | **0.0%** | collapsed | 1.0 | 0% |
+
+The three working variants do not differ significantly from each other (|z| < 0.5).
+`length` is reward-hacked: an empty answer (0) beats every wrong answer (< 0), group-std
+normalization turns those tiny differences into full advantages, and from step 130 the model
+answered everything with an empty string. `length_correct` closes that loophole but saves
+characters by dropping the ` ```sql ` fences (still scored correct via the raw-SQL fallback).
+`format` lowers the share of groups without learning signal from 68% to 45% at the same end result.
+Figure: `results/reward_variants_comparison.png`. The collapsed run crashed at step ~210 on a
+logging bug that is fixed now; its 10-step curve and step-200 evaluation are in
+`results/grpo_local_length_lr1e-6_g8_kl_collapsed.json`.
 
 Known issues in mlx-lm-lora 3.1.3 and how `train_local.py` handles them:
 

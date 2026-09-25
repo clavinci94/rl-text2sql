@@ -1,6 +1,6 @@
 # Projektbericht: Ein kleines, lokales Sprachmodell lernt Datenbankabfragen durch Reinforcement Learning
 
-*Modul Reinforcement Learning, FHNW (Prof. Dr. Manuel Renold, CLS-Lab). Stand: 25. September 2026, Phasen 0 bis 4.*
+*Modul Reinforcement Learning, FHNW (Prof. Dr. Manuel Renold, CLS-Lab). Stand: 25. September 2026, Phasen 0 bis 5 und Vergleich der Reward-Varianten.*
 
 ## 1. Kurzfassung
 
@@ -200,20 +200,42 @@ Für das kleine Modell ist eine Cloud-GPU damit nicht zwingend. Für das grösse
 
 Die Vorlesung zeigt an der Grid World, dass die Form des Rewards das gelernte Verhalten bestimmt:
 Ein Reward nur am Ziel führt nicht zum kürzesten Weg, eine kleine Strafe pro Zeitschritt schon.
-Das Projekt überträgt das auf SQL und vergleicht drei Varianten:
+Das Projekt überträgt das auf SQL und vergleicht vier Varianten, alle mit derselben Einstellung wie Anlauf 4, denselben 200 Trainingsfragen in derselben Reihenfolge und 300 Schritten:
 
 | Variante | Reward | Gegenstück in der Grid World |
 |---|---|---|
 | binär | 1 bei korrektem Resultat, sonst 0 | +10 am Ziel |
 | Format-Bonus | zusätzlich 0,1 für eine saubere, ausführbare Abfrage, die falsch ist | Reward Shaping |
-| Längenstrafe | kleiner Abzug pro Zeichen, höchstens 0,2 | −1 pro Zeitschritt |
+| Längenstrafe auf alle Antworten | kleiner Abzug pro Zeichen, höchstens 0,2, auf jede Antwort | −1 pro Zeitschritt |
+| Längenstrafe nur auf korrekte Antworten | derselbe Abzug, aber nur, wenn das Resultat stimmt | −1 pro Zeitschritt, Episode endet nur am Ziel |
 
-Die Längenstrafe zielt auf einen beobachteten Fehler: 8 Antworten des Basismodells geraten in eine Endlosschleife verschachtelter Abfragen.
-Unter den korrekten Antworten bevorzugt sie zudem die kürzeste, das Gegenstück zum kürzesten Weg.
+Die Längenstrafe zielte auf einen beobachteten Fehler: 8 Antworten des Basismodells geraten in eine Endlosschleife verschachtelter Abfragen.
+Unter den korrekten Antworten sollte sie zudem die kürzeste bevorzugen, das Gegenstück zum kürzesten Weg.
 
-Eine Schwierigkeit des binären Rewards zeigte sich deutlich: Sind alle Antworten einer Gruppe richtig oder alle falsch, lernt GRPO aus dieser Frage nichts.
-Mit 4 Antworten pro Frage betraf das 77 bis 90 % der Gruppen, mit 8 Antworten im Mittel rund 70 %.
-Das ist die SQL-Version der Grid-World-Lektion: Ein spärlicher Reward liefert wenig Lernsignal.
+### Ergebnisse
+
+| Variante | Validierung, 231 Fragen | besser als Basismodell? | Antwortlänge in Tokens | Antworten im ```` ```sql ````-Block | Gruppen ohne Lernsignal |
+|---|---|---|---|---|---|
+| Basismodell | 49,4 % | – | 32,8 | 100 % | – |
+| binär | **56,7 %** | ja, z = 3,05 | 29,9 | 100 % | 68 % |
+| Format-Bonus | **56,3 %** | ja, z = 2,83 | 29,5 | 100 % | 45 % |
+| Längenstrafe nur auf korrekte | **55,8 %** | ja, z = 2,69 | 20,5 | 0 % | 60 % |
+| Längenstrafe auf alle | **0,0 %** | nein, kollabiert | 1,0 | 0 % | – |
+
+Die z-Werte stammen aus dem McNemar-Test gegen das Basismodell auf denselben Fragen, ab |z| ≈ 2 gilt ein Unterschied als gesichert.
+Die drei funktionierenden Varianten unterscheiden sich untereinander nicht signifikant, |z| < 0,5.
+Im Training steigt der Anteil korrekter Antworten bei allen dreien um rund 6,5 Prozentpunkte pro 100 Schritte, gemessen jeweils an denselben Fragen, t > 8.
+
+![Vergleich der Reward-Varianten](results/reward_variants_comparison.png)
+
+### Was die Varianten zeigen
+
+- **Reward Shaping erhöht das Lernsignal, nicht das Ergebnis.** Der Format-Bonus unterscheidet auch zwischen falschen Antworten. Dadurch haben deutlich mehr Gruppen unterschiedliche Rewards: Nur 45 statt 68 % der Gruppen liefern kein Lernsignal. Das Endergebnis ist nach 300 Schritten trotzdem gleich wie beim binären Reward.
+- **Die naive Längenstrafe ist ein Lehrbuchfall von Reward Hacking.** Eine leere Antwort bekommt den Reward 0, jede falsche Antwort wegen der Längenstrafe etwas weniger. Wo alle Antworten einer Gruppe falsch sind, gewinnt also die kürzeste. GRPO teilt die Unterschiede innerhalb der Gruppe durch deren Standardabweichung und macht so aus winzigen Unterschieden ein volles Lernsignal. Ab Schritt 130 gab das Modell auf jede Frage eine leere Antwort. Der Unterschied zur Grid World erklärt den Kollaps: Dort endet eine Episode nur am Ziel, der Agent kann der Strafe pro Schritt nicht durch Aufgeben entkommen. Ein Sprachmodell kann seine Antwort jederzeit beenden.
+- **Die korrigierte Längenstrafe funktioniert, optimiert aber anders als gedacht.** Sie wirkt nur auf korrekte Antworten. Aufgeben bringt deshalb dieselbe 0 wie eine falsche Antwort. Das Modell bleibt so gut wie die anderen Varianten und antwortet um ein Drittel kürzer. Die Kürze erreicht es aber vor allem, indem es den verlangten ```` ```sql ````-Block weglässt, denn jedes Zeichen kostet. Die Antworten zählen nur deshalb als korrekt, weil die Auswertung auch rohes SQL erkennt. Das Modell optimiert genau das, was gemessen wird, und nicht das, was gemeint war.
+
+**Folgerung für den Cloud-Lauf:** Der binäre Reward ist die robuste Wahl. Er ist einfach, erhält das Format und ist nicht schlechter als die Alternativen.
+Wer Kürze belohnen will, muss das Format zusätzlich absichern, zum Beispiel mit einer Strafe für fehlende ```` ```sql ````-Blöcke.
 
 ## 9. Ethik und Risiken
 
@@ -221,7 +243,7 @@ Das ist die SQL-Version der Grid-World-Lektion: Ein spärlicher Reward liefert w
 - **Übermässiges Vertrauen.** Auch nach dem Training wird das Modell Fehler machen. Nutzerinnen und Nutzer müssen das wissen, die Trefferquote gehört offen kommuniziert.
 - **Datenschutz und Zugriffsrechte.** Lokaler Betrieb verhindert den Abfluss an Dritte. Die Resultate können aber Personendaten enthalten. Das System muss deshalb mit den bestehenden Zugriffsrechten der Person arbeiten, nie mit Administratorrechten.
 - **Keine Veränderung der Daten.** Das System darf nur lesen. Das ist technisch doppelt abgesichert und getestet.
-- **Reward Hacking.** Siehe Abschnitt 7. Stichproben der Modellantworten während des Trainings bleiben Pflicht.
+- **Reward Hacking.** Siehe Abschnitte 7 und 8: leere Datenbanken im Datensatz, ein Modell, das auf eine Längenstrafe mit leeren Antworten reagiert, und eines, das das verlangte Format weglässt. Stichproben der Modellantworten während des Trainings bleiben Pflicht.
 - **Stille Fehler im Training.** Anlauf 1 zeigt: Ein RL-Training kann ohne Fehlermeldung durchlaufen und das Modell trotzdem verschlechtern. Ein Unternehmen darf ein nachtrainiertes Modell deshalb nie ohne unabhängige Messung auf zurückgehaltenen Daten einsetzen.
 
 ## 10. Grenzen
@@ -246,6 +268,7 @@ Das ist die SQL-Version der Grid-World-Lektion: Ein spärlicher Reward liefert w
 | 3 | Messung des Basismodells | erledigt, 45,3 % |
 | 4 | RL-Machbarkeitstest lokal | erledigt, Validierung 49,4 % → 56,7 % |
 | 5 | Trainingsskript für die Cloud-GPU | erledigt, auf dem Laptop ohne Training geprüft |
+| – | Vergleich der Reward-Varianten, lokal | erledigt, siehe Abschnitt 8 |
 | 6 | Finaler Lauf, Vergleich mit API-Modell, Präsentation | offen |
 
 **Offener Punkt:** Laut Vorlesung ist der Leistungsnachweis ein Gruppenprojekt mit 2 bis 4 Personen. Die Gruppenzusammensetzung ist noch zu klären.

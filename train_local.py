@@ -33,21 +33,23 @@ class SQLReward:
     """mlx-lm-lora reward function around sql_env.RewardLog.
 
     mlx-lm-lora 3.1.3 calls the reward function twice per step with identical inputs
-    (rewards, then metrics), so the repeat call is served from cache: no second SQL
-    execution, no second log row."""
+    (rewards, then metrics). Only that immediate second call is served from cache: no
+    second SQL execution, no second log row. (An earlier version cached by content alone
+    and skipped a step when a collapsed model repeated the same answers to the same batch.)"""
 
     def __init__(self, variant, group_size):
         self.log = RewardLog(variant, group_size)
         self.steps = self.log.steps
-        self._last = (None, None)
+        self._pending = None  # (key, rewards) of a first call still waiting for its repeat
         self.__name__ = f"sql_{variant}"  # the trainer names its metrics after this
 
     def __call__(self, prompts, completions, answer, types=None):
         key = (tuple(completions), tuple(answer))
-        if key == self._last[0]:
-            return self._last[1]
+        if self._pending is not None and self._pending[0] == key:
+            rewards, self._pending = self._pending[1], None
+            return rewards
         rewards, _ = self.log.grade(completions, [json.loads(a) for a in answer])
-        self._last = (key, rewards)
+        self._pending = (key, rewards)
         return rewards
 
 

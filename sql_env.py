@@ -202,24 +202,29 @@ def reward(completion, example, format_bonus=0.0):
 
 
 # Reward engineering variants (cf. grid-world lecture: goal reward vs. -1 per timestep).
-REWARD_VARIANTS = ("binary", "format", "length")
+REWARD_VARIANTS = ("binary", "format", "length", "length_correct")
 LENGTH_PENALTY_PER_CHAR = 0.0002  # 1,000 characters (~250 tokens) cost the maximum
 LENGTH_PENALTY_MAX = 0.2
 
 
 def shaped_reward(completion, example, variant="binary", result=None):
     """binary: 1/0. format: 0.1 for a wrong but executable ```sql block.
-    length: binary minus a small per-character cost (max 0.2), so shorter correct
-    answers win and runaway generations are discouraged.
+    length: binary minus a small per-character cost (max 0.2) on every answer.
+      Reward-hacked in practice: an empty answer (0) beats every wrong answer (< 0), and the
+      model collapsed to empty output (see BERICHT.md). Kept only as a documented failure.
+    length_correct: the per-character cost only on correct answers, so giving up earns the
+      same 0 as a wrong answer, and among correct answers the shorter one wins.
     Pass `result` (from score) to avoid executing the query twice."""
     if variant not in REWARD_VARIANTS:
         raise ValueError(f"unknown reward variant {variant!r}, choose from {REWARD_VARIANTS}")
     result = result or score(completion, example)
-    r = 1.0 if result["status"] == "correct" else 0.0
+    correct = result["status"] == "correct"
+    r = 1.0 if correct else 0.0
+    penalty = min(LENGTH_PENALTY_MAX, LENGTH_PENALTY_PER_CHAR * len(completion))
     if variant == "format" and result["status"] == "wrong_result" and result["formatted"]:
         r = 0.1
-    elif variant == "length":
-        r -= min(LENGTH_PENALTY_MAX, LENGTH_PENALTY_PER_CHAR * len(completion))
+    elif variant == "length" or (variant == "length_correct" and correct):
+        r -= penalty
     return r
 
 
