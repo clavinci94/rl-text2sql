@@ -1,0 +1,195 @@
+{
+  "train": {
+    "n": 8659,
+    "gold_errors": [
+      {
+        "db_id": "assets_maintenance",
+        "question": "What is the description of the type of the company who concluded its contracts most recently?",
+        "query": "SELECT T1.company_name FROM Third_Party_Companies AS T1 JOIN Maintenance_Contracts AS T2 ON T1.company_id  =  T2.maintenance_contract_company_id JOIN Ref_Company_Types AS T3 ON T1.company_type_code  =  T3.company_type_code ORDER BY T2.contract_end_date DESC LIMIT 1",
+        "error": "OperationalError: no such table: Ref_Company_Types"
+      },
+      {
+        "db_id": "document_management",
+        "question": "Find the list of documents that are both in the most three popular type and have the most three popular structure.",
+        "query": "SELECT document_name FROM documents GROUP BY document_type_code ORDER BY count(*) DESC LIMIT 3 INTERSECT SELECT document_name FROM documents GROUP BY document_structure_code ORDER BY count(*) DESC LIMIT 3",
+        "error": "OperationalError: ORDER BY clause should come after INTERSECT not before"
+      },
+      {
+        "db_id": "document_management",
+        "question": "What are the names of documents that have both one of the three most common types and one of three most common structures?",
+        "query": "SELECT document_name FROM documents GROUP BY document_type_code ORDER BY count(*) DESC LIMIT 3 INTERSECT SELECT document_name FROM documents GROUP BY document_structure_code ORDER BY count(*) DESC LIMIT 3",
+        "error": "OperationalError: ORDER BY clause should come after INTERSECT not before"
+      }
+    ],
+    "gold_empty_result": 1616,
+    "gold_empty_examples": [
+      {
+        "db_id": "farm",
+        "question": "List the official names of cities that have not held any competition.",
+        "query": "SELECT Official_Name FROM city WHERE City_ID NOT IN (SELECT Host_city_ID FROM farm_competition)"
+      },
+      {
+        "db_id": "farm",
+        "question": "What are the official names of cities that have not hosted a farm competition?",
+        "query": "SELECT Official_Name FROM city WHERE City_ID NOT IN (SELECT Host_city_ID FROM farm_competition)"
+      },
+      {
+        "db_id": "twitter_1",
+        "question": "Find the id of users who are followed by Mary and Susan.",
+        "query": "SELECT T2.f1 FROM user_profiles AS T1 JOIN follows AS T2 ON T1.uid  =  T2.f2 WHERE T1.name  =  \"Mary\" INTERSECT SELECT T2.f1 FROM user_profiles AS T1 JOIN follows AS T2 ON T1.uid  =  T2.f2 WHERE T1.name  =  \"Susan\""
+      },
+      {
+        "db_id": "store_1",
+        "question": "List the name of all tracks in the playlists of Movies.",
+        "query": "SELECT T1.name FROM tracks AS T1 JOIN playlist_tracks AS T2 ON T1.id = T2.track_id JOIN playlists AS T3 ON T3.id = T2.playlist_id WHERE T3.name = \"Movies\";"
+      },
+      {
+        "db_id": "store_1",
+        "question": "What are the names of all tracks that are on playlists titled Movies?",
+        "query": "SELECT T1.name FROM tracks AS T1 JOIN playlist_tracks AS T2 ON T1.id = T2.track_id JOIN playlists AS T3 ON T3.id = T2.playlist_id WHERE T3.name = \"Movies\";"
+      }
+    ],
+    "slowest_gold_s": 0.521,
+    "slowest_gold_query": "SELECT T1.name_first , T1.name_last FROM player AS T1 JOIN player_award AS T2 WHERE T2.year  =  1960 INTERSECT SELECT T1.name_first , T1.name_last FROM player AS T1 JOIN player_award AS T2 WHERE T2.year  =  1961",
+    "probe_hit_rate": {
+      "SELECT count(*) FROM <best table>": 0.0734,
+      "SELECT 1 WHERE 0 (empty result)": 0.1866,
+      "SELECT 1": 0.0107,
+      "SELECT * FROM <best table>": 0.1727
+    },
+    "most_common_gold_results": [
+      {
+        "result": "['(0,)']",
+        "count": 335,
+        "share": 0.0387
+      },
+      {
+        "result": "['(2,)']",
+        "count": 104,
+        "share": 0.012
+      },
+      {
+        "result": "['(1,)']",
+        "count": 91,
+        "share": 0.0105
+      },
+      {
+        "result": "['(5,)']",
+        "count": 84,
+        "share": 0.0097
+      },
+      {
+        "result": "['(3,)']",
+        "count": 81,
+        "share": 0.0094
+      }
+    ]
+  },
+  "rl_train": {
+    "n": 6717,
+    "gold_errors": [],
+    "gold_empty_result": 0,
+    "gold_empty_examples": [],
+    "slowest_gold_s": 0.0,
+    "slowest_gold_query": "SELECT product FROM product WHERE product LIKE \"%Scanner%\"",
+    "probe_hit_rate": {
+      "SELECT count(*) FROM <best table>": 0.0515,
+      "SELECT 1": 0.0138,
+      "SELECT * FROM <best table>": 0.0049
+    },
+    "most_common_gold_results": [
+      {
+        "result": "['(2,)']",
+        "count": 104,
+        "share": 0.0155
+      },
+      {
+        "result": "['(1,)']",
+        "count": 91,
+        "share": 0.0135
+      },
+      {
+        "result": "['(5,)']",
+        "count": 84,
+        "share": 0.0125
+      },
+      {
+        "result": "['(3,)']",
+        "count": 81,
+        "share": 0.0121
+      },
+      {
+        "result": "['(15,)']",
+        "count": 61,
+        "share": 0.0091
+      }
+    ]
+  },
+  "dev": {
+    "n": 1034,
+    "gold_errors": [],
+    "gold_empty_result": 49,
+    "gold_empty_examples": [
+      {
+        "db_id": "concert_singer",
+        "question": "Show location and name for all stadiums with a capacity between 5000 and 10000.",
+        "query": "SELECT LOCATION ,  name FROM stadium WHERE capacity BETWEEN 5000 AND 10000"
+      },
+      {
+        "db_id": "concert_singer",
+        "question": "What are the locations and names of all stations with capacity between 5000 and 10000?",
+        "query": "SELECT LOCATION ,  name FROM stadium WHERE capacity BETWEEN 5000 AND 10000"
+      },
+      {
+        "db_id": "pets_1",
+        "question": "Find the first name of students who have both cat and dog pets .",
+        "query": "select t1.fname from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid join pets as t3 on t3.petid  =  t2.petid where t3.pettype  =  'cat' intersect select t1.fname from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid join pets as t3 on t3.petid  =  t2.petid where t3.pettype  =  'dog'"
+      },
+      {
+        "db_id": "pets_1",
+        "question": "What are the students' first names who have both cats and dogs as pets?",
+        "query": "SELECT T1.Fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat' INTERSECT SELECT T1.Fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'dog'"
+      },
+      {
+        "db_id": "flight_2",
+        "question": "List the airport code and name in the city of Anthony.",
+        "query": "SELECT AirportCode ,  AirportName FROM AIRPORTS WHERE city  =  \"Anthony\""
+      }
+    ],
+    "slowest_gold_s": 0.247,
+    "slowest_gold_query": "SELECT sum(ranking_points) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name",
+    "probe_hit_rate": {
+      "SELECT count(*) FROM <best table>": 0.0532,
+      "SELECT 1 WHERE 0 (empty result)": 0.0474,
+      "SELECT 1": 0.0106,
+      "SELECT * FROM <best table>": 0.0039
+    },
+    "most_common_gold_results": [
+      {
+        "result": "['(0,)']",
+        "count": 24,
+        "share": 0.0232
+      },
+      {
+        "result": "['(3,)']",
+        "count": 21,
+        "share": 0.0203
+      },
+      {
+        "result": "['(2,)']",
+        "count": 16,
+        "share": 0.0155
+      },
+      {
+        "result": "['(12,)']",
+        "count": 12,
+        "share": 0.0116
+      },
+      {
+        "result": "['(1,)']",
+        "count": 11,
+        "share": 0.0106
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+# Python
+.venv/
+.venv-cloud/
+__pycache__/
+*.pyc
+
+# Data / models / checkpoints (large, fetched by scripts)
+data/
+models/
+checkpoints/
+*.db
+*.sqlite
+
+# Results can be large (plots ok, raw per-example logs maybe not) - keep dir but ignore big artifacts
+results/*.jsonl
+
+# Course material (large, copyrighted; GitHub rejects files > 100 MB)
+*.pdf
+
+# Misc
+.DS_Store
+.env
+*.log
+wandb/

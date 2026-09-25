@@ -1,0 +1,387 @@
+train: 8659 examples, dev: 1034 examples
+
+================================================================================
+db_id: department_management   gold: SELECT count(*) FROM head WHERE age  >  56
+--------------------------------------------------------------------------------
+[system]
+You are a SQLite expert. Given a database schema and a question, write one SQLite query that answers the question. Output only the query inside a ```sql code block, with no explanation.
+
+[user]
+Database schema:
+CREATE TABLE "department" (
+"Department_ID" int,
+"Name" text,
+"Creation" text,
+"Ranking" int,
+"Budget_in_Billions" real,
+"Num_Employees" real,
+PRIMARY KEY ("Department_ID")
+);
+
+CREATE TABLE "head" (
+"head_ID" int,
+"name" text,
+"born_state" text,
+"age" real,
+PRIMARY KEY ("head_ID")
+);
+
+CREATE TABLE "management" (
+"department_ID" int,
+"head_ID" int,
+"temporary_acting" text,
+PRIMARY KEY ("Department_ID","head_ID"),
+FOREIGN KEY ("Department_ID") REFERENCES `department`("Department_ID"),
+FOREIGN KEY ("head_ID") REFERENCES `head`("head_ID")
+);
+
+Question: How many heads of the departments are older than 56 ?
+
+================================================================================
+db_id: sakila_1   gold: SELECT amount FROM payment ORDER BY amount DESC LIMIT 1
+--------------------------------------------------------------------------------
+[system]
+You are a SQLite expert. Given a database schema and a question, write one SQLite query that answers the question. Output only the query inside a ```sql code block, with no explanation.
+
+[user]
+Database schema:
+CREATE TABLE actor (
+actor_id SMALLINT UNSIGNED NOT NULL,
+first_name VARCHAR(45) NOT NULL,
+last_name VARCHAR(45) NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (actor_id)
+);
+
+CREATE TABLE address (
+address_id SMALLINT UNSIGNED NOT NULL,
+address VARCHAR(50) NOT NULL,
+address2 VARCHAR(50) DEFAULT NULL,
+district VARCHAR(20) NOT NULL,
+city_id SMALLINT UNSIGNED NOT NULL,
+postal_code VARCHAR(10) DEFAULT NULL,
+phone VARCHAR(20) NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (address_id),
+FOREIGN KEY (city_id) REFERENCES city (city_id)
+);
+
+CREATE TABLE category (
+category_id TINYINT UNSIGNED NOT NULL,
+name VARCHAR(25) NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (category_id)
+);
+
+CREATE TABLE city (
+city_id SMALLINT UNSIGNED NOT NULL,
+city VARCHAR(50) NOT NULL,
+country_id SMALLINT UNSIGNED NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (city_id),
+FOREIGN KEY (country_id) REFERENCES country (country_id)
+);
+
+CREATE TABLE country (
+country_id SMALLINT UNSIGNED NOT NULL,
+country VARCHAR(50) NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (country_id)
+);
+
+CREATE TABLE customer (
+customer_id SMALLINT UNSIGNED NOT NULL,
+store_id TINYINT UNSIGNED NOT NULL,
+first_name VARCHAR(45) NOT NULL,
+last_name VARCHAR(45) NOT NULL,
+email VARCHAR(50) DEFAULT NULL,
+address_id SMALLINT UNSIGNED NOT NULL,
+active BOOLEAN NOT NULL DEFAULT TRUE,
+create_date DATETIME NOT NULL,
+last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (customer_id),
+FOREIGN KEY (address_id) REFERENCES address (address_id),
+FOREIGN KEY (store_id) REFERENCES store (store_id)
+);
+
+CREATE TABLE film (
+film_id SMALLINT UNSIGNED NOT NULL,
+title VARCHAR(255) NOT NULL,
+description TEXT DEFAULT NULL,
+release_year YEAR DEFAULT NULL,
+language_id TINYINT UNSIGNED NOT NULL,
+original_language_id TINYINT UNSIGNED DEFAULT NULL,
+rental_duration TINYINT UNSIGNED NOT NULL DEFAULT 3,
+rental_rate DECIMAL(4,2) NOT NULL DEFAULT 4.99,
+length SMALLINT UNSIGNED DEFAULT NULL,
+replacement_cost DECIMAL(5,2) NOT NULL DEFAULT 19.99,
+rating DEFAULT 'G',
+special_features DEFAULT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (film_id),
+FOREIGN KEY (language_id) REFERENCES language (language_id),
+FOREIGN KEY (original_language_id) REFERENCES language (language_id)
+);
+
+CREATE TABLE film_actor (
+actor_id SMALLINT UNSIGNED NOT NULL,
+film_id SMALLINT UNSIGNED NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (actor_id,film_id),
+FOREIGN KEY (actor_id) REFERENCES actor (actor_id),
+FOREIGN KEY (film_id) REFERENCES film (film_id)
+);
+
+CREATE TABLE film_category (
+film_id SMALLINT UNSIGNED NOT NULL,
+category_id TINYINT UNSIGNED NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (film_id, category_id),
+FOREIGN KEY (film_id) REFERENCES film (film_id),
+FOREIGN KEY (category_id) REFERENCES category (category_id)
+);
+
+CREATE TABLE film_text (
+film_id SMALLINT NOT NULL,
+title VARCHAR(255) NOT NULL,
+description TEXT,
+PRIMARY KEY  (film_id)
+);
+
+CREATE TABLE inventory (
+inventory_id MEDIUMINT UNSIGNED NOT NULL,
+film_id SMALLINT UNSIGNED NOT NULL,
+store_id TINYINT UNSIGNED NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (inventory_id),
+FOREIGN KEY (store_id) REFERENCES store (store_id),
+FOREIGN KEY (film_id) REFERENCES film (film_id)
+);
+
+CREATE TABLE language (
+language_id TINYINT UNSIGNED NOT NULL,
+name CHAR(20) NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (language_id)
+);
+
+CREATE TABLE payment (
+payment_id SMALLINT UNSIGNED NOT NULL,
+customer_id SMALLINT UNSIGNED NOT NULL,
+staff_id TINYINT UNSIGNED NOT NULL,
+rental_id INT DEFAULT NULL,
+amount DECIMAL(5,2) NOT NULL,
+payment_date DATETIME NOT NULL,
+last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (payment_id),
+FOREIGN KEY (rental_id) REFERENCES rental (rental_id),
+FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
+FOREIGN KEY (staff_id) REFERENCES staff (staff_id)
+);
+
+CREATE TABLE rental (
+rental_id INT NOT NULL,
+rental_date DATETIME NOT NULL,
+inventory_id MEDIUMINT UNSIGNED NOT NULL,
+customer_id SMALLINT UNSIGNED NOT NULL,
+return_date DATETIME DEFAULT NULL,
+staff_id TINYINT UNSIGNED NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (rental_id),
+FOREIGN KEY (staff_id) REFERENCES staff (staff_id),
+FOREIGN KEY (inventory_id) REFERENCES inventory (inventory_id),
+FOREIGN KEY (customer_id) REFERENCES customer (customer_id)
+);
+
+CREATE TABLE staff (
+staff_id TINYINT UNSIGNED NOT NULL,
+first_name VARCHAR(45) NOT NULL,
+last_name VARCHAR(45) NOT NULL,
+address_id SMALLINT UNSIGNED NOT NULL,
+picture BLOB DEFAULT NULL,
+email VARCHAR(50) DEFAULT NULL,
+store_id TINYINT UNSIGNED NOT NULL,
+active BOOLEAN NOT NULL DEFAULT TRUE,
+username VARCHAR(16) NOT NULL,
+password VARCHAR(40) DEFAULT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (staff_id),
+FOREIGN KEY (address_id) REFERENCES address (address_id)
+);
+
+CREATE TABLE store (
+store_id TINYINT UNSIGNED NOT NULL,
+manager_staff_id TINYINT UNSIGNED NOT NULL,
+address_id SMALLINT UNSIGNED NOT NULL,
+last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY  (store_id),
+FOREIGN KEY (manager_staff_id) REFERENCES staff (staff_id),
+FOREIGN KEY (address_id) REFERENCES address (address_id)
+);
+
+Question: What is the largest payment amount?
+
+================================================================================
+db_id: geo   gold: SELECT COUNT ( river_name ) FROM river WHERE LENGTH  >  750 AND traverse  =  "ohio";
+--------------------------------------------------------------------------------
+[system]
+You are a SQLite expert. Given a database schema and a question, write one SQLite query that answers the question. Output only the query inside a ```sql code block, with no explanation.
+
+[user]
+Database schema:
+CREATE TABLE `state` (
+`state_name` text
+,  `population` integer DEFAULT NULL
+,  `area` double DEFAULT NULL
+,  `country_name` varchar(3) NOT NULL DEFAULT ''
+,  `capital` text
+,  `density` double DEFAULT NULL
+,  PRIMARY KEY (`state_name`)
+);
+
+CREATE TABLE `city` (
+`city_name` text
+,  `population` integer DEFAULT NULL
+,  `country_name` varchar(3) NOT NULL DEFAULT ''
+,  `state_name` text
+,  PRIMARY KEY (`city_name`,`state_name`)
+,  FOREIGN KEY(`state_name`) REFERENCES `state`(`state_name`)
+);
+
+CREATE TABLE `border_info` (
+`state_name` text
+,  `border` text
+,  PRIMARY KEY (`border`,`state_name`)
+,  FOREIGN KEY(`state_name`) REFERENCES `state`(`state_name`)
+,  FOREIGN KEY(`border`) REFERENCES `state`(`state_name`)
+);
+
+CREATE TABLE `highlow` (
+`state_name` text
+,  `highest_elevation` text
+,  `lowest_point` text
+,  `highest_point` text
+,  `lowest_elevation` text
+,  PRIMARY KEY (`state_name`)
+,  FOREIGN KEY(`state_name`) REFERENCES `state`(`state_name`)
+);
+
+CREATE TABLE `lake` (
+`lake_name` text
+,  `area` double DEFAULT NULL
+,  `country_name` varchar(3) NOT NULL DEFAULT ''
+,  `state_name` text
+);
+
+CREATE TABLE `mountain` (
+`mountain_name` text
+,  `mountain_altitude` integer DEFAULT NULL
+,  `country_name` varchar(3) NOT NULL DEFAULT ''
+,  `state_name` text
+,  PRIMARY KEY (`mountain_name`, `state_name`)
+,  FOREIGN KEY(`state_name`) REFERENCES `state`(`state_name`)
+);
+
+CREATE TABLE `river` (
+`river_name` text
+,  `length` integer DEFAULT NULL
+,  `country_name` varchar(3) NOT NULL DEFAULT ''
+,  `traverse` text
+,  PRIMARY KEY (`river_name`)
+,  FOREIGN KEY(`traverse`) REFERENCES `state`(`state_name`)
+);
+
+Question: how many major rivers cross ohio
+
+================================================================================
+db_id: concert_singer   gold: SELECT count(*) FROM singer
+--------------------------------------------------------------------------------
+[system]
+You are a SQLite expert. Given a database schema and a question, write one SQLite query that answers the question. Output only the query inside a ```sql code block, with no explanation.
+
+[user]
+Database schema:
+CREATE TABLE "stadium" (
+"Stadium_ID" int,
+"Location" text,
+"Name" text,
+"Capacity" int,
+"Highest" int,
+"Lowest" int,
+"Average" int,
+PRIMARY KEY ("Stadium_ID")
+);
+
+CREATE TABLE "singer" (
+"Singer_ID" int,
+"Name" text,
+"Country" text,
+"Song_Name" text,
+"Song_release_year" text,
+"Age" int,
+"Is_male" bool,
+PRIMARY KEY ("Singer_ID")
+);
+
+CREATE TABLE "concert" (
+"concert_ID" int,
+"concert_Name" text,
+"Theme" text,
+"Stadium_ID" text,
+"Year" text,
+PRIMARY KEY ("concert_ID"),
+FOREIGN KEY ("Stadium_ID") REFERENCES "stadium"("Stadium_ID")
+);
+
+CREATE TABLE "singer_in_concert" (
+"concert_ID" int,
+"Singer_ID" text,
+PRIMARY KEY ("concert_ID","Singer_ID"),
+FOREIGN KEY ("concert_ID") REFERENCES "concert"("concert_ID"),
+FOREIGN KEY ("Singer_ID") REFERENCES "singer"("Singer_ID")
+);
+
+Question: How many singers do we have?
+
+================================================================================
+db_id: battle_death   gold: SELECT T2.id ,  T2.name FROM death AS T1 JOIN ship AS t2 ON T1.caused_by_ship_id  =  T2.id GROUP BY T2.id ORDER BY count(*) DESC LIMIT 1
+--------------------------------------------------------------------------------
+[system]
+You are a SQLite expert. Given a database schema and a question, write one SQLite query that answers the question. Output only the query inside a ```sql code block, with no explanation.
+
+[user]
+Database schema:
+CREATE TABLE "battle" (
+"id" int,
+"name" text,
+"date" text,
+"bulgarian_commander" text,
+"latin_commander" text,
+"result" text,
+primary key("id")
+);
+
+CREATE TABLE "ship" (
+"lost_in_battle" int,
+"id" int,
+"name" text,
+"tonnage" text,
+"ship_type" text,
+"location" text,
+"disposition_of_ship" text,
+primary key("id"),
+foreign key (`lost_in_battle`) references `battle`("id")
+);
+
+CREATE TABLE "death" (
+"caused_by_ship_id" int,
+"id" int,
+"note" text,
+"killed" int,
+"injured" int,
+primary key("id"),
+foreign key ("caused_by_ship_id") references `ship`("id")
+);
+
+Question: What is the ship id and name that caused most total injuries?
+

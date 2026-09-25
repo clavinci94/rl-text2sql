@@ -1,0 +1,12 @@
+# Cloud GPU (Linux + CUDA) for train_cloud.py. Versions pinned to the ones the script was checked against.
+# The MLX packages in requirements.txt are not needed there.
+torch==2.14.0
+transformers==5.17.0
+trl==1.13.0
+peft==0.21.0
+accelerate==1.15.0
+datasets==5.0.1
+tqdm
+# optional:
+# wandb        # --wandb
+# vllm         # --use-vllm; install the vLLM version that matches the torch version above

@@ -1,0 +1,6602 @@
+{
+  "summary": {
+    "run": "grpo_local_binary",
+    "model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+    "reward": "binary",
+    "n_train": 200,
+    "iters": 300,
+    "batch": 2,
+    "group": 4,
+    "beta": 0.0,
+    "lr": 1e-05,
+    "lora": {
+      "rank": 8,
+      "scale": 20.0,
+      "dropout": 0.0
+    },
+    "trainable_params": 4399104,
+    "temperature": 0.8,
+    "max_tokens": 256,
+    "seed": 0,
+    "reward_first50": 0.45,
+    "reward_last50": 0.285,
+    "accuracy_first50": 0.45,
+    "accuracy_last50": 0.285,
+    "no_signal_share": 0.8083,
+    "step_s_median": 2.02,
+    "step_s_mean": 2.64,
+    "step_s_first": 2.53,
+    "total_s": 794.9,
+    "peak_mem_gb": 11.62,
+    "full_epoch_estimate": {
+      "rl_train_questions": 6717,
+      "steps": 3359,
+      "hours_at_median_step": 1.88
+    },
+    "date": "2026-09-24"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 159.875,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 4
+      },
+      "sample": {
+        "question": "What is the name corresponding to the accoung with the lowest sum of checking and savings balances?",
+        "completion": "```sql\nSELECT name\nFROM accounts\nWHERE custid = (\n    SELECT custid\n    FROM savings\n    ORDER BY SUM(checking.balance) + SUM(savings.balance) ASC\n    LIMIT 1\n);\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.53,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 44.375,
+      "peak_mem_gb": 3.53
+    },
+    {
+      "step": 2,
+      "reward_mean": 0.875,
+      "accuracy": 0.875,
+      "no_signal_share": 0.5,
+      "mean_chars": 110,
+      "status": {
+        "wrong_result": 1,
+        "correct": 7
+      },
+      "sample": {
+        "question": "What are the different fates of the mission that involved ships from the United States?",
+        "completion": "```sql\nSELECT DISTINCT Fate FROM mission WHERE Ship_ID IN (SELECT Ship_ID FROM ship WHERE Nationality = 'United States')\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.72,
+      "loss": 0.09054385125637054,
+      "kl": 0.0,
+      "gen_tokens": 26.5,
+      "peak_mem_gb": 3.53
+    },
+    {
+      "step": 3,
+      "reward_mean": 0.625,
+      "accuracy": 0.625,
+      "no_signal_share": 0,
+      "mean_chars": 75.625,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 1,
+        "correct": 5
+      },
+      "sample": {
+        "question": "Show all book categories and the number of books in each category.",
+        "completion": "```sql\nSELECT book_category, COUNT(*) \nFROM book_club \nGROUP BY book_category;\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.54,
+      "loss": 0.0525972917675972,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 3.53
+    },
+    {
+      "step": 4,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 73.75,
+      "status": {
+        "wrong_result": 2,
+        "correct": 6
+      },
+      "sample": {
+        "question": "Count the number of voting records for each election cycle.",
+        "completion": "```sql\nSELECT election_cycle, COUNT(*) FROM Voting_record GROUP BY election_cycle\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.74,
+      "loss": 0.08631367236375809,
+      "kl": 0.0,
+      "gen_tokens": 18.375,
+      "peak_mem_gb": 3.53
+    },
+    {
+      "step": 5,
+      "reward_mean": 0.625,
+      "accuracy": 0.625,
+      "no_signal_share": 0,
+      "mean_chars": 172,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 2,
+        "correct": 5
+      },
+      "sample": {
+        "question": "What are the ids and names of accounts with 4 or more transactions?",
+        "completion": "```sql\nSELECT account_id, account_name FROM Accounts WHERE account_id IN (SELECT account_id FROM Financial_Transactions WHERE transaction_amount > 4)\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 4.18,
+      "loss": -0.06988552957773209,
+      "kl": 0.0,
+      "gen_tokens": 42.5,
+      "peak_mem_gb": 3.53
+    },
+    {
+      "step": 6,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 284.75,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 1,
+        "correct": 1
+      },
+      "sample": {
+        "question": "What are the names and genders of staff who have held the title Sales Person, but never Clerical Staff?",
+        "completion": "```sql\nSELECT s.staff_name, s.staff_gender\nFROM staff s\nJOIN staff_department_assignments tda ON s.staff_id = tda.staff_id\nJOIN departments d ON tda.department_id = d.department_id\nWHERE d.dept_store_id IN (\n    SELECT dept_store_id\n    FROM department_store_chains\n    WHERE store_name = 'Sales'\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 6.53,
+      "loss": 0.12076863646507263,
+      "kl": 0.0,
+      "gen_tokens": 76.875,
+      "peak_mem_gb": 5.89
+    },
+    {
+      "step": 7,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 235.875,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 2,
+        "correct": 1
+      },
+      "sample": {
+        "question": "What are the names and genders of staff who have held the title Sales Person, but never Clerical Staff?",
+        "completion": "```sql\nSELECT DISTINCT t1.staff_name, t1.staff_gender\nFROM Staff t1\nJOIN Staff_Department_Assignments t2 ON t1.staff_id = t2.staff_id\nJOIN Departments d ON t2.department_id = d.department_id\nWHERE t2.job_title_code = 'Sales Person' AND d.department_name NOT IN ('Clerical Staff')\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 5.82,
+      "loss": -0.05894983187317848,
+      "kl": 0.0,
+      "gen_tokens": 59.75,
+      "peak_mem_gb": 5.89
+    },
+    {
+      "step": 8,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 158.375,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "How many drama workshop groups are there in each city? Return both the city and the count.",
+        "completion": "```sql\nSELECT T1.`City_Town`, COUNT(*) FROM Drama_Workshop_Groups AS T1 INNER JOIN Addresses AS T2 ON T1.Address_ID = T2.Address_ID GROUP BY T1.`City_Town`\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 6.91,
+      "loss": -0.11106345057487488,
+      "kl": 0.0,
+      "gen_tokens": 47.125,
+      "peak_mem_gb": 5.89
+    },
+    {
+      "step": 9,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 51.375,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What is the total number of ratings that has more than 3 stars?",
+        "completion": "```sql\nSELECT COUNT(DISTINCT rID) FROM Rating WHERE stars > 3\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.19,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.125,
+      "peak_mem_gb": 5.89
+    },
+    {
+      "step": 10,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 75.625,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "Find the number of albums by the artist \"Metallica\".",
+        "completion": "```sql\nSELECT count(*) FROM Album WHERE ArtistId = (SELECT ArtistId FROM Artist WHERE Name = 'Metallica')\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 5.6,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.375,
+      "peak_mem_gb": 5.89
+    },
+    {
+      "step": 11,
+      "reward_mean": 0.875,
+      "accuracy": 0.875,
+      "no_signal_share": 0.5,
+      "mean_chars": 115.25,
+      "status": {
+        "exec_error": 1,
+        "correct": 7
+      },
+      "sample": {
+        "question": "Show the prices of the products named \"Dining\" or \"Trading Policy\".",
+        "completion": "```sql\nSELECT Product_Price FROM Products WHERE Product_Name = 'Dining' OR Product_Name = 'Trading Policy'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 3.25,
+      "loss": 0.1309652030467987,
+      "kl": 0.0,
+      "gen_tokens": 30.75,
+      "peak_mem_gb": 5.89
+    },
+    {
+      "step": 12,
+      "reward_mean": 0.625,
+      "accuracy": 0.625,
+      "no_signal_share": 0.5,
+      "mean_chars": 123,
+      "status": {
+        "exec_error": 3,
+        "correct": 5
+      },
+      "sample": {
+        "question": "Return the apartment numbers of the apartments with type code \"Flat\".",
+        "completion": "```sql\nSELECT apt_number FROM Apartments WHERE apt_type_code = \"Flat\"\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 3.86,
+      "loss": -0.2688407897949219,
+      "kl": 0.0,
+      "gen_tokens": 37.5,
+      "peak_mem_gb": 5.89
+    },
+    {
+      "step": 13,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 116.875,
+      "status": {
+        "exec_error": 2,
+        "correct": 6
+      },
+      "sample": {
+        "question": "List the names of members who did not participate in any round.",
+        "completion": "```sql\nSELECT Name\nFROM member\nWHERE Member_ID NOT IN (\n    SELECT Member_ID\n    FROM round\n)\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.04,
+      "loss": 0.026780368760228157,
+      "kl": 0.0,
+      "gen_tokens": 29.0,
+      "peak_mem_gb": 5.89
+    },
+    {
+      "step": 14,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 229.625,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "What is the first name, GPA, and phone number of the students with the top 5 GPAs?",
+        "completion": "```sql\nSELECT T1.stu_fname, T1.stu_gpa, T1.stu_phone\nFROM student AS T1\nJOIN enroll AS T2 ON T1.stu_num = T2.stu_num\nJOIN course AS T3 ON T2.class_code = T3.class_code\nJOIN professor AS T4 ON T3.prof_num = T4.prof_num\nWHERE T4.prof_high_degree = 'B.Sc.'\nGROUP BY T1.stu_fname, T1.stu_gpa, T1.stu_phone\nORDER BY AVG(T2.enroll_grade) DESC\nLIMIT 5\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.42,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 75.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 15,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0,
+      "mean_chars": 142.375,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 2,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT DISTINCT b.name\nFROM buildings b\nWHERE id NOT IN (\n    SELECT building_id\n    FROM Office_locations\n)\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.72,
+      "loss": 0.06051868572831154,
+      "kl": 0.0,
+      "gen_tokens": 42.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 16,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 121.375,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 3,
+        "correct": 1
+      },
+      "sample": {
+        "question": "What are the numbers of constructors for different nationalities?",
+        "completion": "```sql\nSELECT nationality, COUNT(*) FROM constructors GROUP BY nationality\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 4.7,
+      "loss": 0.11082563549280167,
+      "kl": 0.0,
+      "gen_tokens": 32.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 17,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 196,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Give me a list of names and years of races that had any driver whose forename is Lewis?",
+        "completion": "```sql\nSELECT name, year FROM races WHERE driverId IN (\n    SELECT driverId FROM drivers WHERE forename = 'Lewis'\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 6.23,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 57.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 18,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 135,
+      "status": {
+        "exec_error": 6,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Find the name of airports whose altitude is between -50 and 50.",
+        "completion": "```sql\nSELECT name FROM airports WHERE elevation BETWEEN -50 AND 50\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.87,
+      "loss": 0.007750385440886021,
+      "kl": 0.0,
+      "gen_tokens": 33.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 19,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 152.875,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 3,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Return the type of transaction with the highest total amount.",
+        "completion": "```sql\nSELECT transaction_type\nFROM Financial_transactions\nGROUP BY transaction_type\nORDER BY SUM(transaction_amount) DESC\nLIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 3.32,
+      "loss": 0.10643032193183899,
+      "kl": 0.0,
+      "gen_tokens": 39.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 20,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 154.875,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 5,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT name FROM buildings\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.87,
+      "loss": -0.09835261106491089,
+      "kl": 0.0,
+      "gen_tokens": 45.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 21,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 164.875,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 3,
+        "correct": 1
+      },
+      "sample": {
+        "question": "List the position of players with average number of points scored by players of that position bigger than 20.",
+        "completion": "```sql\nSELECT Player_ID\nFROM player\nGROUP BY Player_ID\nHAVING AVG(Points) > 20\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 3.25,
+      "loss": 0.14890526235103607,
+      "kl": 0.0,
+      "gen_tokens": 44.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 22,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 122.25,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 2,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Count the number of video games with Massively multiplayer online game type .",
+        "completion": "```sql\nSELECT COUNT(*) FROM Plays_Games WHERE GameID IN (\n    SELECT GameID FROM Video_Games WHERE GType = 'Massively multiplayer online game'\n)\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.72,
+      "loss": -0.07966534048318863,
+      "kl": 0.0,
+      "gen_tokens": 32.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 23,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 60.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "List the name of the company that produced more than one phone model.",
+        "completion": "```sql\nSELECT company_name FROM phone GROUP BY company_name HAVING count(*) > 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.65,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 16.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 24,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 88.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the names of projects that have taken longer than the average number of hours for all projects?",
+        "completion": "```sql\nSELECT Name\nFROM Projects\nGROUP BY Code\nHAVING AVG(Hours) > (SELECT AVG(Hours) FROM Projects)\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.51,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 25,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 150.375,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the first name and last name of the players who have weight above 220 or height below 75?",
+        "completion": "```sql\nSELECT T1.name_first, T1.name_last\nFROM player AS T1\nJOIN player_award AS TA ON T1.player_id = TA.player_id\nJOIN manager_award_vote AS MAV ON TA.award_id = MAV.award_id\nGROUP BY T1.id\nHAVING SUM(CASE WHEN T1.weight > 220 OR T1.height < 75 THEN 1 ELSE 0 END) > COUNT(TA.id)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 8.48,
+      "loss": 0.3782384395599365,
+      "kl": 0.0,
+      "gen_tokens": 41.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 26,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 50,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What are distinct locations where tracks are located?",
+        "completion": "```sql\nSELECT DISTINCT LOCATION FROM track\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.27,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 12.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 27,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 70.375,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the number of invoices and total money billed in them from CA?",
+        "completion": "```sql\nSELECT COUNT(*), SUM(T1.total) FROM invoices AS T1 JOIN customers AS C ON T1.customer_id = C.id JOIN media_types AS MT ON T1.media_type_id = MT.id WHERE C.country = 'CA'",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.93,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 28,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 97.5,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What is the payment method code used by the most orders?",
+        "completion": "```sql\nSELECT payment_method_code\nFROM Orders\nGROUP BY payment_method_code\nORDER BY count(*) DESC\nLIMIT 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.72,
+      "loss": -0.0031890394166111946,
+      "kl": 0.0,
+      "gen_tokens": 23.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 29,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 218.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the distinct name, location and products of the enzymes which has any 'inhibitor' interaction?",
+        "completion": "```sql\nSELECT DISTINCT\n    e.name,\n    e.Location,\n    DISTINCT\n    e.Product\nFROM\n    enzyme e\nJOIN\n    medicine_enzyme_interaction mei\nON\n    mei.id = me.id\nJOIN\n    InteractionType it\nON\n    it.id = mei.interaction_id\nWHERE\n    it.name = 'Inhibitor'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 4.04,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 63.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 30,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 112.625,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 3,
+        "correct": 2
+      },
+      "sample": {
+        "question": "What are the countries that have at least two perpetrators?",
+        "completion": "```sql\nSELECT DISTINCT Country\nFROM people\nGROUP BY Country\nHAVING COUNT(*) >= 2\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.31,
+      "loss": 0.2730546295642853,
+      "kl": 0.0,
+      "gen_tokens": 30.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 31,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 56.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What are the names of captains, sorted by age descending?",
+        "completion": "```sql\nSELECT Name FROM Captain ORDER BY Age DESC\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.09,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 32,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 79.75,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Show the musical nominee with award \"Bob Fosse\" or \"Cleavant Derricks\".",
+        "completion": "```sql\nSELECT Name\nFROM Musical\nWHERE Award IN ('Bob Fosse', 'Cleavant Derricks')\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.75,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 33,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 180.25,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 1,
+        "correct": 2
+      },
+      "sample": {
+        "question": "when is the hire date for those employees whose first name does not containing the letter M?",
+        "completion": "```sql\nSELECT Hire_DATE\nFROM employees\nWHERE FirstName != 'M'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.27,
+      "loss": -0.002557035069912672,
+      "kl": 0.0,
+      "gen_tokens": 49.875,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 34,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 119.375,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "What are the full names of customers with the account name 900?",
+        "completion": "```sql\nSELECT first_name, last_name FROM Customers WHERE id IN (\n    SELECT id FROM Accounts WHERE name = '900'\n)",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 4.91,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 36.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 35,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 53.625,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 1,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Which grade is studying in room 105?",
+        "completion": "```sql\nSELECT Grade FROM teachers WHERE Classroom = 105\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.24,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 15.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 36,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 58.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "Find the name, city, and country of the airport that has the lowest altitude.",
+        "completion": "```sql\nSELECT name, city, country FROM airports ORDER BY elevation LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.41,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 14.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 37,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 83.125,
+      "status": {
+        "exec_error": 2,
+        "correct": 6
+      },
+      "sample": {
+        "question": "What are the different software platforms for devices, ordered by frequency descending?",
+        "completion": "```sql\nSELECT DISTINCT Software_Platform FROM device ORDER BY COUNT(*) DESC\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.53,
+      "loss": -0.08569714426994324,
+      "kl": 0.0,
+      "gen_tokens": 18.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 38,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 93.5,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "List the names of journalists in ascending order of years working.",
+        "completion": "```sql\nSELECT Name FROM journalist ORDER BY Years_working ASC\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.16,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 27.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 39,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 48.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the average age for all person?",
+        "completion": "```sql\nSELECT AVG(age) FROM Person\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.18,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 40,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 47,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the mission codes, fates, and names of the ships involved?",
+        "completion": "```sql\nSELECT Code, Fate, Name FROM ship\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.17,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 12.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 41,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 81.75,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "List the names of members who did not participate in any round.",
+        "completion": "```sql\nSELECT Name FROM member WHERE Id NOT IN (\n    SELECT Id FROM round\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.49,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 42,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 74.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What is the most common hometown of gymnasts?",
+        "completion": "```sql\nSELECT Hometown FROM people GROUP BY Hometown ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.53,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 43,
+      "reward_mean": 0.875,
+      "accuracy": 0.875,
+      "no_signal_share": 0.5,
+      "mean_chars": 55.375,
+      "status": {
+        "wrong_result": 1,
+        "correct": 7
+      },
+      "sample": {
+        "question": "What are the names of captains, sorted by age descending?",
+        "completion": "```sql\nSELECT Name FROM Captain ORDER BY Age DESC\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.09,
+      "loss": -0.017491422593593597,
+      "kl": 0.0,
+      "gen_tokens": 13.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 44,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 107,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the names of procedures physician John Wen was trained in?",
+        "completion": "```sql\nSELECT Name FROM Procedures WHERE Physician = 'John Wen'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.37,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 27.875,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 45,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0,
+      "mean_chars": 167.625,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 3,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Show the average amount of transactions for different investors.",
+        "completion": "```sql\nSELECT \n    Investor_id,\n    AVG(amount_of_transaction)\nFROM \n    Transactions\nGROUP BY \n    Investor_id\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 3.22,
+      "loss": 0.25543975830078125,
+      "kl": 0.0,
+      "gen_tokens": 40.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 46,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 77.375,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the total number of rooms in the apartments that have facility code \"Gym\".",
+        "completion": "```sql\nSELECT COUNT(*) FROM Apartments WHERE facility_code = \"Gym\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.41,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 47,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 71,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the login names and family names of course author and tutors?",
+        "completion": "```sql\nSELECT login_name, family_name FROM Course_Authors_and_Tutors\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.19,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 48,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 72.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Show all game names played by at least 1000 hours.",
+        "completion": "```sql\nSELECT gname FROM Video_Games WHERE Hours_Played >= 1000\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.64,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 49,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 105.375,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 3,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Find the name of companies that do not make DVD drive.",
+        "completion": "```sql\nSELECT Name FROM Manufacturers WHERE id NOT IN (\n    SELECT id FROM Products WHERE Name = 'DVD drive'\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.78,
+      "loss": 0.043893665075302124,
+      "kl": 0.0,
+      "gen_tokens": 26.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 50,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 120.375,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 4
+      },
+      "sample": {
+        "question": "Find the ids and names of stations from which at least 200 trips started.",
+        "completion": "```sql\nSELECT id, name FROM station WHERE id IN (\n    SELECT id FROM trip GROUP BY id HAVING count(*) >= 200\n)",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 3.03,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 33.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 51,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 86.375,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the ids of the students who are under 20 years old and are involved in at least one activity.",
+        "completion": "```sql\nSELECT Stuid FROM Student WHERE Age < 20 AND id NOT IN (\n    SELECT id FROM Participates_in\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.22,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 52,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 90.5,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the different software platforms for devices, ordered by frequency descending?",
+        "completion": "```sql\nSELECT Software_Platform FROM device GROUP BY Software_Platform ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.47,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 53,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 95.125,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Count the number of distinct claim outcome codes.",
+        "completion": "```sql\nSELECT count(DISTINCT Claim_Outcome_Code)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.92,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 27.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 54,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 82.375,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 6
+      },
+      "sample": {
+        "question": "What are the ids and names of the architects who built at least 3 bridges ?",
+        "completion": "```sql\nSELECT id, name FROM bridge GROUP BY id HAVING count(*) >= 3\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.92,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 55,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 91.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the ids and names of accounts with 4 or more transactions?",
+        "completion": "```sql\nSELECT id, name FROM Accounts GROUP BY id HAVING count(*) >= 4\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.55,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 25.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 56,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 109,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 4
+      },
+      "sample": {
+        "question": "List the position of players with average number of points scored by players of that position bigger than 20.",
+        "completion": "```sql\nSELECT Position FROM player WHERE Points > 20 GROUP BY Position ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.03,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 25.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 57,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 80.625,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Which workshop groups have bookings with status code \"stop\"? Give me the names.",
+        "completion": "```sql\nSELECT Name FROM Drama_Workshop_Groups WHERE Status_Code = \"stop\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.63,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 58,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 100,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the names of procedures physician John Wen was trained in?",
+        "completion": "```sql\nSELECT Name FROM Procedures WHERE Trainer = 'John Wen'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 4.88,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 25.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 59,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 60.125,
+      "status": {
+        "wrong_result": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the full names of faculties with sex M and who live in building NEB?",
+        "completion": "```sql\nSELECT *\nFROM Faculty\nWHERE Sex = 'M' AND Building = 'NEB'\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.29,
+      "loss": -0.026847295463085175,
+      "kl": 0.0,
+      "gen_tokens": 17.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 60,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 72.125,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Which restaurants have highest rating? List the restaurant name and its rating.",
+        "completion": "```sql\nSELECT resname, rating FROM Restaurant ORDER BY rating DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.64,
+      "loss": -0.011171931400895119,
+      "kl": 0.0,
+      "gen_tokens": 20.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 61,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 78.75,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the number of rooms with king bed for each decor type.",
+        "completion": "```sql\nSELECT decor, count(*) FROM Rooms WHERE bedType = 'King' GROUP BY decor\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.36,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 62,
+      "reward_mean": 0.625,
+      "accuracy": 0.625,
+      "no_signal_share": 0,
+      "mean_chars": 77.125,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 1,
+        "correct": 5
+      },
+      "sample": {
+        "question": "Who are the advisors for students that live in a city with city code \"BAL\"?",
+        "completion": "```sql\nSELECT *\nFROM Student\nGROUP BY Advisor\nORDER BY count(*) DESC\nLIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.95,
+      "loss": 0.14935559034347534,
+      "kl": 0.0,
+      "gen_tokens": 20.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 63,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 70.375,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Return the code of the city that has the most students.",
+        "completion": "```sql\nSELECT city_code FROM Student GROUP BY city_code ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.68,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 64,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 80.25,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Which allergy has most number of students affected?",
+        "completion": "```sql\nSELECT *\nFROM Has_Allergy\nGROUP BY Allergy\nORDER BY count(*) DESC\nLIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.5,
+      "loss": 0.027163157239556313,
+      "kl": 0.0,
+      "gen_tokens": 22.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 65,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 54.875,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 3,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the number of albums by the artist \"Metallica\".",
+        "completion": "```sql\nSELECT count(*) FROM Album WHERE ArtistId = 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 5.58,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 14.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 66,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 76.5,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the name of project that continues for the longest time.",
+        "completion": "```sql\nSELECT Name FROM Projects GROUP BY Name ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.23,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 67,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 101.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the names of procedures physician John Wen was trained in?",
+        "completion": "```sql\nSELECT Name FROM Procedures WHERE Trainer IN (\n    SELECT Id FROM Patient WHERE Name = 'John Wen'\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.19,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 26.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 68,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 83.625,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the total amount of money spent by Lucas Mancini?",
+        "completion": "```sql\nSELECT sum(total) FROM invoices WHERE first_name = 'Lucas' AND last_name = 'Mancini'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.51,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 69,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 77.375,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "Find the last name of female (sex is F) students in the descending order of age.",
+        "completion": "```sql\nSELECT LName FROM Student WHERE Sex = 'F' ORDER BY Age DESC LIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.37,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 70,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 99.75,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the description of the service type which offers both the photo product and the film product?",
+        "completion": "```sql\nSELECT Description FROM Services WHERE Product_Type_Code IN ('Photo', 'Film')\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 6.72,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 25.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 71,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 0,
+      "mean_chars": 80,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 2,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Who are the advisors for students that live in a city with city code \"BAL\"?",
+        "completion": "```sql\nSELECT Advisor FROM Student WHERE city_code  =  \"BAL\"\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.02,
+      "loss": 0.07126133888959885,
+      "kl": 0.0,
+      "gen_tokens": 21.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 72,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 78,
+      "status": {
+        "wrong_result": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Show the musical nominee with award \"Bob Fosse\" or \"Cleavant Derricks\".",
+        "completion": "```sql\nSELECT Name FROM Musical WHERE Award IN ('Bob Fosse', 'Cleavant Derricks')\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.57,
+      "loss": 0.03226678818464279,
+      "kl": 0.0,
+      "gen_tokens": 21.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 73,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 107.375,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the description of the service type which offers both the photo product and the film product?",
+        "completion": "```sql\nSELECT description FROM Services WHERE product_id IN (\n    SELECT id FROM Services WHERE name = 'Photo' INTERSECT SELECT id FROM Services WHERE name = 'Film'\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 6.98,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 27.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 74,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 75.125,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the average sales of the journals that have an editor whose work type is 'Photo'?",
+        "completion": "```sql\nSELECT AVG(Sales) FROM journal WHERE Editor_ID IN (\n    SELECT ID FROM editor WHERE Work_Type = 'Photo'\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.65,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.875,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 75,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 65.75,
+      "status": {
+        "exec_error": 6,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Which county has the largest population? Give me the name of the county.",
+        "completion": "```sql\nSELECT County_name FROM county ORDER BY Population DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.47,
+      "loss": -0.014922384172677994,
+      "kl": 0.0,
+      "gen_tokens": 17.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 76,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 76.125,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the heights of perpetrators in descending order of the number of people they injured?",
+        "completion": "```sql\nSELECT Height FROM people ORDER BY Injured DESC LIMIT 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.53,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 77,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 86,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the last names of the members of the club \"Bootup Baltimore\".",
+        "completion": "```sql\nSELECT LName FROM Member_of_club WHERE ClubName = 'Bootup Baltimore'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.48,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.125,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 78,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 77.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "How many drama workshop groups are there in each city? Return both the city and the count.",
+        "completion": "```sql\nSELECT City_Town , count(*) FROM Drama_Workshop_Groups GROUP BY City_Town\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.6,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 79,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0,
+      "mean_chars": 74.5,
+      "status": {
+        "exec_error": 6,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Which problems are reported before 1978-06-26? Give me the ids of the problems.",
+        "completion": "```sql\nSELECT problem_id FROM Problems WHERE date_problem_reported < '1978-06-26'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.53,
+      "loss": -0.006790834479033947,
+      "kl": 0.0,
+      "gen_tokens": 22.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 80,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 83.875,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 4,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT name FROM Buildings GROUP BY name HAVING count(*) > 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.74,
+      "loss": -0.01000953372567892,
+      "kl": 0.0,
+      "gen_tokens": 22.625,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 81,
+      "reward_mean": 0.625,
+      "accuracy": 0.625,
+      "no_signal_share": 0.5,
+      "mean_chars": 63.375,
+      "status": {
+        "wrong_result": 3,
+        "correct": 5
+      },
+      "sample": {
+        "question": "Count the number of voting records for each election cycle.",
+        "completion": "```sql\nSELECT count(*) FROM Voting_record GROUP BY election_cycle\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.61,
+      "loss": -0.04517349973320961,
+      "kl": 0.0,
+      "gen_tokens": 15.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 82,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 86,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 3
+      },
+      "sample": {
+        "question": "Which attribute definitions have attribute value 0? Give me the attribute name and attribute ID.",
+        "completion": "```sql\nSELECT attribute_name, attribute_id FROM Catalog_Contents_Additional_Attributes WHERE attribute_value = 0\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.28,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 83,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 90.75,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 2,
+        "correct": 1
+      },
+      "sample": {
+        "question": "What is the list of school locations sorted in ascending order of school enrollment?",
+        "completion": "```sql\nSELECT *\nFROM school_details\nGROUP BY Location\nORDER BY count(*) DESC\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.92,
+      "loss": 0.03563068062067032,
+      "kl": 0.0,
+      "gen_tokens": 21.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 84,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 70.25,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the average sales of the journals that have an editor whose work type is 'Photo'?",
+        "completion": "```sql\nSELECT avg(Sales) FROM journal WHERE Work_Type = 'Photo'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.46,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 85,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 71,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the total number of rooms in the apartments that have facility code \"Gym\".",
+        "completion": "```sql\nSELECT count(*) FROM Apartments WHERE facility_code = \"Gym\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.17,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 86,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 68,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 2,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Compute the average number of hosts for parties.",
+        "completion": "```sql\nSELECT avg(number_of_hosts) FROM party\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.4,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 16.75,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 87,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 72,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the nationalities and ages of journalists?",
+        "completion": "```sql\nSELECT Nationality, Age FROM journalist\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.56,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 88,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 111.375,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "What is the first name, GPA, and phone number of the students with the top 5 GPAs?",
+        "completion": "```sql\nSELECT STU_FNAME, STU_GPA, STU_PHONE FROM STUDENT GROUP BY STU_FNAME, STU_GPA ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.95,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 29.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 89,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 91,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 1,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the software platform that is most common amongst all devices?",
+        "completion": "```sql\nSELECT Software_Platform FROM device GROUP BY Software_Platform ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.5,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 90,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 60.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "Count the number of regions.",
+        "completion": "```sql\nSELECT count(*) FROM region\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.56,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 15.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 91,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 69.75,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 4,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Compute the average number of hosts for parties.",
+        "completion": "```sql\nSELECT avg(Number_of_hosts) FROM party\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.36,
+      "loss": 0.05411408841609955,
+      "kl": 0.0,
+      "gen_tokens": 17.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 92,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 131.375,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the software platform that is most common amongst all devices?",
+        "completion": "```sql\nSELECT Software_Platform FROM device GROUP BY Software_Platform ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 3.38,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 31.375,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 93,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 85,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Show the prices of the products named \"Dining\" or \"Trading Policy\".",
+        "completion": "```sql\nSELECT Price FROM Products WHERE Name = 'Dining' OR Name = 'Trading Policy'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.61,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 94,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 73.25,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 1,
+        "correct": 6
+      },
+      "sample": {
+        "question": "Find the name of the source user with the highest average trust score.",
+        "completion": "```sql\nSELECT name FROM useracct GROUP BY name ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.7,
+      "loss": 0.034958045929670334,
+      "kl": 0.0,
+      "gen_tokens": 18.875,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 95,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 111.375,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "What are the names of representatives in descending order of votes?",
+        "completion": "```sql\nSELECT Name FROM representative ORDER BY Votes DESC\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.75,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.5,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 96,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 98.25,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 4,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Find the name of project that continues for the longest time.",
+        "completion": "```sql\nSELECT Name FROM Projects WHERE Hours >= (\n    SELECT Hours FROM Projects GROUP BY Hours ORDER BY count(*) DESC\n    .[1]\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.55,
+      "loss": 0.07469867169857025,
+      "kl": 0.0,
+      "gen_tokens": 22.25,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 97,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 84.75,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT name FROM buildings GROUP BY name HAVING count(*) > 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.71,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.875,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 98,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 79,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the personal names and family names of the students? Sort the result in alphabetical order of the family name.",
+        "completion": "```sql\nSELECT personal_name, family_name FROM Students ORDER BY family_name ASC\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.15,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 99,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 62.5,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Return the minimum, maximum, and average seating across all tracks.",
+        "completion": "```sql\nSELECT min(Seating), max(Seating), avg(Seating) FROM track\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.29,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 100,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 43.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "Count the total number of counties.",
+        "completion": "```sql\nSELECT count(*) FROM county\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.17,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 10.0,
+      "peak_mem_gb": 6.24
+    },
+    {
+      "step": 101,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 177.375,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "What is the first name, GPA, and phone number of the students with the top 5 GPAs?",
+        "completion": "```sql\nSELECT stu_fname, stu_gpa, stu_phone FROM student GROUP BY stu_gpa ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 5.4,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 45.0,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 102,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 142.75,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the description of the service type which offers both the photo product and the film product?",
+        "completion": "```sql\nSELECT Service_Type_Description FROM Services WHERE Product_ID IN (\n    SELECT ID FROM Products WHERE Product_Name = 'Photo' INTERSECT\n    SELECT ID FROM Products WHERE Product_Name = 'Film'\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 7.57,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 33.75,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 103,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 62,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "How many medicines have the FDA approval status 'No' ?",
+        "completion": "```sql\nSELECT count(*) FROM medicine WHERE FDA_approved = 'No'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.23,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 15.0,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 104,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 77.625,
+      "status": {
+        "wrong_result": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Show the musical nominee with award \"Bob Fosse\" or \"Cleavant Derricks\".",
+        "completion": "```sql\nSELECT Name FROM Musical WHERE Award IN ('Bob Fosse', 'Cleavant Derricks')\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.56,
+      "loss": 0.06534531712532043,
+      "kl": 0.0,
+      "gen_tokens": 20.875,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 105,
+      "reward_mean": 0.625,
+      "accuracy": 0.625,
+      "no_signal_share": 0.5,
+      "mean_chars": 91,
+      "status": {
+        "wrong_result": 3,
+        "correct": 5
+      },
+      "sample": {
+        "question": "Find the state, account type, and credit score of the customer whose number of loan is 0.",
+        "completion": "```sql\nSELECT state, acc_type, credit_score FROM customer WHERE no_of_loans = 0\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.73,
+      "loss": -0.023559873923659325,
+      "kl": 0.0,
+      "gen_tokens": 25.5,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 106,
+      "reward_mean": 0.875,
+      "accuracy": 0.875,
+      "no_signal_share": 0.5,
+      "mean_chars": 84.375,
+      "status": {
+        "wrong_result": 1,
+        "correct": 7
+      },
+      "sample": {
+        "question": "Show the headquarters that have at least two companies.",
+        "completion": "```sql\nSELECT Headquarters FROM company GROUP BY Headquarters HAVING count(*) >= 2\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.54,
+      "loss": -0.07820359617471695,
+      "kl": 0.0,
+      "gen_tokens": 20.375,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 107,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 91.5,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What is the software platform that is most common amongst all devices?",
+        "completion": "```sql\nSELECT Software_Platform FROM device GROUP BY Software_Platform ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.48,
+      "loss": -0.03187088295817375,
+      "kl": 0.0,
+      "gen_tokens": 21.375,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 108,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 87.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the average latitude and longitude of stations located in San Jose city?",
+        "completion": "```sql\nSELECT avg(lat), avg(long) FROM station WHERE city = 'San Jose'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.12,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.375,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 109,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 68.875,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the average age for a male in each job?",
+        "completion": "```sql\nSELECT job, avg(age) FROM Person WHERE gender = 'Male' GROUP BY job\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.19,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.5,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 110,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 112,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Show the names of trains and locations of railways they are in.",
+        "completion": "```sql\nSELECT Name, Location FROM railway WHERE Manager_ID IN (\n  SELECT ID FROM manager WHERE Level = 1\n)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.4,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 27.125,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 111,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 90.625,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 3,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Count the number of video games with Massively multiplayer online game type .",
+        "completion": "```sql\nSELECT count(*) FROM Video_games WHERE GType = 'Massively multiplayer online game'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.59,
+      "loss": 0.018864158540964127,
+      "kl": 0.0,
+      "gen_tokens": 20.875,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 112,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 87.25,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "List all payment methods and number of payments using each payment methods.",
+        "completion": "```sql\nSELECT Payment_method_code ,  count(*) FROM Customer_Payments GROUP BY Payment_method_code\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.46,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.5,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 113,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 83.375,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 4,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Find the last name of female (sex is F) students in the descending order of age.",
+        "completion": "```sql\nSELECT LName FROM Student WHERE Sex = 'F' ORDER BY Age DESC LIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.33,
+      "loss": -0.02935001067817211,
+      "kl": 0.0,
+      "gen_tokens": 23.125,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 114,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 76.625,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Show the musical nominee with award \"Bob Fosse\" or \"Cleavant Derricks\".",
+        "completion": "```sql\nSELECT Nominee FROM musical WHERE Award IN (\"Bob Fosse\", \"Cleavant Derricks\"))\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.55,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.375,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 115,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 89.5,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 4
+      },
+      "sample": {
+        "question": "Find the names of all the customers and staff members.",
+        "completion": "```sql\nSELECT * FROM Customers UNION SELECT * FROM Staff\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.24,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.875,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 116,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 107.25,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What is the description of the service type which offers both the photo product and the film product?",
+        "completion": "```sql\nSELECT Service_Type_Description FROM Services WHERE Product_Description LIKE '%photo%' AND Product_Description LIKE '%film%'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 6.59,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 25.25,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 117,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 85.125,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 2,
+        "correct": 4
+      },
+      "sample": {
+        "question": "How many students are affected by each allergy type?",
+        "completion": "```sql\nSELECT allergy_type, count(*)) FROM Has_allergy GROUP BY allergy_type\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.47,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.125,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 118,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 116.125,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Show the shipping charge and customer id for customer orders with order status Cancelled or Paid.",
+        "completion": "```sql\nSELECT shipping_charge, customer_id FROM Customer_Orders WHERE order_status_code IN ('Cancelled', 'Paid')```\n\nExplanation: The query selects the `shipping_charge` and `customer_id` columns from the `Customer_Orders` table where the `order_status_code` is either 'Cancelled' or 'Paid'.",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.92,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 26.0,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 119,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 124.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the membership level with the most people?",
+        "completion": "```sql\nSELECT Level FROM membership_register_branch GROUP BY Level HAVING count(*) > 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.27,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 32.75,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 120,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 146.125,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Show the prices of the products named \"Dining\" or \"Trading Policy\".",
+        "completion": "```sql\nSELECT Product_Price FROM Products WHERE Product_Name IN ('Dining', 'Trading Policy'))\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 4.37,
+      "loss": 0.08153995871543884,
+      "kl": 0.0,
+      "gen_tokens": 34.625,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 121,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 116.125,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the branch names of banks in the New York state.",
+        "completion": "```sql\nSELECT bname FROM bank WHERE state = 'New York'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.48,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 29.75,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 122,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 62.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "How many medicines have the FDA approval status 'No' ?",
+        "completion": "```sql\nSELECT count(*)) FROM medicine WHERE FDA_approved = 'No'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.27,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 15.5,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 123,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 125.375,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 3,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Which attribute definitions have attribute value 0? Give me the attribute name and attribute ID.",
+        "completion": "```sql\nSELECT attribute_id, attribute_name FROM Catalog_Contents_Additional_Attributes WHERE attribute_value = 0\n```\n\nExplanation: The query selects the `attribute_id` and `attribute_name` columns from the `Catalog_Contents_Additional_Attributes` table where the `attribute_value` is 0. The `WHERE` clause filters the results to only include rows where the `attribute_value` is 0.",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.67,
+      "loss": -0.021679513156414032,
+      "kl": 0.0,
+      "gen_tokens": 27.625,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 124,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 81.25,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the crime rates of counties sorted by number of offices ascending?",
+        "completion": "```sql\nSELECT Crime_rate FROM county_public_safety GROUP BY Crime_rate ORDER BY count(*)) ASC LIMIT 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.78,
+      "loss": 0.052158161997795105,
+      "kl": 0.0,
+      "gen_tokens": 21.75,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 125,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 106.25,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 4
+      },
+      "sample": {
+        "question": "Show the id and name of the employee with maximum salary.",
+        "completion": "```sql\nSELECT id, name FROM employee WHERE salary = (SELECT salary FROM employee) GROUP BY id HAVING count(*)) > 1 ORDER BY count(*)) = 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.95,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 29.625,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 126,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 79.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the personal names and family names of the students? Sort the result in alphabetical order of the family name.",
+        "completion": "```sql\nSELECT personal_name, family_name FROM students ORDER BY family_name ASC\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.16,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.5,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 127,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 108.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the names of projects that have taken longer than the average number of hours for all projects?",
+        "completion": "```sql\nSELECT Name FROM Projects WHERE Hours > (SELECT Hours FROM Projects))",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.7,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.5,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 128,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 106.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the name of the manager with the most gas stations that opened after 2000?",
+        "completion": "```sql\nSELECT Manager_Name FROM gas_station_company WHERE Open_Year > 2000 GROUP BY Manager_Name HAVING count(*)) >= 2\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.17,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 28.75,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 129,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 50.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the total number of ratings that has more than 3 stars?",
+        "completion": "```sql\nSELECT count(*)) FROM Rating WHERE stars > 3\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.11,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.0,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 130,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0,
+      "mean_chars": 115,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 1,
+        "correct": 6
+      },
+      "sample": {
+        "question": "Show the average amount of transactions for different investors.",
+        "completion": "```sql\nSELECT Investor_id, AVG(amount_of_transaction) FROM Transactions`",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.57,
+      "loss": 0.11293374001979828,
+      "kl": 0.0,
+      "gen_tokens": 24.0,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 131,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 83.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "How many orders does Lucas Mancini has?",
+        "completion": "```sql\nSELECT count(*)) FROM customers WHERE first_name = 'Lucas' AND last_name = 'Mancini'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.37,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.0,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 132,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 67.375,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Compute the average number of hosts for parties.",
+        "completion": "```sql\nSELECT avg(Number_of_hosts) FROM party\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.46,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 15.75,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 133,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 171.875,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are all the document type codes and document type names?",
+        "completion": "```sql\nSELECT * FROM Ref_Document_Types\n```\n\nExplanation: The query selects all columns (`*`) from the `Ref_Document_Types` table, which contains information about different types of documents.",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 5.72,
+      "loss": 0.13528522849082947,
+      "kl": 0.0,
+      "gen_tokens": 41.0,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 134,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 117.5,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Count the number of financial transactions that correspond to each account id.",
+        "completion": "```sql\nSELECT \n    account_id,\n    count(*))\nFROM \n    Financial_Transactions\nGROUP BY \n    account_id\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 4.17,
+      "loss": -0.036843638867139816,
+      "kl": 0.0,
+      "gen_tokens": 24.5,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 135,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 135.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "List the authors who do not have submission to any workshop.",
+        "completion": "```sql\nSELECT Author FROM Submission WHERE Workshop_ID not in (SELECT id FROM workshop))\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.66,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 31.875,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 136,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 123.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the the lesson ids of all staff taught by Janessa Sawayn whose nickname has the letter s?",
+        "completion": "```sql\nSELECT lesson_id FROM Lessons WHERE staff_id IN (SELECT id FROM Staff WHERE nickname = 'Janessa Sawayn' AND middle_name IS NOT NULL)) AND (middle_name LIKE '%s%')\n```\n\nThis query selects the `lesson_id` from the `Lessons` table where the `staff_id` is in the list of `id`s of the staff named 'Janessa Sawayn' and where the `middle_name` is not `null`. It also filters the results to include only those where the `middle_name` contains the letter 's'.",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.38,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 32.875,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 137,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 74.5,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 3
+      },
+      "sample": {
+        "question": "find the highest support percentage, lowest consider rate and oppose rate of all candidates.",
+        "completion": "```sql\nSELECT *\nFROM candidate WHERE Support_rate > 1 and Consider_rate < 2 and Oppose_rate > 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.5,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.875,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 138,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 50.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the total number of ratings that has more than 3 stars?",
+        "completion": "```sql\nSELECT count(*)) FROM Rating WHERE stars > 3\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.07,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.0,
+      "peak_mem_gb": 6.65
+    },
+    {
+      "step": 139,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 224.375,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "how many programs are there?",
+        "completion": "```sql\nSELECT count(*)) FROM program\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.93,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 54.25,
+      "peak_mem_gb": 8.57
+    },
+    {
+      "step": 140,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 290,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Show the first and last name of all the faculty members who participated in some activity, together with the number of activities they participated in.",
+        "completion": "```sql\nSELECT fname, lname, count(*)) FROM Faculty_Participates_in GROUP BY fname, lname HAVING count(*)) >= 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 8.1,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 75.25,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 141,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 49.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the city with post code 255.",
+        "completion": "```sql\nSELECT city FROM addresses WHERE zip_postcode = '255')\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.25,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.75,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 142,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 77.75,
+      "status": {
+        "exec_error": 6,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Find the total number of rooms in the apartments that have facility code \"Gym\".",
+        "completion": "```sql\nSELECT count(*)) FROM Apartments WHERE facility_code = \"Gym\")\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.31,
+      "loss": 0.09089093655347824,
+      "kl": 0.0,
+      "gen_tokens": 20.25,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 143,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 93.375,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the heights of perpetrators in descending order of the number of people they injured?",
+        "completion": "```sql\nSELECT Height FROM people ORDER BY Injured DESC\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.07,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.25,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 144,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 96.125,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Show the shipping charge and customer id for customer orders with order status Cancelled or Paid.",
+        "completion": "```sql\nSELECT shipping_charge, customer_id FROM Customer_Orders WHERE order_status_code IN ('Cancelled', 'Paid'))\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.89,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 145,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 64.125,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Count the number of accounts.",
+        "completion": "```sql\nSELECT count(*))\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.13,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.0,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 146,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 68.5,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "find the highest support percentage, lowest consider rate and oppose rate of all candidates.",
+        "completion": "```sql\nSELECT *\nFROM candidate\nGROUP BY *\nHAVING count(*)) >= 3\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.45,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.875,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 147,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 64.25,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Return the name of the heaviest entrepreneur.",
+        "completion": "```sql\nSELECT Name FROM people WHERE Weight > 10000)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.22,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.0,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 148,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 243,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are total transaction amounts for each transaction type?",
+        "completion": "```sql\nSELECT transaction_type, SUM(transaction_amount)) FROM Financial_transactions GROUP BY transaction_type\n```\n\nExplanation:\n- `SELECT transaction_type, SUM(transaction_amount)) FROM Financial_transactions`: This part of the query selects the column `transaction_type` and calculates the sum of the column `transaction_amount`.\n- `FROM Financial_transactions`: This specifies the table to be queried.\n- `GROUP BY transaction_type`: This groups the results by the column `transaction_type`, so that only one row is returned for each group.\n- `SUM(transaction_amount))`: This calculates the sum of all the values in the `transaction_amount` column.",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.82,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 49.125,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 149,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 65.75,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Show the number of cities in counties that have a population more than 20000.",
+        "completion": "```sql\nSELECT count(*)) FROM city WHERE Population > 20000\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.47,
+      "loss": 0.03486546128988266,
+      "kl": 0.0,
+      "gen_tokens": 19.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 150,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 105.875,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Find the name of airports whose altitude is between -50 and 50.",
+        "completion": "```sql\nSELECT name FROM airports WHERE elevation BETWEEN -50 AND 50\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.63,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 27.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 151,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 89.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Return the apartment numbers of the apartments with type code \"Flat\".",
+        "completion": "```sql\nSELECT apt_id FROM Apartments WHERE type_code = \"Flat\")\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.38,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.75,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 152,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 47.25,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Which grade is studying in room 105?",
+        "completion": "```sql\nSELECT Grade FROM classrooms WHERE Id = 105\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 0.99,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 153,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 58,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "How many students are affected by food related allergies?",
+        "completion": "```sql\nSELECT count(*)) FROM Has_Allergy WHERE AllergyType = 'Food'",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.33,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 15.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 154,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 68.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "find the highest support percentage, lowest consider rate and oppose rate of all candidates.",
+        "completion": "```sql\nSELECT *\nFROM candidate\nGROUP BY *\nHAVING count(*)) >= 3\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.63,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 16.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 155,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 39.875,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the distinct districts for elections?",
+        "completion": "```sql\nSELECT DISTINCT District FROM election\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.33,
+      "loss": -0.025096381083130836,
+      "kl": 0.0,
+      "gen_tokens": 9.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 156,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 81.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the first name of the staff who did not give any lesson?",
+        "completion": "```sql\nSELECT first_name FROM Staff WHERE id not in (SELECT id FROM Lessons))\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.33,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.125,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 157,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 91.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Tell me the name of the most pricy product.",
+        "completion": "```sql\nSELECT Name FROM Products WHERE Price > 1000 GROUP BY Name HAVING count(*) >= 2\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.63,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.875,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 158,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 71.5,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 4
+      },
+      "sample": {
+        "question": "Show the game name that has most number of hours played.",
+        "completion": "```sql\nSELECT GName FROM Video_Games GROUP BY GName HAVING count(*) > 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.54,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.125,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 159,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 62.5,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the ids of the students who are under 20 years old and are involved in at least one activity.",
+        "completion": "```sql\nSELECT stid FROM Student WHERE Age < 20 INTERSECT SELECT id FROM Participates_in",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.77,
+      "loss": 0.013019934296607971,
+      "kl": 0.0,
+      "gen_tokens": 17.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 160,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 69.625,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "Which restaurants have highest rating? List the restaurant name and its rating.",
+        "completion": "```sql\nSELECT ResName, Rating FROM Restaurant\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.81,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.875,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 161,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 83.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Count the number of accounts.",
+        "completion": "```sql\nSELECT count(*) FROM Accounts\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.24,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.125,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 162,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 96.5,
+      "status": {
+        "exec_error": 2,
+        "correct": 6
+      },
+      "sample": {
+        "question": "Find the state, account type, and credit score of the customer whose number of loan is 0.",
+        "completion": "```sql\nSELECT state, account_type, credit_score FROM customer WHERE no_of_loans = 0\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.65,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 26.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 163,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 180.375,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are total transaction amounts for each transaction type?",
+        "completion": "```sql\nSELECT transaction_type, SUM(transaction_amount) FROM Financial_transactions GROUP BY transaction_type\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 6.52,
+      "loss": 0.8223894238471985,
+      "kl": 0.0,
+      "gen_tokens": 38.375,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 164,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 71.5,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 3
+      },
+      "sample": {
+        "question": "List ids for all student who are on scholarship.",
+        "completion": "```sql\nSELECT StuID FROM Student WHERE OnScholarship = 'SomeName'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.55,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.0,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 165,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 75.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the author who achieved the highest score in a submission.",
+        "completion": "```sql\nSELECT Author FROM Acceptance GROUP BY Author HAVING count(*) > 1 ORDER BY count(*) ASC LIMIT 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.52,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.25,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 166,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 113.5,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 3
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT Name FROM buildings GROUP BY Name HAVING count(*) > 1\n```\n\nExplanation: This SQL query groups the buildings by their name and counts the number of companies in each group. It then filters the groups to include only those with more than one company. The `GROUP BY` clause is used to group the results by the name of the group, and the `HAVING` clause is used to filter the groups based on a condition.",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 3.15,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 28.375,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 167,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 77.25,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What is the average latitude and longitude of stations located in San Jose city?",
+        "completion": "```sql\nSELECT avg(lat), avg(long) FROM station WHERE city = 'San Jose'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.92,
+      "loss": -2.7885214137768344e-09,
+      "kl": 0.0,
+      "gen_tokens": 22.375,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 168,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 52.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What are the names of ships, ordered by year they were built and their class?",
+        "completion": "```sql\nSELECT Name FROM Ship ORDER BY Built_Year, Class\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.14,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 169,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 86.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the average age of members of the club \"Hopkins Student Enterprises\".",
+        "completion": "```sql\nSELECT avg(age) FROM Member_of_club WHERE ClubName = 'Hopkins Student Enterprises'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.53,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.125,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 170,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 49.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the city with post code 255.",
+        "completion": "```sql\nSELECT city FROM cities WHERE zip_postcode = 255\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.12,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 14.0,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 171,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 79.875,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the average latitude and longitude of stations located in San Jose city?",
+        "completion": "```sql\nSELECT avg(lat), avg(long) FROM station WHERE city = 'San Jose'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.91,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.125,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 172,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 103.625,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Which attribute definitions have attribute value 0? Give me the attribute name and attribute ID.",
+        "completion": "```sql\nSELECT attribute_id, attribute_name FROM Catalog_Contents_Additional_Attributes WHERE attribute_value = 0",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.26,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 173,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 71.25,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "How many students are affected by food related allergies?",
+        "completion": "```sql\nSELECT count(*) FROM Has_Allergy WHERE AllergyType IN ('Food', 'NonFood')",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.65,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.875,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 174,
+      "reward_mean": 0.625,
+      "accuracy": 0.625,
+      "no_signal_share": 0,
+      "mean_chars": 114.75,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 2,
+        "correct": 5
+      },
+      "sample": {
+        "question": "Show the average amount of transactions for different investors.",
+        "completion": "```sql\nSELECT Investor_id, count(*) FROM Transactions GROUP BY Investor_id\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.62,
+      "loss": 0.05225490406155586,
+      "kl": 0.0,
+      "gen_tokens": 24.25,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 175,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 71,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the total number of rooms in the apartments that have facility code \"Gym\".",
+        "completion": "```sql\nSELECT count(*) FROM Apartments WHERE facility_code = \"Gym\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.17,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 176,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 124.25,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "What are the full names of customers with the account name 900?",
+        "completion": "```sql\nSELECT FullName FROM Customers WHERE Id=900",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.04,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 29.375,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 177,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 46.25,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Which grade is studying in room 105?",
+        "completion": "```sql\nSELECT Grade FROM classrooms WHERE Classroom = 105",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 0.96,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 12.25,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 178,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 88.625,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the last names of the members of the club \"Bootup Baltimore\".",
+        "completion": "```sql\nSELECT LastName FROM Member_of_club WHERE ClubName  =  \"Bootup Baltimore\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.44,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.25,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 179,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 79.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Show the prices of the products named \"Dining\" or \"Trading Policy\".",
+        "completion": "```sql\nSELECT Price FROM Products WHERE Name IN ('Dining', 'Trading Policy')\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.39,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.125,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 180,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 100.125,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "What is the description of the service type which offers both the photo product and the film product?",
+        "completion": "```sql\nSELECT Service_Type_Description FROM Services WHERE Product_ID IN (1, 2)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 6.57,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.875,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 181,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 49,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What is the total number of ratings that has more than 3 stars?",
+        "completion": "```sql\nSELECT COUNT(*) FROM Rating WHERE stars > 3\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.06,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 12.0,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 182,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 70.625,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the name, city, and country of the airport that has the lowest altitude.",
+        "completion": "```sql\nSELECT name, city, country FROM airports GROUP BY country ORDER BY count(*) ASC LIMIT 1",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.68,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 183,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 83.125,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT name FROM Buildings GROUP BY name HAVING count(*) > 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.71,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.375,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 184,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 96.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the names of all the customers and staff members.",
+        "completion": "```sql\nSELECT DISTINCT Name_of_Customer UNION ALL SELECT DISTINCT Name_of_Staff Member_of_Clients",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.24,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 185,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 99.25,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the dates of ceremony at music festivals corresponding to volumes that lasted more than 2 weeks on top?",
+        "completion": "```sql\nSELECT Date_of_ceremony FROM music_festival WHERE Weeks_on_Top > 2 GROUP BY Date_of_ceremony HAVING size(of GROUP BY Date_of_ceremony) >= 2\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.06,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 26.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 186,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 77.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "How many drama workshop groups are there in each city? Return both the city and the count.",
+        "completion": "```sql\nSELECT City_Town ,  count(*) FROM Drama_Workshop_Groups GROUP BY City_Town\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.48,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.375,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 187,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 96.75,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "Show the id and name of the employee with maximum salary.",
+        "completion": "```sql\nSELECT id,name FROM employee WHERE salary IN (SELECT id FROM employee GROUP BY id HAVING size (> 1))\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.68,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 188,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 98.125,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the name of airports whose altitude is between -50 and 50.",
+        "completion": "```sql\nSELECT name FROM airports WHERE elevation BETWEEN -50 AND 50\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.92,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 25.375,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 189,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 88.25,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Return the average price for each product type.",
+        "completion": "```sql\nSELECT product_type_code, AVG(product_price) FROM Products GROUP BY product_type_code\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 3.94,
+      "loss": 0.025412073358893394,
+      "kl": 0.0,
+      "gen_tokens": 20.875,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 190,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 79.5,
+      "status": {
+        "wrong_result": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the personal names and family names of the students? Sort the result in alphabetical order of the family name.",
+        "completion": "```sql\nSELECT DISTINCT personal_name ,  family_name FROM students ORDER BY family_name ASC",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.13,
+      "loss": -0.06996569782495499,
+      "kl": 0.0,
+      "gen_tokens": 17.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 191,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 79.5,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 1,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Which county has the largest population? Give me the name of the county.",
+        "completion": "```sql\nSELECT County_name FROM county GROUP BY Population ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.52,
+      "loss": -0.011029614135622978,
+      "kl": 0.0,
+      "gen_tokens": 20.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 192,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 46.5,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What is the average age for all person?",
+        "completion": "```sql\nSELECT avg(age) FROM Person",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 0.95,
+      "loss": 0.012827047146856785,
+      "kl": 0.0,
+      "gen_tokens": 12.25,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 193,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 98.375,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Count the number of distinct claim outcome codes.",
+        "completion": "```sql\nSELECT DISTINCT COUNT(DISTINCT Claim_Outcome_Code)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.57,
+      "loss": -0.05191897973418236,
+      "kl": 0.0,
+      "gen_tokens": 24.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 194,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 91,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the average age of members of the club \"Hopkins Student Enterprises\".",
+        "completion": "```sql\nSELECT avg(Age) FROM Member_of_club WHERE ClubName = \"Hopkins Student Enterprises\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.44,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 195,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 80.875,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 3,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Show the headquarters that have at least two companies.",
+        "completion": "```sql\nSELECT Headquarters FROM company GROUP BY Headquarters HAVING count(*) >= 2\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.55,
+      "loss": 0.023400718346238136,
+      "kl": 0.0,
+      "gen_tokens": 19.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 196,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 114.75,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the average enrollment size of the universities that are founded before 1850?",
+        "completion": "```sql\nSELECT avg(Enrollment) FROM university WHERE Founded < 1850\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.04,
+      "loss": -0.015671048313379288,
+      "kl": 0.0,
+      "gen_tokens": 28.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 197,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 50.375,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 1,
+        "correct": 6
+      },
+      "sample": {
+        "question": "What are the names of ships, ordered by year they were built and their class?",
+        "completion": "```sql\nSELECT Name FROM Ship ORDER BY Built_Year ,  Class",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.19,
+      "loss": -0.05318085849285126,
+      "kl": 0.0,
+      "gen_tokens": 12.75,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 198,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 82.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the first name of the staff who did not give any lesson?",
+        "completion": "```sql\nSELECT first_name FROM Staff WHERE customer_id NOT IN (SELECT id FROM Lessons",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.35,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.0,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 199,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 87.875,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT building_name FROM Companies GROUP BY building_name HAVING count(*) > 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.71,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.875,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 200,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 80.5,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "What are the names of the all-female dorms?",
+        "completion": "```sql\nSELECT Name FROM Dorm WHERE Sex  =  'Female'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.81,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.5,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 201,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 0,
+      "mean_chars": 77,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the total number of companies?",
+        "completion": "```sql\nSELECT 1 FROM company\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.84,
+      "loss": -0.08910059928894043,
+      "kl": 0.0,
+      "gen_tokens": 19.625,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 202,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 83.25,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 2,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Show the average transaction amount for different transaction types.",
+        "completion": "```sql\nSELECT avg(amount_of_transaction) GROUP BY transaction_type\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.04,
+      "loss": -0.07029843330383301,
+      "kl": 0.0,
+      "gen_tokens": 17.0,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 203,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 79.625,
+      "status": {
+        "wrong_result": 8
+      },
+      "sample": {
+        "question": "How many orders does Lucas Mancini has?",
+        "completion": "```sql\nSELECT CASE WHEN COUNT(*) THEN 1 ELSE NULL END FROM employees WHERE last_name = 'Lucas' AND first_name = 'Mancini'",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 3.49,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.875,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 204,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 105.75,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "What is the description of the service type which offers both the photo product and the film product?",
+        "completion": "```sql\nSELECT DISTINCT Service_Type_Description FROM Services WHERE Product_ID IN (SELECT ID FROM Products WHERE Product_Type_Description IN ('Photo', 'Film'))\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 6.53,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.375,
+      "peak_mem_gb": 11.24
+    },
+    {
+      "step": 205,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 197.125,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Show the number of customers.",
+        "completion": "```sql\nSELECT count(*) FROM Customers\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 9.48,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 45.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 206,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 97.75,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "What are the names of representatives in descending order of votes?",
+        "completion": "```sql\nSELECT Name FROM representative ORDER BY Votes DESC",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.84,
+      "loss": -0.010369169525802135,
+      "kl": 0.0,
+      "gen_tokens": 21.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 207,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 119.25,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the number of routes from the United States to Canada.",
+        "completion": "```sql\nSELECT count(*) FROM routes WHERE dst_apid in (SELECT id FROM airports WHERE country = 'United States') AND src_apid in (SELECT id FROM airports WHERE country = 'Canada')\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.05,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 29.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 208,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 82.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT name FROM buildings GROUP BY name HAVING size > 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.51,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 209,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 58.125,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 4,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the different ship flags, and how many ships have each?",
+        "completion": "```sql\nSELECT DISTINCT Flag ,  count(*) FROM Ship\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.31,
+      "loss": -0.13528522849082947,
+      "kl": 0.0,
+      "gen_tokens": 17.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 210,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 67.25,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the crime rates of counties sorted by number of offices ascending?",
+        "completion": "```sql\nSELECT Crime_rate FROM county_public_safety ORDER BY NumberOf_officers ASC\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.36,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 211,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0,
+      "mean_chars": 78.625,
+      "status": {
+        "exec_error": 2,
+        "correct": 6
+      },
+      "sample": {
+        "question": "How many professors do have a Ph.D. degree?",
+        "completion": "```sql\nSELECT count(*) FROM PROFESSOR WHERE PROF_HIGH_DEGREE = 'Ph.D.'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.46,
+      "loss": -0.03628220781683922,
+      "kl": 0.0,
+      "gen_tokens": 22.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 212,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 99.625,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Show the headquarters that have at least two companies.",
+        "completion": "```sql\nSELECT Headquarters FROM company GROUP BY Headquarters HAVING size(ResultSet) >= 2\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.77,
+      "loss": 0.018038013949990273,
+      "kl": 0.0,
+      "gen_tokens": 25.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 213,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 88.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Which building has the largest number of company offices? Give me the building name.",
+        "completion": "```sql\nSELECT name FROM Companies GROUP BY size(Hardly_Named_Companies) ORDER BY size(Hardly_Named_Companies) DESC LIMIT 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.79,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.125,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 214,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 106.125,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 1,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What is the list of school locations sorted in ascending order of school enrollment?",
+        "completion": "```sql\nSELECT LOCATION FROM school ORDER BY Enrollment ASC\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.6,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 215,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 90.25,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Which allergy has most number of students affected?",
+        "completion": "```sql\nSELECT allergy FROM Has_Allergy GROUP BY allergy HAVING size(Has_Allergy)  >  1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.56,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.125,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 216,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 85.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the total amount of money spent by Lucas Mancini?",
+        "completion": "```sql\nSELECT sum(total) FROM employees WHERE last_name = 'Lucas' AND city = 'Mancini'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.34,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.125,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 217,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 62,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 2,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What is the average age for a male in each job?",
+        "completion": "```sql\nSELECT avg(age) FROM Person WHERE gender IN ('Male')",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.08,
+      "loss": 5.911204414843496e-09,
+      "kl": 0.0,
+      "gen_tokens": 16.125,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 218,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 81.625,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 1,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Return the type code of the document named \"David CV\".",
+        "completion": "```sql\nSELECT type_code FROM Documents WHERE document_name = 'David CV'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.39,
+      "loss": -0.03710680827498436,
+      "kl": 0.0,
+      "gen_tokens": 18.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 219,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 78.375,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 2,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Return the type code of the document named \"David CV\".",
+        "completion": "```sql\nSELECT type_code FROM Documents WHERE document_name  =  \"David CV\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.37,
+      "loss": -0.05093090608716011,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 220,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 80.75,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "What are the first name, last name, and gender of all the good customers? Order by their last name.",
+        "completion": "```sql\nSELECT DISTINCT FROM Customers WHERE gender_mf ORDER BY last_name\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.42,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 221,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 65.25,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "Find the average age of students living in each dorm and the name of dorm.",
+        "completion": "```sql\nSELECT avg(age), name FROM lives_in GROUP BY name\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.7,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 222,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 86.125,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Which buildings have more than one company offices? Give me the building names.",
+        "completion": "```sql\nSELECT name FROM buildings WHERE has_child Companies AND count(*) > 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.64,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 223,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 63.125,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the names of all the catalog entries.",
+        "completion": "```sql\nSELECT name FROM Catalog_Contents\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.02,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 15.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 224,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 90.25,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the last names of the members of the club \"Bootup Baltimore\".",
+        "completion": "```sql\nSELECT Name FROM Member_of_club WHERE ClubName  =  'Bootup Baltimore'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.51,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 225,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 64.125,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "Find the average age of students living in each dorm and the name of dorm.",
+        "completion": "```sql\nSELECT avg(age) ,  name FROM Lives_in GROUP BY name\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.68,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 226,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 46.5,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Which grade is studying in room 105?",
+        "completion": "```sql\nSELECT Classroom FROM teachers WHERE Classroom = 105",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 0.99,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 227,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 58.625,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "Find the name, city, and country of the airport that has the lowest altitude.",
+        "completion": "```sql\nSELECT name, city, country FROM airports ORDER BY elevation LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.45,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 14.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 228,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 81.875,
+      "status": {
+        "exec_error": 6,
+        "correct": 2
+      },
+      "sample": {
+        "question": "What is the level name of the cheapest catalog (in USD)?",
+        "completion": "```sql\nSELECT catalog_level_name FROM Catalog_Structure ORDER BY price_in_dollars LIMIT 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.2,
+      "loss": -0.038453858345746994,
+      "kl": 0.0,
+      "gen_tokens": 20.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 229,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 77,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 6
+      },
+      "sample": {
+        "question": "Give id of the instructor who advises students in the History department.",
+        "completion": "SELECT id FROM instructor WHERE dept_name IN ('History')",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 3.93,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 16.125,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 230,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0,
+      "mean_chars": 77.25,
+      "status": {
+        "exec_error": 2,
+        "correct": 6
+      },
+      "sample": {
+        "question": "How many professors do have a Ph.D. degree?",
+        "completion": "```sql\nSELECT count(*) FROM professor WHERE prof_degree = 'Ph.D.'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.43,
+      "loss": -0.030028635635972023,
+      "kl": 0.0,
+      "gen_tokens": 22.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 231,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 0,
+      "mean_chars": 97.125,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Show the average transaction amount for different transaction types.",
+        "completion": "```sql\nSELECT avg(amount_of_transaction) FROM Transactions\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.32,
+      "loss": -0.3289664387702942,
+      "kl": 0.0,
+      "gen_tokens": 20.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 232,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 82.25,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the wifi and screen mode type of the hardware model named \"LG-P760\"?",
+        "completion": "```sql\nSELECT Type FROM phone WHERE Hardware_Model_name  =  \"LG-P760 AND screen_modetype  =  \"Wi-Fi\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.96,
+      "loss": 0.003279650816693902,
+      "kl": 0.0,
+      "gen_tokens": 23.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 233,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 89.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Find the last names of the members of the club \"Bootup Baltimore\".",
+        "completion": "```sql\nSELECT last_name FROM Member_of_club WHERE ClubName  =  \"Bootup Baltimore\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.52,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 234,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 90.25,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 3
+      },
+      "sample": {
+        "question": "Show the distinct director of films with market estimation in the year of 1995.",
+        "completion": "```sql\nSELECT DISTINCT Director FROM film_market_estimation WHERE Year = 1995\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.6,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 235,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 71.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Who are the advisors for students that live in a city with city code \"BAL\"?",
+        "completion": "```sql\nSELECT Advisor FROM Student WHERE City_Code  =  \"BAL\"\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.69,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 236,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 86.625,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Return the titles of films that include 'Deleted Scenes' in their special feature section.",
+        "completion": "```sql\nSELECT title FROM film WHERE special_features LIKE '%Deleted Scenes%'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 4.84,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 237,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 64.375,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Return the code of the city that has the most students.",
+        "completion": "```sql\nSELECT city_code FROM Student GROUP BY city_code HAVING size(*) >= 2\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.64,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 238,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 90.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the first name, GPA, and phone number of the students with the top 5 GPAs?",
+        "completion": "```sql\nSELECT firstname, gpa, phone FROM student GROUP BY firstname HAVING size(GRAPHIC) >= 5\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.7,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 239,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 69,
+      "status": {
+        "exec_error": 6,
+        "correct": 2
+      },
+      "sample": {
+        "question": "What is the maximum, minimum and average market share of the listed browsers?",
+        "completion": "```sql\nSELECT max(?, ?), min(?, ?), avg(?) FROM browser\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.38,
+      "loss": -0.014811848290264606,
+      "kl": 0.0,
+      "gen_tokens": 17.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 240,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 56.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What are the birthdays of people in ascending order of height?",
+        "completion": "```sql\nSELECT Birth_Date FROM people ORDER BY Height ASC\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.06,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 241,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 169.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "List the position of players with average number of points scored by players of that position bigger than 20.",
+        "completion": "```sql\nSELECT Position FROM player WHERE Points > 20 GROUP BY Position HAVING size(GROUP BY Position) > 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.55,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 40.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 242,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 74.625,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Which workshop groups have bookings with status code \"stop\"? Give me the names.",
+        "completion": "```sql\nSELECT Name FROM Workshops WHERE Status_Code IN (\"stop\")\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.37,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 243,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 54.25,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What are the names of ships, ordered by year they were built and their class?",
+        "completion": "```sql\nSELECT Name FROM Ship ORDER BY Built_Year ,  Class\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.17,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 14.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 244,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 85.375,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "What is the maximum number that a certain service is provided? List the service id, details and number.",
+        "completion": "```sql\nSELECT \n    Max(Service_id), \n    sum(case when Provided THEN 1 else null end), \n    count(*) FROM Services",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.11,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 245,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 84.375,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are all the distinct premise types?",
+        "completion": "```sql\nSELECT DISTINCT premise_type FROM Premises\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.19,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.125,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 246,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 88,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 3
+      },
+      "sample": {
+        "question": "Show names of pilots that have more than one record.",
+        "completion": "```sql\nSELECT Name FROM Pilot_record GROUP BY Name HAVING size (values()) > 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.72,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 247,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 83.375,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the first name, GPA, and phone number of the students with the top 5 GPAs?",
+        "completion": "```sql\nSELECT Fist_name,GPA,Phone_number FROM Student ORDER BY GPA DESC LIMIT 5\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.59,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 248,
+      "reward_mean": 0.875,
+      "accuracy": 0.875,
+      "no_signal_share": 0.5,
+      "mean_chars": 64.5,
+      "status": {
+        "exec_error": 1,
+        "correct": 7
+      },
+      "sample": {
+        "question": "What is the total number of companies?",
+        "completion": "```sql\nSELECT count(*) FROM company\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.73,
+      "loss": 0.1985626518726349,
+      "kl": 0.0,
+      "gen_tokens": 16.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 249,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 53.25,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What are the names of ships, ordered by year they were built and their class?",
+        "completion": "```sql\nSELECT Name FROM Ship ORDER BY Built_Year ,  Class\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.18,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 250,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 53.875,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "how many programs are there?",
+        "completion": "```sql\nSELECT count(*) FROM program\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.33,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 12.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 251,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 84.5,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 3
+      },
+      "sample": {
+        "question": "Show the names of employees that work for companies with sales bigger than 200.",
+        "completion": "```sql\nSELECT Name FROM company WHERE Sales_in_Billion  >  200\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.75,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 252,
+      "reward_mean": 0.125,
+      "accuracy": 0.125,
+      "no_signal_share": 0.5,
+      "mean_chars": 104.625,
+      "status": {
+        "exec_error": 7,
+        "correct": 1
+      },
+      "sample": {
+        "question": "Tell me the name of the most pricy product.",
+        "completion": "```sql\nSELECT Product_Name FROM Products ORDER BY Product_Price DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 5.62,
+      "loss": 0.05708739534020424,
+      "kl": 0.0,
+      "gen_tokens": 23.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 253,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 142.25,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Which workshop groups have bookings with status code \"stop\"? Give me the names.",
+        "completion": "```sql\nSELECT Name FROM Drama_Workshop_Groups WHERE Status_Code = \"stop\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 8.24,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 36.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 254,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 105.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the names of directors who directed movies with 5 star rating? Also return the title of these movies.",
+        "completion": "```sql\nSELECT name FROM Movie WHERE stars = 5 UNION ALL SELECT title FROM Movie WHERE rID IN (SELECT ID FROM Reviewer WHERE stars = 5",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.76,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 27.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 255,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 43.5,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "What are the distinct districts for elections?",
+        "completion": "```sql\nSELECT DISTINCT District FROM election\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.14,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 10.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 256,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 82.75,
+      "status": {
+        "exec_error": 5,
+        "wrong_result": 3
+      },
+      "sample": {
+        "question": "Show names of pilots that have more than one record.",
+        "completion": "```\nSELECT Pilot_name FROM pilot_record GROUP BY Pilot_name HAVING size(ResultSet) > 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.72,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 257,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 48.75,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the nationalities and ages of journalists?",
+        "completion": "```sql\nSELECT Nationality ,  Age FROM journalist\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.22,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 13.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 258,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 121.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the membership level with the most people?",
+        "completion": "```sql\nSELECT Level FROM member GROUP BY Level HAVING size()>1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.45,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 32.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 259,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 88.125,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Count the number of distinct claim outcome codes.",
+        "completion": "```sql\nSELECT count(DISTINCT Claim_Outcome_Code)\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.37,
+      "loss": -0.05247427150607109,
+      "kl": 0.0,
+      "gen_tokens": 21.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 260,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 56.625,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the mission codes, fates, and names of the ships involved?",
+        "completion": "```sql\nSELECT Code, Fate, Name FROM ship JOIN mission_ships JOIN Ship JOIN shipable FROM Entity\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.39,
+      "loss": 0.00515371561050415,
+      "kl": 0.0,
+      "gen_tokens": 15.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 261,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 80,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 4
+      },
+      "sample": {
+        "question": "Show the names of employees that work for companies with sales bigger than 200.",
+        "completion": "```sql\nSELECT Name FROM company WHERE Sales_in_Billion > 200\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.84,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 22.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 262,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 66.25,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "List the authors who do not have submission to any workshop.",
+        "completion": "```sql\nSELECT Author FROM Submission EXCEPT SELECT Author FROM Workshop\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.2,
+      "loss": -0.06184467300772667,
+      "kl": 0.0,
+      "gen_tokens": 15.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 263,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 61.875,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "give me names of all compatible browsers and accelerators in the descending order of compatible year",
+        "completion": "```sql\nSELECT name FROM accelerator_compatible_browser ORDER BY compatible_since_year DESC\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.53,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 14.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 264,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 59.25,
+      "status": {
+        "exec_error": 2,
+        "wrong_result": 2,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Find the number of albums by the artist \"Metallica\".",
+        "completion": "```sql\nSELECT count(*) FROM Album WHERE ArtistId = 1 AND Name = \"Metallica\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 5.41,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 15.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 265,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 157.75,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 2,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are total transaction amounts for each transaction type?",
+        "completion": "```sql\nSELECT transaction_type, SUM(transaction_amount) FROM Financial_transactions GROUP BY transaction_type\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 5.57,
+      "loss": 0.03206760808825493,
+      "kl": 0.0,
+      "gen_tokens": 34.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 266,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 111.375,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "List the position of players with average number of points scored by players of that position bigger than 20.",
+        "completion": "```sql\nSELECT Position FROM player WHERE Points > 20 GROUP BY Position HAVING size()>1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.16,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 25.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 267,
+      "reward_mean": 0.875,
+      "accuracy": 0.875,
+      "no_signal_share": 0.5,
+      "mean_chars": 41.875,
+      "status": {
+        "wrong_result": 1,
+        "correct": 7
+      },
+      "sample": {
+        "question": "What are the distinct districts for elections?",
+        "completion": "```sql\nSELECT DISTINCT District FROM election\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.15,
+      "loss": -0.07528916746377945,
+      "kl": 0.0,
+      "gen_tokens": 9.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 268,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 73.625,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the birth date and birth place of the body builder with the highest total points?",
+        "completion": "```sql\nSELECT Birth_Date, Birth_Place FROM people ORDER BY Total DESC LIMIT 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.4,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 269,
+      "reward_mean": 0.875,
+      "accuracy": 0.875,
+      "no_signal_share": 0.5,
+      "mean_chars": 51.625,
+      "status": {
+        "exec_error": 1,
+        "correct": 7
+      },
+      "sample": {
+        "question": "Find the total number of employees.",
+        "completion": "```sql\nSELECT count(*) FROM employee\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.16,
+      "loss": 0.010494856163859367,
+      "kl": 0.0,
+      "gen_tokens": 14.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 270,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 90.75,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "List all payment methods and number of payments using each payment methods.",
+        "completion": "```sql\nSELECT payment_method_code ,  count(*) FROM Customer_payments GROUP BY payment_method_code\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.55,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 271,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 74,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the different fates of the mission that involved ships from the United States?",
+        "completion": "```sql\nSELECT Fate FROM ship WHERE Nationality = 'United States'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.28,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 272,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 237.125,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the name of the artist who produced the shortest song?",
+        "completion": "```sql\nSELECT artist_name FROM song WHERE length_of_song <= 1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 8.03,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 54.125,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 273,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 93.375,
+      "status": {
+        "exec_error": 3,
+        "wrong_result": 1,
+        "correct": 4
+      },
+      "sample": {
+        "question": "What are the different software platforms for devices, ordered by frequency descending?",
+        "completion": "```sql\nSELECT Software_Platform FROM device GROUP BY Software_Platform ORDER BY count(*) DESC LIMIT 1\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.6,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 21.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 274,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 81.5,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Show each premise type and the number of premises in that type.",
+        "completion": "```sql\nSELECT premise_type, count(*) FROM Premises GROUP BY premise_type\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.72,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 275,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 76,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "What are the countries that have at least two perpetrators?",
+        "completion": "```sql\nSELECT Country FROM people GROUP BY Country HAVING size()>1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.41,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 276,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 73,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "List ids for all student who are on scholarship.",
+        "completion": "```sql\nSELECT StuID FROM Student WHERE OnScholarship = 'OnScholarship'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.51,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 277,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 88.25,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "Return the type code of the document named \"David CV\".",
+        "completion": "```sql\nSELECT type_code FROM Documents WHERE document_name = 'David CV'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.57,
+      "loss": -0.034865450114011765,
+      "kl": 0.0,
+      "gen_tokens": 19.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 278,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 78.375,
+      "status": {
+        "wrong_result": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "For each product, return its id and the number of times it was ordered.",
+        "completion": "```sql\nSELECT product_id, count(*) FROM Order_Items GROUP BY product_id\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 2.12,
+      "loss": -0.04601004719734192,
+      "kl": 0.0,
+      "gen_tokens": 18.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 279,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 94.75,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What are the names of procedures physician John Wen was trained in?",
+        "completion": "```sql\nSELECT Name FROM Procedure AS P JOIN Trained_In AS TIN ON P.Id = TIN\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 4.54,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 23.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 280,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 54.125,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "List the order dates of all the bookings.",
+        "completion": "```sql\nSELECT Order_Date FROM Bookings\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 5.18,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 14.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 281,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 79.125,
+      "status": {
+        "exec_error": 1,
+        "wrong_result": 1,
+        "correct": 6
+      },
+      "sample": {
+        "question": "Which problems are reported before 1978-06-26? Give me the ids of the problems.",
+        "completion": "```sql\nSELECT problem_id FROM Problems WHERE date_problem_reported < '1978-06-26'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.42,
+      "loss": -0.01754034124314785,
+      "kl": 0.0,
+      "gen_tokens": 22.375,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 282,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 73.375,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "Show all book categories and the number of books in each category.",
+        "completion": "```sql\nSELECT category ,  count(*) FROM book_club GROUP BY category\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.48,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 18.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 283,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 75.25,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "What are the names of representatives in descending order of votes?",
+        "completion": "```sql\nSELECT Name FROM representative ORDER BY Votes DESC\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.45,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 284,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 0,
+      "mean_chars": 66,
+      "status": {
+        "exec_error": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "How many different colleges do attend the tryout test?",
+        "completion": "```sql\nSELECT count(DISTINCT cName) FROM Tryout\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.37,
+      "loss": 0.04999517276883125,
+      "kl": 0.0,
+      "gen_tokens": 16.875,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 285,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 63.875,
+      "status": {
+        "exec_error": 2,
+        "correct": 6
+      },
+      "sample": {
+        "question": "What are the ids of the students who are under 20 years old and are involved in at least one activity.",
+        "completion": "```sql\nSELECT Stuid FROM Student WHERE Age < 20 INTERSECT SELECT Stuid FROM Activities",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.77,
+      "loss": -0.0769076943397522,
+      "kl": 0.0,
+      "gen_tokens": 17.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 286,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 91.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Give me a list of names and years of races that had any driver whose forename is Lewis?",
+        "completion": "```sql\nSELECT name ,  year FROM drivers WHERE forename  =  \"Lewis\"\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 3.81,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 287,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 71.125,
+      "status": {
+        "exec_error": 4,
+        "wrong_result": 2,
+        "correct": 2
+      },
+      "sample": {
+        "question": "How many friends does Dan have?",
+        "completion": "```sql\nSELECT count(*) FROM PersonFriend WHERE friend = 'Dan'\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 1.28,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 19.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 288,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 63.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Return the code of the city that has the most students.",
+        "completion": "```sql\nSELECT City_Code FROM Student GROUP BY City_Code HAVING size()>1\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.65,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 17.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 289,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 85.25,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Show the names of trains and locations of railways they are in.",
+        "completion": "```sql\nSELECT Train_Name ,  Location FROM railway_manage\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.99,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 20.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 290,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 191,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "What is the first name, GPA, and phone number of the students with the top 5 GPAs?",
+        "completion": "```sql\nSELECT first_name,gpa,phone FROM student ORDER BY gpa DESC LIMIT 5\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 8.25,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 51.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 291,
+      "reward_mean": 0.75,
+      "accuracy": 0.75,
+      "no_signal_share": 0.5,
+      "mean_chars": 79.75,
+      "status": {
+        "wrong_result": 2,
+        "correct": 6
+      },
+      "sample": {
+        "question": "Which problems are reported before 1978-06-26? Give me the ids of the problems.",
+        "completion": "```sql\nSELECT problem_id FROM Problems WHERE date_problem_reported < '1978-06-26'\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 2.57,
+      "loss": 0.005779178347438574,
+      "kl": 0.0,
+      "gen_tokens": 22.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 292,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 106.5,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Show the distinct director of films with market estimation in the year of 1995.",
+        "completion": "```sql\nSELECT DISTINCT Director FROM film_market_estimation WHERE Year = 1995\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.61,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 25.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 293,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 105.375,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Show the name and number of employees for the departments managed by heads whose temporary acting value is 'Yes'?",
+        "completion": "```sql\nSELECT Name ,  Num_Employees FROM department WHERE Department_ID IN (SELECT ID FROM management WHERE Temporary_acting  =  'Yes')\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.87,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 28.125,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 294,
+      "reward_mean": 1.0,
+      "accuracy": 1,
+      "no_signal_share": 1,
+      "mean_chars": 59,
+      "status": {
+        "correct": 8
+      },
+      "sample": {
+        "question": "Find the name, city, and country of the airport that has the lowest altitude.",
+        "completion": "```sql\nSELECT name, city, country FROM airports ORDER BY elevation LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 1.44,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 14.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 295,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 91.875,
+      "status": {
+        "exec_error": 7,
+        "wrong_result": 1
+      },
+      "sample": {
+        "question": "Find the ids and names of stations from which at least 200 trips started.",
+        "completion": "```sql\nSELECT id, name FROM trip WHERE trips_count >= 200\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 2.17,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 24.625,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 296,
+      "reward_mean": 0.25,
+      "accuracy": 0.25,
+      "no_signal_share": 0.5,
+      "mean_chars": 93.75,
+      "status": {
+        "exec_error": 6,
+        "correct": 2
+      },
+      "sample": {
+        "question": "Tell me the name of the most pricy product.",
+        "completion": "```sql\nSELECT Product_Name FROM Products ORDER BY Product_Price DESC LIMIT 1\n```",
+        "status": "correct",
+        "reward": 1.0
+      },
+      "step_s": 5.61,
+      "loss": 0.07498499006032944,
+      "kl": 0.0,
+      "gen_tokens": 21.0,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 297,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 198.875,
+      "status": {
+        "exec_error": 8
+      },
+      "sample": {
+        "question": "Show the name and number of employees for the departments managed by heads whose temporary acting value is 'Yes'?",
+        "completion": "```sql\nSELECT Name ,  count(*) FROM management WHERE Temporary_acting  =  'Yes'\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 7.22,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 52.75,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 298,
+      "reward_mean": 0.5,
+      "accuracy": 0.5,
+      "no_signal_share": 1,
+      "mean_chars": 146.125,
+      "status": {
+        "wrong_result": 4,
+        "correct": 4
+      },
+      "sample": {
+        "question": "How many members have the black membership card?",
+        "completion": "```sql\nSELECT count(*) FROM member WHERE Level_of_membership = 'Black'\n```",
+        "status": "wrong_result",
+        "reward": 0.0
+      },
+      "step_s": 4.66,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 34.5,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 299,
+      "reward_mean": 0.0,
+      "accuracy": 0,
+      "no_signal_share": 1,
+      "mean_chars": 58.875,
+      "status": {
+        "exec_error": 6,
+        "wrong_result": 2
+      },
+      "sample": {
+        "question": "List ids for all student who are on scholarship.",
+        "completion": "```sql\nSELECT StuID FROM StudentOnScholarship\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.45,
+      "loss": 0.0,
+      "kl": 0.0,
+      "gen_tokens": 16.25,
+      "peak_mem_gb": 11.62
+    },
+    {
+      "step": 300,
+      "reward_mean": 0.375,
+      "accuracy": 0.375,
+      "no_signal_share": 0.5,
+      "mean_chars": 75,
+      "status": {
+        "exec_error": 5,
+        "correct": 3
+      },
+      "sample": {
+        "question": "What are the heights of perpetrators in descending order of the number of people they injured?",
+        "completion": "```sql\nSELECT Height FROM people ORDER BY Injury DESC\n```",
+        "status": "exec_error",
+        "reward": 0.0
+      },
+      "step_s": 1.55,
+      "loss": -0.016491910442709923,
+      "kl": 0.0,
+      "gen_tokens": 18.5,
+      "peak_mem_gb": 11.62
+    }
+  ]
+}
