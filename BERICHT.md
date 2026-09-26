@@ -1,6 +1,6 @@
 # Projektbericht: Ein kleines, lokales Sprachmodell lernt Datenbankabfragen durch Reinforcement Learning
 
-*Modul Reinforcement Learning, FHNW (Prof. Dr. Manuel Renold, CLS-Lab). Stand: 25. September 2026, Phasen 0 bis 5 und Vergleich der Reward-Varianten.*
+*Modul Reinforcement Learning, FHNW (Prof. Dr. Manuel Renold, CLS-Lab). Stand: 26. September 2026, Phasen 0 bis 5, Vergleich der Reward-Varianten und Schlusstest des lokalen Modells.*
 
 ## 1. Kurzfassung
 
@@ -11,15 +11,17 @@ Das Modell läuft lokal auf einem Laptop, Firmendaten verlassen das Haus also ni
 Trainiert wird mit **Reinforcement Learning (RL) mit verifizierbarem Reward**: Das Modell schreibt eine Abfrage, die Datenbank führt sie aus, und nur ein korrektes Resultat wird belohnt.
 Eine menschliche Bewertung jeder Antwort ist dafür nicht nötig.
 
-Stand heute ist die Grundlage gebaut, und ein erstes kurzes RL-Training auf dem Laptop zeigt bereits Wirkung:
+Stand heute ist die Grundlage gebaut, und schon ein kurzes RL-Training auf dem Laptop verbessert das Modell deutlich:
 
-| Kennzahl | Wert |
-|---|---|
-| Basismodell | Qwen2.5-Coder-0.5B-Instruct, 494 Mio. Parameter, Apache-2.0-Lizenz |
-| Trefferquote vor dem Training, 1'034 Testfragen | **45,3 %** |
-| Antwortzeit pro Frage auf einem MacBook M4 | 0,6 s |
-| Speicherbedarf | 1,5 GB |
-| Erstes RL-Training: 300 Schritte, 200 Fragen, 70 Minuten auf dem Laptop | Validierung auf unbekannten Datenbanken: **49,4 % → 56,7 %** |
+| Kennzahl | Basismodell | Nach RL-Training |
+|---|---|---|
+| Trefferquote, 1'034 Testfragen auf 20 unbekannten Datenbanken | 45,3 % | **52,5 %** |
+| Antwortzeit pro Frage auf einem MacBook M4 | 0,60 s | 0,67 s |
+| Speicherbedarf | 1,5 GB | 1,8 GB |
+| Trainingsaufwand | – | 70 Minuten auf dem Laptop, 200 Trainingsfragen |
+
+Das Modell ist Qwen2.5-Coder-0.5B-Instruct mit 494 Millionen Parametern und Apache-2.0-Lizenz.
+Die Verbesserung ist statistisch gesichert: McNemar-Test, z = 6,0, p ≈ 2·10⁻⁹.
 
 Die zentrale Frage des Projekts: **Wie weit bringt RL ein so kleines Modell, und wie steht es danach im Vergleich zu einem grossen, kostenpflichtigen API-Modell bei Genauigkeit, Antwortzeit und Kosten?**
 
@@ -186,6 +188,40 @@ Stichproben der Antworten zeigen echte SQL-Abfragen und keine Tricks wie `SELECT
 Diese Entscheidungen fielen nur anhand der Trainingsprotokolle und des Validierungsdatensatzes.
 Eine Offenlegung: Den gescheiterten Anlauf 3 haben wir einmalig auch auf 200 Testfragen gemessen, mit 31,5 % gegenüber 48,5 % beim Basismodell. Danach haben wir den Validierungsdatensatz eingeführt. Der Testdatensatz wurde seither nicht mehr verwendet.
 
+### Schlusstest auf dem Testdatensatz
+
+Das Modell aus Anlauf 4, trainiert mit dem binären Reward, wurde einmal auf allen 1'034 Testfragen gemessen.
+Die Einstellungen für den späteren Cloud-Lauf standen zu diesem Zeitpunkt bereits fest und sind in der Versionsgeschichte am 25. September 2026 festgehalten. Das Testergebnis kann sie also nicht mehr beeinflusst haben.
+
+| Ergebnis auf 1'034 Testfragen | Basismodell | Nach RL-Training |
+|---|---|---|
+| korrekt | 45,3 % | **52,5 %** |
+| ohne Fragen mit leerem Referenzresultat | 45,0 % | 51,5 % |
+| erfundene oder falsch zugeordnete Spalte oder Tabelle | 33,6 % | 23,3 % |
+| läuft, liefert aber ein falsches Resultat | 19,5 % | 22,8 % |
+| sonstige Fehler und Syntaxfehler | 1,6 % | 1,3 % |
+| Antwortzeit, Mittel / 95 % der Fragen unter | 0,60 s / 1,05 s | 0,67 s / 1,13 s |
+
+- Das trainierte Modell löst 116 Testfragen, die das Basismodell nicht löst. Umgekehrt sind es 41. McNemar-Test: z = 6,0, p ≈ 2·10⁻⁹.
+- 16 der 20 Testdatenbanken verbessern sich, eine verschlechtert sich.
+- Der Gewinn kommt fast ganz aus der Fehlerart, die der Reward direkt bestraft: Schemafehler sinken um fast ein Drittel. Ein Teil dieser Abfragen läuft jetzt, liefert aber noch das falsche Resultat.
+
+### Kosten pro Anfrage
+
+**Lokal:** Der Laptop braucht als Ganzes rund 30 Watt, gemessen über den Akku, im Leerlauf wie bei der Beantwortung von Fragen. Der Zusatzverbrauch des kleinen Modells ist kleiner, als der Akkusensor auflöst.
+Als Obergrenze gilt: 30 W während 0,67 s, also rund 20 Joule oder 0,0056 Wh pro Frage.
+Bei einem angenommenen Strompreis von 0,30 CHF/kWh kosten 1'000 Fragen höchstens etwa 0,2 Rappen Strom. Der Laptop selbst ist dabei nicht eingerechnet.
+
+**Grosses API-Modell:** Die Messung mit Claude Opus 5 ist vorbereitet, aber noch nicht gelaufen, weil dafür ein API-Schlüssel und ein Budget nötig sind.
+Zum Listenpreis von 5 USD pro Million Eingabe-Tokens und 25 USD pro Million Ausgabe-Tokens ergibt sich eine grobe Schätzung. Angenommen sind rund 450 Eingabe-Tokens und 40 sichtbare Ausgabe-Tokens pro Frage, dazu eine unbekannte Menge Denk-Tokens:
+
+| Denk-Tokens pro Frage, Annahme | Kosten pro 1'000 Fragen |
+|---|---|
+| 0 | ca. 3 USD |
+| 500 | ca. 16 USD |
+
+Das ist mindestens tausendmal teurer als der Strom des lokalen Modells. Die echten Zahlen kommen aus der Messung, denn Tokenizer und Denkaufwand von Claude weichen von diesen Annahmen ab.
+
 ### Rechenaufwand auf dem Laptop
 
 | Einstellung | Zeit pro Schritt, Median | Speicher, Spitze |
@@ -269,6 +305,7 @@ Wer Kürze belohnen will, muss das Format zusätzlich absichern, zum Beispiel mi
 | 4 | RL-Machbarkeitstest lokal | erledigt, Validierung 49,4 % → 56,7 % |
 | 5 | Trainingsskript für die Cloud-GPU | erledigt, auf dem Laptop ohne Training geprüft |
 | – | Vergleich der Reward-Varianten, lokal | erledigt, siehe Abschnitt 8 |
-| 6 | Finaler Lauf, Vergleich mit API-Modell, Präsentation | offen |
+| 6 | Schlusstest des lokalen RL-Modells | erledigt, 45,3 % → 52,5 % auf 1'034 Testfragen |
+| 7 | Cloud-Lauf, Messung des API-Modells, Präsentation | offen, braucht GPU-Miete und API-Schlüssel |
 
 **Offener Punkt:** Laut Vorlesung ist der Leistungsnachweis ein Gruppenprojekt mit 2 bis 4 Personen. Die Gruppenzusammensetzung ist noch zu klären.

@@ -84,6 +84,28 @@ Greedy decoding, max 256 new tokens, one request at a time (latency = prefill + 
 
 Apple M4, 24 GB, MLX 0.32.2 / mlx-lm 0.31.3, bf16 weights.
 
+### Large API model baseline (Claude)
+
+`--api-model` sends the same system prompt and user message to a Claude model through the
+official Anthropic SDK (`anthropic` 1.8.0) and records tokens, latency and cost per request.
+Default `claude-opus-5`, effort `high` (the API default); current Claude models do not accept
+`temperature`, so sampling stays at the API default. Server-side refusal fallbacks are enabled
+(`fallbacks="default"`); `served_by` in the results shows which model answered.
+Prices are hard-coded in `evaluate.API_PRICES` (Anthropic first-party rates; check the live
+pricing page before quoting).
+
+```bash
+.venv/bin/python evaluate.py --api-model claude-opus-5 --split val --dry-run   # prints the request, no call
+export ANTHROPIC_API_KEY=...                                                   # or: ant auth login
+.venv/bin/python evaluate.py --api-model claude-opus-5 --split val --tag api   # 231 requests, costs money
+.venv/bin/python evaluate.py --api-model claude-opus-5 --tag api               # dev: final comparison only
+```
+
+For a cheaper large-scale run without latency measurement, the Message Batches API costs half.
+Prompt caching is not used: on Claude Opus 5 only prefixes of at least 512 tokens cache, which
+only the longer schemas reach, and it would need the schema in its own content block. Since each
+dev database is asked about ~50 times, caching the long schemas could lower cost in production.
+
 ## Local GRPO smoke test (`train_local.py`)
 
 mlx-lm has no GRPO; we use the `train_grpo` Python API of the community package
