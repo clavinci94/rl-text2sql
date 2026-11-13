@@ -1,0 +1,300 @@
+{
+ "summary": {
+  "split": "versicherung",
+  "catalog": true,
+  "model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+  "adapter": null,
+  "backend": "mlx",
+  "samples": 8,
+  "retries": 2,
+  "n": 2,
+  "n_answerable": 2,
+  "n_unanswerable": 0,
+  "accuracy_on_answerable": {
+   "greedy": 0.5,
+   "greedy_retry": 0.5,
+   "vote": 1.0,
+   "pass_at_9": 1.0
+  },
+  "retry_used": 1,
+  "risk_coverage": [
+   {
+    "threshold": 0.0,
+    "coverage": 1.0,
+    "accuracy_answered": 1.0,
+    "wrong_answers": 0,
+    "unanswerable_declined": null
+   },
+   {
+    "threshold": 0.25,
+    "coverage": 0.5,
+    "accuracy_answered": 1.0,
+    "wrong_answers": 0,
+    "unanswerable_declined": null
+   },
+   {
+    "threshold": 0.375,
+    "coverage": 0.5,
+    "accuracy_answered": 1.0,
+    "wrong_answers": 0,
+    "unanswerable_declined": null
+   },
+   {
+    "threshold": 0.5,
+    "coverage": 0.5,
+    "accuracy_answered": 1.0,
+    "wrong_answers": 0,
+    "unanswerable_declined": null
+   },
+   {
+    "threshold": 0.625,
+    "coverage": 0.5,
+    "accuracy_answered": 1.0,
+    "wrong_answers": 0,
+    "unanswerable_declined": null
+   },
+   {
+    "threshold": 0.75,
+    "coverage": 0.0,
+    "accuracy_answered": null,
+    "wrong_answers": 0,
+    "unanswerable_declined": null
+   },
+   {
+    "threshold": 0.875,
+    "coverage": 0.0,
+    "accuracy_answered": null,
+    "wrong_answers": 0,
+    "unanswerable_declined": null
+   },
+   {
+    "threshold": 1.0,
+    "coverage": 0.0,
+    "accuracy_answered": null,
+    "wrong_answers": 0,
+    "unanswerable_declined": null
+   }
+  ],
+  "by_level": {
+   "einfach": {
+    "n": 2,
+    "greedy": 0.5,
+    "vote": 1.0
+   }
+  },
+  "by_lang": {
+   "de": {
+    "n": 2,
+    "greedy": 0.5,
+    "vote": 1.0
+   }
+  },
+  "latency_s_mean": {
+   "greedy": 0.786,
+   "with_retry": 1.596,
+   "with_vote": 7.97
+  },
+  "wall_time_s": 15.9,
+  "date": "2026-11-13"
+ },
+ "examples": [
+  {
+   "id": "V01",
+   "question": "Wie viele Kunden haben wir insgesamt?",
+   "gold": "SELECT count(*) FROM T_PARTNER",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "count"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_PARTNER",
+   "greedy_error": null,
+   "greedy_correct": true,
+   "retry_used": false,
+   "retry_sql": "SELECT COUNT(*) FROM T_PARTNER",
+   "retry_correct": true,
+   "vote_sql": "SELECT COUNT(*) FROM T_PARTNER",
+   "vote_confidence": 0.6667,
+   "vote_answer_runs": true,
+   "vote_correct": true,
+   "pass_at_k": true,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER",
+     "error": null,
+     "key": "61391bcd29e1",
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER",
+     "error": null,
+     "key": "61391bcd29e1",
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER",
+     "error": null,
+     "key": "61391bcd29e1",
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(T2.PTR_ID) FROM T_PARTNER AS T1 INNER JOIN T_AGENTUR AS T2 ON T1.PTR_ID = T2.PTR_ID WHERE T1.STAT_CD = 'A'",
+     "error": "OperationalError: no such column: T2.PTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE PTR_TYP_CD = 'U'",
+     "error": null,
+     "key": "963587429802",
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT SUM(T_PARTNER.PTR_ID) FROM T_PARTNER",
+     "error": null,
+     "key": "397deb67d60a",
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER",
+     "error": null,
+     "key": "61391bcd29e1",
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER",
+     "error": null,
+     "key": "61391bcd29e1",
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER",
+     "error": null,
+     "key": "61391bcd29e1",
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 0.749,
+    "with_retry": 0.749,
+    "with_vote": 7.024
+   }
+  },
+  {
+   "id": "V02",
+   "question": "Wie viele Kunden wohnen im Kanton Aargau?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE KT_CD = 'AG'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(T1.KT_CD) FROM T_PARTNER AS T1 INNER JOIN T_KANTON AS T2 ON T1.KT_CD = T2.KT_CD WHERE T2.KT_NAME = 'Aargau'",
+   "vote_confidence": 0.1111,
+   "vote_answer_runs": true,
+   "vote_correct": true,
+   "pass_at_k": true,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(T1.KT_CD) FROM T_PARTNER AS T1 INNER JOIN T_KANTON AS T2 ON T1.KT_CD = T2.KT_CD WHERE T2.KT_NAME = 'Aargau'",
+     "error": null,
+     "key": "f901af81845a",
+     "degenerate": false
+    },
+    {
+     "stage": "sample",
+     "sql": "SELECT COUNT(*) FROM T_PARTNER WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 0.823,
+    "with_retry": 2.443,
+    "with_vote": 8.915
+   }
+  }
+ ]
+}
