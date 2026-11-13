@@ -309,3 +309,83 @@ Wer Kürze belohnen will, muss das Format zusätzlich absichern, zum Beispiel mi
 | 7 | Cloud-Lauf, Messung des API-Modells, Präsentation | offen, braucht GPU-Miete und API-Schlüssel |
 
 **Offener Punkt:** Laut Vorlesung ist der Leistungsnachweis ein Gruppenprojekt mit 2 bis 4 Personen. Die Gruppenzusammensetzung ist noch zu klären.
+
+## 13. Teil 2: Vom Benchmark zum Werkzeug
+
+### Ausgangspunkt
+
+Teil 1 zeigt, dass RL ein kleines Modell messbar verbessert. Für den Einsatz in einer Fachabteilung reicht das nicht:
+Nach dem Training liefern 22,8 % der Antworten ein plausibles, aber falsches Resultat, und Spider ist klein, sauber und englisch.
+Teil 2 prüft deshalb drei Fragen:
+
+1. Wie gut ist das Modell auf einer realistischen, deutschsprachigen Unternehmensdatenbank, die es nie gesehen hat?
+2. Kann das System erkennen, wann es eine Frage nicht zuverlässig beantworten kann?
+3. Wie sieht ein Werkzeug aus, dem Fachleute vertrauen können, und wie fliesst ihr Feedback zurück ins RL-Training?
+
+### Fallstudie Muster Versicherung AG
+
+`insurance_db.py` erzeugt eine synthetische, aber realistische Datenbank einer fiktiven Schweizer Versicherung (fester Seed, keine echten Personen).
+Sie enthält bewusst die Eigenschaften echter Firmendatenbanken, die Spider fehlen:
+
+| Eigenschaft | Beispiel in der Datenbank |
+|---|---|
+| Kryptische Spaltennamen aus einem Altsystem | `JPRAEMIE`, `STAT_CD`, `KT_CD_EREIG` |
+| Generische Codetabelle | `T_CODE` mit Status, Ursachen und Zahlweisen |
+| Geschäftsbegriffe, die nirgends im Schema stehen | «offener Schaden» = Status `OFF` oder `PRF` |
+| Fehlende Werte | Unternehmen ohne Geburtsdatum und Geschlecht |
+| Historische Lücken | Schäden erst seit der Systemmigration 2021 |
+| Plausible Kennzahlen | Schadenquoten um 0,65, Hagelschäden gehäuft im Sommer |
+
+Umfang: 15 Tabellen, rund 40'000 Zeilen, 2'400 Kunden, 4'705 Verträge, 2'283 Schäden.
+
+Der Testdatensatz `insurance_questions.json` enthält 59 Fragen, so formuliert, wie Fachleute fragen würden:
+50 auf Deutsch, 5 auf Französisch, 4 auf Italienisch, in den Stufen einfach (17), mittel (24) und schwer (12).
+Dazu kommen 6 Fragen, die die Datenbank nicht beantworten kann, zum Beispiel nach der Kundenzufriedenheit oder nach Schäden im Jahr 2019.
+Dort ist die einzig richtige Reaktion, keine Antwort zu geben. Eine Abfrage für 2019 liefert 0, die richtige Antwort wäre aber «nicht bekannt».
+Alle Referenzabfragen sind automatisch geprüft: Sie laufen, liefern ein nicht leeres Resultat, und bei Ranglisten gibt es keine Gleichstände an der Grenze.
+Das Modell trainiert nie auf dieser Datenbank.
+
+Zusätzlich gibt es einen Datenkatalog: Beschreibungen der Tabellen und Spalten und ein Glossar mit Geschäftsbegriffen.
+Mit `--catalog` stehen sie im Prompt. So lässt sich messen, wie viel dokumentierte Metadaten wert sind, eine Frage, die sich jedes Unternehmen vor einer Einführung stellen muss.
+
+### Zuverlässigkeitsschicht
+
+`reliable.py` legt drei Mechanismen um das Modell. Keiner braucht zusätzliches Training.
+
+1. **Fehlerkorrektur.** Meldet SQLite einen Fehler oder ist das Resultat leer, bekommt das Modell die Meldung zurück und schreibt eine neue Abfrage, höchstens zweimal.
+2. **Mehrheitsentscheid über Resultate (Self-Consistency).** Wie im GRPO-Training erzeugt das Modell mehrere Antworten (8, Temperatur 0,8). Alle werden ausgeführt und nach ihrem Resultat gruppiert. Die grösste Gruppe gewinnt. Unterschiedlich geschriebene, aber gleichwertige Abfragen zählen damit als Zustimmung.
+3. **Enthaltung.** Die Konfidenz ist der Anteil der Antworten in der Gewinnergruppe. Unter einer Schwelle antwortet das System nicht, sondern meldet «unsicher, bitte prüfen».
+
+Eine Designentscheidung aus der ersten Messung: Leere Resultate, nur NULL oder eine einzelne 0 erhalten keine Stimme.
+Das Basismodell schrieb für «aktive Verträge» unter anderem `STAT_CD = 'Aktiv'`, `'Active'` und `'aktive'`. Alle drei liefern 0 und hätten sich gegenseitig bestätigt.
+Ein leeres Resultat ist kein Beleg.
+
+Gemessen wird pro Lauf: Trefferquote mit einer Antwort, mit Fehlerkorrektur und mit Mehrheitsentscheid, pass@k als Obergrenze, sowie für jede Schwelle die Abdeckung (Anteil beantworteter Fragen) und die Trefferquote auf den beantworteten Fragen.
+Die Schwelle wird auf dem Validierungsdatensatz festgelegt, nicht auf der Fallstudie.
+
+### Prototyp
+
+`app.py` ist eine lokale Webanwendung ohne zusätzliche Abhängigkeiten. Sie zeigt zu jeder Frage das Resultat, das SQL, die Konfidenz und auf Wunsch die anderen Antworten des Modells.
+Unter der Schwelle steht «Unsicher, bitte prüfen». Fachleute können das SQL bearbeiten, ausführen, bestätigen oder als falsch markieren.
+Jede Frage landet im Audit-Log, bestätigte und korrigierte Abfragen in `logs/feedback.jsonl`.
+Diese Paare aus Frage und geprüftem SQL sind genau das, was GRPO als Reward braucht: Eine Referenzabfrage, gegen die neue Antworten ausgeführt und verglichen werden.
+So entsteht ein Kreislauf, in dem das Modell aus dem Betrieb heraus auf der eigenen Firmendatenbank weiterlernt, ohne dass jemand einen Datensatz von Hand schreibt.
+
+### Erste Messung: Basismodell auf der Fallstudie
+
+ERGEBNISSE_BASIS
+
+### Fahrplan
+
+| Woche | Inhalt | Ergebnis |
+|---|---|---|
+| 1 | `reliable.py` auf dem Mac: Basis- und RL-Modell, mit und ohne Datenkatalog, auf Validierung und Fallstudie | Tabelle Trefferquote und Abdeckung, Schwelle festgelegt auf Validierung |
+| 2 | Cloud-Lauf mit `train_cloud.py`: volle Epoche 0.5B, danach 1.5B | Effekt von mehr Training und Modellgrösse, Kosten pro Lauf |
+| 3 | Prototyp mit 3 bis 5 Testpersonen als Fachleute, je 10 Fragen | Feedback-Daten, Beobachtungen zu Vertrauen und Bedienung |
+| 4 | Optional zweite GRPO-Runde mit den bestätigten Abfragen, Bericht und Präsentation | Vorher-nachher auf der Fallstudie |
+
+### Grenzen von Teil 2
+
+- Die Daten sind synthetisch. Die Struktur ist realistisch, die Verteilungen sind plausibel, aber nicht echt.
+- Die Testfragen stammen vom Projektteam. Eine unabhängige Person sollte einen Teil davon gegenlesen oder ergänzen.
+- 59 Fragen sind wenig. Unterschiede von wenigen Prozentpunkten sind nicht gesichert, der McNemar-Test bleibt Pflicht.

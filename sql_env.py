@@ -64,8 +64,12 @@ def load_split(split):
     return examples
 
 
+# Databases outside Spider (case study, built by insurance_db.py). Never used for training.
+CUSTOM_DBS = {"versicherung": DATA_DIR / "versicherung.sqlite"}
+
+
 def db_path(db_id):
-    return SPIDER_DIR / "database" / db_id / f"{db_id}.sqlite"
+    return CUSTOM_DBS.get(db_id) or SPIDER_DIR / "database" / db_id / f"{db_id}.sqlite"
 
 
 @lru_cache(maxsize=None)
@@ -131,6 +135,12 @@ def _authorizer(action, *_):
 
 def execute_sql(db_id, sql, timeout=EXEC_TIMEOUT):
     """Run one query read-only. Returns (rows, error); error is None, 'timeout' or a message."""
+    rows, _cols, err = execute_sql_full(db_id, sql, timeout)
+    return rows, err
+
+
+def execute_sql_full(db_id, sql, timeout=EXEC_TIMEOUT):
+    """Like execute_sql, but also returns the column names: (rows, columns, error)."""
     con = sqlite3.connect(f"file:{db_path(db_id)}?mode=ro", uri=True)
     con.text_factory = lambda b: b.decode(errors="replace")  # some Spider DBs have bad UTF-8
     con.set_authorizer(_authorizer)
@@ -138,9 +148,11 @@ def execute_sql(db_id, sql, timeout=EXEC_TIMEOUT):
     # Called every 10k VM steps; a truthy return aborts the query (also during fetch).
     con.set_progress_handler(lambda: time.perf_counter() > deadline, 10_000)
     try:
-        return con.execute(sql).fetchall(), None
+        cur = con.execute(sql)
+        rows = cur.fetchall()
+        return rows, [d[0] for d in cur.description or []], None
     except Exception as e:  # never let a bad completion crash training/eval
-        return None, "timeout" if time.perf_counter() > deadline else f"{type(e).__name__}: {e}"
+        return None, None, "timeout" if time.perf_counter() > deadline else f"{type(e).__name__}: {e}"
     finally:
         con.close()
 
