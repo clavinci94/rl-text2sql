@@ -33,7 +33,6 @@ from sql_env import (ROOT, SYSTEM_PROMPT, _normalize, build_prompt, execute_sql_
                      load_split, load_val, score)
 
 SAMPLE_TEMPERATURE = 0.8   # same as in GRPO training
-THRESHOLDS = [0.0, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
 RETRY_PROMPT = ("The query failed with this SQLite error:\n{error}\n"
                 "Write a corrected query. Output only the query inside a ```sql code block.")
 EMPTY_PROMPT = ("The query ran, but the result is empty (or only 0 / NULL). Check the table names, columns "
@@ -196,15 +195,16 @@ def load_examples(split, catalog=False):
     return exs, [build_prompt(ex) for ex in exs]
 
 
-def risk_coverage(records, total):
-    """For each threshold: share of questions answered, accuracy on those, and how many
-    unanswerable questions were correctly declined."""
+def risk_coverage(records, total, n_voters):
+    """For each minimum number of agreeing answers (k of n_voters): share of questions answered,
+    accuracy on those, and how many unanswerable questions were correctly declined.
+    Counted in votes, not in rounded confidences, so k/9 thresholds are exact."""
     table = []
-    for t in THRESHOLDS:
-        answered = [r for r in records if r["vote_confidence"] >= t and r["vote_answer_runs"]]
+    for k in range(1, n_voters + 1):
+        answered = [r for r in records if r["votes"] >= k and r["vote_answer_runs"]]
         unans = [r for r in records if r["unanswerable"]]
         table.append({
-            "threshold": t,
+            "min_votes": f"{k}/{n_voters}", "threshold": round(k / n_voters, 4),
             "coverage": round(len(answered) / total, 4),
             "accuracy_answered": round(sum(r["vote_correct"] for r in answered) / len(answered), 4) if answered else None,
             "wrong_answers": sum(not r["vote_correct"] for r in answered),
@@ -245,6 +245,7 @@ def main():
             "retry_used": len(res["chain"]) > 1, "retry_sql": res["final"]["sql"],
             "retry_correct": is_correct(ex, res["final"]),
             "vote_sql": chosen["sql"], "vote_confidence": res["confidence"],
+            "votes": round(res["confidence"] * res["n_voters"]),
             "vote_answer_runs": chosen["key"] is not None,
             "vote_correct": is_correct(ex, chosen),
             "pass_at_k": any(is_correct(ex, c) for c in [res["final"]] + res["samples"]),
@@ -271,7 +272,7 @@ def main():
         "accuracy_on_answerable": {"greedy": acc("greedy_correct"), "greedy_retry": acc("retry_correct"),
                                    "vote": acc("vote_correct"), f"pass_at_{args.samples + 1}": acc("pass_at_k")},
         "retry_used": sum(r["retry_used"] for r in records),
-        "risk_coverage": risk_coverage(records, n),
+        "risk_coverage": risk_coverage(records, n, args.samples + 1),
         "by_level": by("level") if args.split == "versicherung" else None,
         "by_lang": by("lang") if args.split == "versicherung" else None,
         "latency_s_mean": {k: round(statistics.mean(r["latency_s"][k] for r in records), 3)

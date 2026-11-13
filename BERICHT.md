@@ -400,11 +400,54 @@ Wenn das Schema unklar ist, kann sich auch eine Mehrheit einig irren. Self-Consi
 
 Rohdaten: `results/reliable_base_cpu_versicherung.json` und `results/reliable_base_cpu_versicherung_catalog.json`.
 
+### Messung auf dem Mac: Basis- und RL-Modell mit Mehrheitsentscheid
+
+Alle folgenden Läufe: MacBook M4 mit MLX, Fallstudie mit Datenkatalog, pro Frage eine Antwort ohne Zufall, bis zu zwei Fehlerkorrekturen und 8 zusätzliche Antworten mit Temperatur 0,8.
+Abgestimmt wird also mit 9 Antworten.
+
+**Trefferquote auf den 53 beantwortbaren Fragen**
+
+| Strategie | Basismodell | RL-Modell (Anlauf 4) |
+|---|---|---|
+| eine Antwort | 12 (22,6 %) | 14 (26,4 %) |
+| mit Fehlerkorrektur | 12 (22,6 %) | 14 (26,4 %) |
+| mit Mehrheitsentscheid | 15 (28,3 %) | **17 (32,1 %)** |
+| Obergrenze: mindestens eine von 9 Antworten richtig | 17 (32,1 %) | 18 (34,0 %) |
+| Antwortzeit pro Frage, eine Antwort / mit Mehrheitsentscheid | 1,1 s / 12,5 s | 1,4 s / 15,0 s |
+
+- **Der Mehrheitsentscheid bringt bei beiden Modellen 3 Fragen mehr.** Das ist ein Grossteil dessen, was überhaupt möglich ist: Die Obergrenze liegt nur 2 bzw. 1 Frage höher.
+- **Die Fehlerkorrektur bringt auch auf dem Mac nichts.** 43 Mal bekam jedes Modell seine Fehlermeldung zurück, nie wurde die Abfrage dadurch richtig. Ein Modell mit 0,5 Milliarden Parametern kann eine SQLite-Fehlermeldung offenbar nicht in eine bessere Abfrage übersetzen.
+- **Das RL-Training wirkt auf der Fallstudie nur schwach.** Das RL-Modell löst je 2 Fragen mehr als das Basismodell, statistisch nicht gesichert (McNemar exakt: p = 0,63 mit einer Antwort, p = 0,73 mit Mehrheitsentscheid).
+  Auf Spider war der Effekt klar (z = 6,0). Das Training mit 200 englischen Spider-Fragen überträgt sich kaum auf eine deutschsprachige Datenbank mit Altsystem-Namen. Das spricht für den vollen Trainingslauf und für ein Nachtraining auf der eigenen Firmendatenbank (Fahrplan Woche 2 und 4).
+- **Schwere Fragen löst weiterhin keines der Modelle.**
+
+**Wissen, wann man nichts weiss**
+
+Die Schwelle legen wir vor dem Blick auf die Fallstudie fest, auf dem Validierungsdatensatz (100 Fragen auf 10 Spider-Datenbanken, die nicht im Training waren).
+Regel: die tiefste Schwelle, bei der auf der Validierung mindestens 90 % der gegebenen Antworten stimmen.
+
+| Mindestens übereinstimmend | Validierung: beantwortet / davon richtig | Fallstudie RL: beantwortet / richtig | Fallstudie Basis: beantwortet / richtig |
+|---|---|---|---|
+| 1 von 9 (keine Schwelle) | 82 / 57 (70 %) | 26 / 17 (65 %) | 31 / 15 (48 %) |
+| 4 von 9 | 57 / 47 (82 %) | 13 / 11 (85 %) | 9 / 9 (100 %) |
+| **7 von 9 (festgelegt)** | **46 / 42 (91 %)** | **6 / 6 (100 %)** | **3 / 3 (100 %)** |
+| 9 von 9 | 30 / 30 (100 %) | 2 / 2 | 2 / 2 |
+
+Die 6 nicht beantwortbaren Fragen beantwortet das RL-Modell schon ohne Schwelle nie, das Basismodell ohne Schwelle in 3 von 6 Fällen, ab 3 von 9 nie mehr.
+
+- **Die Konfidenz trägt von Spider auf die Fallstudie.** Bei 4 von 9 stimmen auf der Validierung 82 % der Antworten, auf der Fallstudie 85 %. Bei der festgelegten Schwelle von 7 von 9 stimmen auf der Validierung 91 %, auf der Fallstudie alle 6 Antworten.
+  Die Übereinstimmung der Antworten ist also ein brauchbares Mass dafür, wann man dem System trauen kann, auch auf einer Datenbank, die es nie gesehen hat.
+- **Der Preis ist die Abdeckung.** Mit dieser Schwelle beantwortet das System auf der Fallstudie nur 6 von 59 Fragen. Den Rest gibt es als «unsicher» an Fachleute zurück.
+  Für einen Einsatz ist das ehrlich, aber noch nicht nützlich genug. Die Schwelle ist ein Geschäftsentscheid: Bei 4 von 9 beantwortet das RL-Modell doppelt so viele Fragen und liegt dafür bei 2 Fehlern auf 13 Antworten.
+- **Mit 6 Antworten ist «100 %» kein Beleg für Fehlerfreiheit.** Ein exaktes 95-%-Konfidenzintervall reicht hier von 54 % bis 100 %. Die Validierung mit 46 Antworten ist die belastbarere Zahl.
+
+Rohdaten: `results/reliable_base_versicherung_catalog.json`, `results/reliable_rl_versicherung_catalog.json`, `results/reliable_rl_val.json`.
+
 ### Fahrplan
 
 | Woche | Inhalt | Ergebnis |
 |---|---|---|
-| 1 | `reliable.py` auf dem Mac: Basis- und RL-Modell, mit und ohne Datenkatalog, auf Validierung und Fallstudie | Tabelle Trefferquote und Abdeckung, Schwelle festgelegt auf Validierung |
+| 1 | `reliable.py` auf dem Mac: Basis- und RL-Modell auf Validierung und Fallstudie | **erledigt**, siehe oben. Schwelle 7 von 9 auf der Validierung festgelegt |
 | 2 | Cloud-Lauf mit `train_cloud.py`: volle Epoche 0.5B, danach 1.5B | Effekt von mehr Training und Modellgrösse, Kosten pro Lauf |
 | 3 | Prototyp mit 3 bis 5 Testpersonen als Fachleute, je 10 Fragen | Feedback-Daten, Beobachtungen zu Vertrauen und Bedienung |
 | 4 | Optional zweite GRPO-Runde mit den bestätigten Abfragen, Bericht und Präsentation | Vorher-nachher auf der Fallstudie |
