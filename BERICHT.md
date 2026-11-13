@@ -373,7 +373,32 @@ So entsteht ein Kreislauf, in dem das Modell aus dem Betrieb heraus auf der eige
 
 ### Erste Messung: Basismodell auf der Fallstudie
 
-ERGEBNISSE_BASIS
+Gemessen wurde das untrainierte Basismodell Qwen2.5-Coder-0.5B-Instruct auf den 53 beantwortbaren Fragen, je einmal mit und ohne Datenkatalog.
+Diese Messung lief auf einer CPU mit transformers (`--backend hf`, float32), nur mit einer Antwort pro Frage und Fehlerkorrektur, ohne Mehrheitsentscheid (`--samples 0`).
+Der Mehrheitsentscheid und das RL-Modell folgen auf dem Mac.
+
+| Ergebnis auf 53 Fragen | ohne Datenkatalog | mit Datenkatalog |
+|---|---|---|
+| korrekt | 1 (1,9 %) | **11 (20,8 %)** |
+| davon einfach / mittel / schwer | 1 / 0 / 0 von 17 / 24 / 12 | 8 / 3 / 0 von 17 / 24 / 12 |
+| erfundene oder falsch zugeordnete Spalte oder Tabelle | 36 | 31 |
+| läuft, Resultat leer oder 0 | 10 | 5 |
+| läuft, falsches Resultat | 5 | 4 |
+| sonstige Fehler | 1 | 2 |
+| Antwortzeit pro Frage, CPU, mit Fehlerkorrektur | 21 s | 33 s |
+
+- **Die Fallstudie ist deutlich schwerer als Spider.** Dasselbe Modell löst auf Spider 45,3 % der Testfragen, hier mit Datenkatalog 20,8 % und ohne nur eine einzige Frage.
+- **Der Datenkatalog ist der grösste Hebel.** 11 Fragen löst das Modell nur mit Katalog, eine nur ohne. McNemar, exakter Test: p ≈ 0,006.
+  Ohne Katalog sucht das Modell «Kunden» in der Agenturtabelle und schreibt `STAT_CD = 'Aktiv'` statt `'AKT'`. Mit Katalog findet es `T_PARTNER`, den Code `'AKT'` und die Definition «überfällige Rechnung» aus dem Glossar.
+  Für ein Unternehmen heisst das: Vor jedem Modell steht die Dokumentation der eigenen Daten.
+- **Die Fehlerkorrektur hilft dem kleinen Basismodell nicht.** Bei 44 Fragen bekam das Modell seine SQLite-Fehlermeldung zurück, keine einzige Abfrage wurde dadurch richtig. Meist wiederholt es den Fehler oder erfindet eine neue Spalte.
+- **Schwere Fragen löst es nie.** Mehrstufige Verknüpfungen, Kennzahlen wie die Schadenquote und Fragen auf Italienisch liegen ausserhalb seiner Reichweite.
+- **Die 6 nicht beantwortbaren Fragen** hat das Modell nie mit einer laufenden Abfrage «beantwortet». Das liegt aber daran, dass alle seine Versuche scheiterten, nicht an echtem Erkennen. Ob die Enthaltung funktioniert, zeigt erst der Lauf mit Mehrheitsentscheid.
+
+Ein Probelauf mit Mehrheitsentscheid ohne Katalog zeigt zudem eine Grenze der Methode: Auf «Wie viele Kunden haben wir insgesamt?» zählten 6 von 9 Antworten die Agenturen.
+Wenn das Schema unklar ist, kann sich auch eine Mehrheit einig irren. Self-Consistency misst Übereinstimmung, nicht Richtigkeit.
+
+Rohdaten: `results/reliable_base_cpu_versicherung.json` und `results/reliable_base_cpu_versicherung_catalog.json`.
 
 ### Fahrplan
 
