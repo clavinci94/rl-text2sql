@@ -1,0 +1,3028 @@
+{
+ "summary": {
+  "split": "versicherung",
+  "catalog": false,
+  "model": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+  "adapter": null,
+  "backend": "hf",
+  "samples": 0,
+  "retries": 2,
+  "n": 59,
+  "n_answerable": 53,
+  "n_unanswerable": 6,
+  "accuracy_on_answerable": {
+   "greedy": 0.0189,
+   "greedy_retry": 0.0189,
+   "vote": 0.0189,
+   "pass_at_1": 0.0189
+  },
+  "retry_used": 53,
+  "risk_coverage": [
+   {
+    "threshold": 0.0,
+    "coverage": 0.1186,
+    "accuracy_answered": 0.1429,
+    "wrong_answers": 6,
+    "unanswerable_declined": "6/6"
+   },
+   {
+    "threshold": 0.25,
+    "coverage": 0.1186,
+    "accuracy_answered": 0.1429,
+    "wrong_answers": 6,
+    "unanswerable_declined": "6/6"
+   },
+   {
+    "threshold": 0.375,
+    "coverage": 0.1186,
+    "accuracy_answered": 0.1429,
+    "wrong_answers": 6,
+    "unanswerable_declined": "6/6"
+   },
+   {
+    "threshold": 0.5,
+    "coverage": 0.1186,
+    "accuracy_answered": 0.1429,
+    "wrong_answers": 6,
+    "unanswerable_declined": "6/6"
+   },
+   {
+    "threshold": 0.625,
+    "coverage": 0.1186,
+    "accuracy_answered": 0.1429,
+    "wrong_answers": 6,
+    "unanswerable_declined": "6/6"
+   },
+   {
+    "threshold": 0.75,
+    "coverage": 0.1186,
+    "accuracy_answered": 0.1429,
+    "wrong_answers": 6,
+    "unanswerable_declined": "6/6"
+   },
+   {
+    "threshold": 0.875,
+    "coverage": 0.1186,
+    "accuracy_answered": 0.1429,
+    "wrong_answers": 6,
+    "unanswerable_declined": "6/6"
+   },
+   {
+    "threshold": 1.0,
+    "coverage": 0.1186,
+    "accuracy_answered": 0.1429,
+    "wrong_answers": 6,
+    "unanswerable_declined": "6/6"
+   }
+  ],
+  "by_level": {
+   "einfach": {
+    "n": 17,
+    "greedy": 0.0588,
+    "vote": 0.0588
+   },
+   "mittel": {
+    "n": 24,
+    "greedy": 0.0,
+    "vote": 0.0
+   },
+   "schwer": {
+    "n": 12,
+    "greedy": 0.0,
+    "vote": 0.0
+   }
+  },
+  "by_lang": {
+   "de": {
+    "n": 44,
+    "greedy": 0.0227,
+    "vote": 0.0227
+   },
+   "fr": {
+    "n": 5,
+    "greedy": 0.0,
+    "vote": 0.0
+   },
+   "it": {
+    "n": 4,
+    "greedy": 0.0,
+    "vote": 0.0
+   }
+  },
+  "latency_s_mean": {
+   "greedy": 7.454,
+   "with_retry": 21.432,
+   "with_vote": 21.432
+  },
+  "wall_time_s": 1264.6,
+  "date": "2026-11-13"
+ },
+ "examples": [
+  {
+   "id": "V01",
+   "question": "Wie viele Kunden haben wir insgesamt?",
+   "gold": "SELECT count(*) FROM T_PARTNER",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "count"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": false,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR",
+   "vote_confidence": 1.0,
+   "vote_answer_runs": true,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR",
+     "error": null,
+     "key": "70395039751d",
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 4.127,
+    "with_retry": 4.127,
+    "with_vote": 4.127
+   }
+  },
+  {
+   "id": "V02",
+   "question": "Wie viele Kunden wohnen im Kanton Aargau?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE KT_CD = 'AG'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'AARGAU'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'AARGAU'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'AARGAU'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'AARGAU'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 4.803,
+    "with_retry": 16.383,
+    "with_vote": 16.383
+   }
+  },
+  {
+   "id": "V03",
+   "question": "Wie viele aktive Verträge gibt es?",
+   "gold": "SELECT count(*) FROM T_VERTRAG WHERE STAT_CD = 'AKT'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code",
+    "begriff"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE STAT_CD = 'Aktiv'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE STAT_CD = 'Aktiv'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE STAT_CD = 'Aktiv'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE STAT_CD = 'Aktiv'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE STAT_CD = 'Aktiv'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE STAT_CD = 'Aktiv'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 4.651,
+    "with_retry": 14.852,
+    "with_vote": 14.852
+   }
+  },
+  {
+   "id": "V04",
+   "question": "Wie viele Unternehmen sind bei uns Kunde?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE PTR_TYP_CD = 'U'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD IN (SELECT KT_CD FROM T_KANTON)",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": false,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD IN (SELECT KT_CD FROM T_KANTON)",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD IN (SELECT KT_CD FROM T_KANTON)",
+   "vote_confidence": 1.0,
+   "vote_answer_runs": true,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD IN (SELECT KT_CD FROM T_KANTON)",
+     "error": null,
+     "key": "70395039751d",
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.036,
+    "with_retry": 5.036,
+    "with_vote": 5.036
+   }
+  },
+  {
+   "id": "V05",
+   "question": "Wie hoch ist die durchschnittliche Jahresprämie aller aktiven Verträge?",
+   "gold": "SELECT avg(JPRAEMIE) FROM T_VERTRAG WHERE STAT_CD = 'AKT'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT AVG(T_VZLG.ZLG_DAT) FROM T_VZLG WHERE T_VZLG.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+   "greedy_error": "OperationalError: no such table: T_VZLG",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT AVG(T_VZLG.ZLG_DAT) FROM T_VZLG WHERE T_VZLG.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+   "retry_correct": false,
+   "vote_sql": "SELECT AVG(T_VZLG.ZLG_DAT) FROM T_VZLG WHERE T_VZLG.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT AVG(T_VZLG.ZLG_DAT) FROM T_VZLG WHERE T_VZLG.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+     "error": "OperationalError: no such table: T_VZLG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_VZLG.ZLG_DAT) FROM T_VZLG WHERE T_VZLG.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+     "error": "OperationalError: no such table: T_VZLG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_VZLG.ZLG_DAT) FROM T_VZLG WHERE T_VZLG.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+     "error": "OperationalError: no such table: T_VZLG",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 8.606,
+    "with_retry": 25.221,
+    "with_vote": 25.221
+   }
+  },
+  {
+   "id": "V06",
+   "question": "Wie viele Schadenfälle stehen unter Betrugsverdacht?",
+   "gold": "SELECT count(*) FROM T_SCHADEN WHERE BETRUG_VERD_FLG = 1",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRUG_VERD_FLG = 1",
+   "greedy_error": null,
+   "greedy_correct": true,
+   "retry_used": false,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRUG_VERD_FLG = 1",
+   "retry_correct": true,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRUG_VERD_FLG = 1",
+   "vote_confidence": 1.0,
+   "vote_answer_runs": true,
+   "vote_correct": true,
+   "pass_at_k": true,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRUG_VERD_FLG = 1",
+     "error": null,
+     "key": "d79073669d31",
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.742,
+    "with_retry": 5.742,
+    "with_vote": 5.742
+   }
+  },
+  {
+   "id": "V07",
+   "question": "Welche Fahrzeugmarken sind bei uns versichert? Jede Marke nur einmal.",
+   "gold": "SELECT DISTINCT MARKE FROM T_OBJ_FZG",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [],
+   "greedy_sql": "SELECT DISTINCT MARKE FROM T_SCHADEN WHERE STAT_CD = 'VERTRAG'",
+   "greedy_error": "OperationalError: no such column: MARKE",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT DISTINCT MARKE FROM T_SCHADEN WHERE STAT_CD = 'VERTRAG'",
+   "retry_correct": false,
+   "vote_sql": "SELECT DISTINCT MARKE FROM T_SCHADEN WHERE STAT_CD = 'VERTRAG'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT DISTINCT MARKE FROM T_SCHADEN WHERE STAT_CD = 'VERTRAG'",
+     "error": "OperationalError: no such column: MARKE",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT DISTINCT MARKE FROM T_SCHADEN WHERE STAT_CD = 'VERTRAG'",
+     "error": "OperationalError: no such column: MARKE",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT DISTINCT MARKE FROM T_SCHADEN WHERE STAT_CD = 'VERTRAG'",
+     "error": "OperationalError: no such column: MARKE",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.903,
+    "with_retry": 17.443,
+    "with_vote": 17.443
+   }
+  },
+  {
+   "id": "V08",
+   "question": "Wie viele Mitarbeitende arbeiten als Schadenbearbeiter?",
+   "gold": "SELECT count(*) FROM T_MITARBEITER WHERE FUNKTION_CD = 'SB'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE BEFREUT_VERD_FLG = 1)",
+   "greedy_error": "OperationalError: no such column: BEFREUT_VERD_FLG",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BEFREUT_VERD_FLG = 1",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BEFREUT_VERD_FLG = 1",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE BEFREUT_VERD_FLG = 1)",
+     "error": "OperationalError: no such column: BEFREUT_VERD_FLG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BEFREUT_VERD_FLG = 1",
+     "error": "OperationalError: no such column: BEFREUT_VERD_FLG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BEFREUT_VERD_FLG = 1",
+     "error": "OperationalError: no such column: BEFREUT_VERD_FLG",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.762,
+    "with_retry": 20.587,
+    "with_vote": 20.587
+   }
+  },
+  {
+   "id": "V09",
+   "question": "Wie viele Prämienrechnungen sind in Mahnstufe 3?",
+   "gold": "SELECT count(*) FROM T_RECHNUNG WHERE MAHNSTUFE = 3",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCH_STAT_HIST WHERE SCH_ID IN (SELECT sch_id FROM T_SCH_ZLG WHERE zlg_dat = '2023-01-01' AND sch_cd = '3')",
+   "greedy_error": "OperationalError: no such column: sch_cd",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCH_STAT_HIST WHERE sch_id IN (SELECT sch_id FROM T_SCH_ZLG WHERE zlg_dat = '2023-01-01' AND sch_cd = '3')",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCH_STAT_HIST WHERE sch_id IN (SELECT sch_id FROM T_SCH_ZLG WHERE zlg_dat = '2023-01-01' AND sch_cd = '3')",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCH_STAT_HIST WHERE SCH_ID IN (SELECT sch_id FROM T_SCH_ZLG WHERE zlg_dat = '2023-01-01' AND sch_cd = '3')",
+     "error": "OperationalError: no such column: sch_cd",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCH_STAT_HIST WHERE sch_id IN (SELECT sch_id FROM T_SCH_ZLG WHERE zlg_dat = '2023-01-01' AND sch_cd = '3')",
+     "error": "OperationalError: no such column: sch_cd",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCH_STAT_HIST WHERE sch_id IN (SELECT sch_id FROM T_SCH_ZLG WHERE zlg_dat = '2023-01-01' AND sch_cd = '3')",
+     "error": "OperationalError: no such column: sch_cd",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 9.616,
+    "with_retry": 27.652,
+    "with_vote": 27.652
+   }
+  },
+  {
+   "id": "V10",
+   "question": "Wie heisst unsere Generalagentur im Tessin?",
+   "gold": "SELECT AGT_NAME FROM T_AGENTUR WHERE KT_CD = 'TI'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE AGT_ID = (SELECT AGT_ID FROM T_AGENTUR WHERE KT_CD = 'Tessin')",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE KT_CD = 'Tessin'",
+   "retry_correct": false,
+   "vote_sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE KT_CD = 'Tessin'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE AGT_ID = (SELECT AGT_ID FROM T_AGENTUR WHERE KT_CD = 'Tessin')",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE KT_CD = 'Tessin'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE KT_CD = 'Tessin'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.587,
+    "with_retry": 18.184,
+    "with_vote": 18.184
+   }
+  },
+  {
+   "id": "V11",
+   "question": "Wie viele Schäden wurden im Jahr 2024 gemeldet?",
+   "gold": "SELECT count(*) FROM T_SCHADEN WHERE MELD_DAT LIKE '2024%'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "datum"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2024;",
+   "greedy_error": "OperationalError: no such function: YEAR",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2024;",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2024;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2024;",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2024;",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2024;",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.968,
+    "with_retry": 18.569,
+    "with_vote": 18.569
+   }
+  },
+  {
+   "id": "V12",
+   "question": "Welches versicherte Fahrzeug hat den höchsten Katalogpreis? Nenne Marke und Modell.",
+   "gold": "SELECT MARKE, MODELL FROM T_OBJ_FZG ORDER BY KATPREIS DESC LIMIT 1",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "sortierung"
+   ],
+   "greedy_sql": "SELECT T1.MARKE, T1.MODELL FROM T_SCHADEN AS T1 INNER JOIN T_OBJ_FZG AS T2 ON T1.SCH_ID = T2.SCH_ID ORDER BY T2.KATPREIS DESC LIMIT 1",
+   "greedy_error": "OperationalError: no such column: T1.MARKE",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT T1.MARKE, T1.MODELL FROM T_SCHADEN AS T1 INNER JOIN T_OBJ_FZG AS T2 ON T1.SCH_ID = T2.SCH_ID ORDER BY T2.KATPREIS DESC LIMIT 1",
+   "retry_correct": false,
+   "vote_sql": "SELECT T1.MARKE, T1.MODELL FROM T_SCHADEN AS T1 INNER JOIN T_OBJ_FZG AS T2 ON T1.SCH_ID = T2.SCH_ID ORDER BY T2.KATPREIS DESC LIMIT 1",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT T1.MARKE, T1.MODELL FROM T_SCHADEN AS T1 INNER JOIN T_OBJ_FZG AS T2 ON T1.SCH_ID = T2.SCH_ID ORDER BY T2.KATPREIS DESC LIMIT 1",
+     "error": "OperationalError: no such column: T1.MARKE",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT T1.MARKE, T1.MODELL FROM T_SCHADEN AS T1 INNER JOIN T_OBJ_FZG AS T2 ON T1.SCH_ID = T2.SCH_ID ORDER BY T2.KATPREIS DESC LIMIT 1",
+     "error": "OperationalError: no such column: T1.MARKE",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT T1.MARKE, T1.MODELL FROM T_SCHADEN AS T1 INNER JOIN T_OBJ_FZG AS T2 ON T1.SCH_ID = T2.SCH_ID ORDER BY T2.KATPREIS DESC LIMIT 1",
+     "error": "OperationalError: no such column: T1.MARKE",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 9.43,
+    "with_retry": 29.765,
+    "with_vote": 29.765
+   }
+  },
+  {
+   "id": "V13",
+   "question": "Wie viele Kunden haben Französisch als Korrespondenzsprache?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE SPR_CD = 'FR'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE FUNKTION_CD = 'Französisch'",
+   "greedy_error": "OperationalError: no such column: FUNKTION_CD",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE FUNKTION_CD = 'Französisch'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE FUNKTION_CD = 'Französisch'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE FUNKTION_CD = 'Französisch'",
+     "error": "OperationalError: no such column: FUNKTION_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE FUNKTION_CD = 'Französisch'",
+     "error": "OperationalError: no such column: FUNKTION_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE FUNKTION_CD = 'Französisch'",
+     "error": "OperationalError: no such column: FUNKTION_CD",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.604,
+    "with_retry": 17.254,
+    "with_vote": 17.254
+   }
+  },
+  {
+   "id": "V14",
+   "question": "Wie viele Schäden sind im Kanton Genf passiert?",
+   "gold": "SELECT count(*) FROM T_SCHADEN WHERE KT_CD_EREIG = 'GE'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE KT_CD = 'GENF'",
+   "greedy_error": "OperationalError: no such column: KT_CD",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE KT_CD = 'GENF'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE KT_CD = 'GENF'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE KT_CD = 'GENF'",
+     "error": "OperationalError: no such column: KT_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE KT_CD = 'GENF'",
+     "error": "OperationalError: no such column: KT_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE KT_CD = 'GENF'",
+     "error": "OperationalError: no such column: KT_CD",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.115,
+    "with_retry": 15.39,
+    "with_vote": 15.39
+   }
+  },
+  {
+   "id": "V15",
+   "question": "Wie viele aktive Verträge gibt es pro Sparte? Nenne die Spartenbezeichnung und die Anzahl.",
+   "gold": "SELECT s.SPARTE_BEZ, count(*) FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD JOIN T_SPARTE s ON p.SPARTE_CD = s.SPARTE_CD WHERE v.STAT_CD = 'AKT' GROUP BY s.SPARTE_BEZ",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "join",
+    "gruppierung"
+   ],
+   "greedy_sql": "SELECT spart_bez, COUNT(*) AS active_verträge\nFROM t_vertrag\nWHERE spart_id IS NOT NULL\nGROUP BY spart_bez;",
+   "greedy_error": "OperationalError: no such column: spart_bez",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT spart_bez, COUNT(*) AS active_verträge\nFROM t_vertrag\nWHERE spart_id IS NOT NULL\nGROUP BY spart_bez;",
+   "retry_correct": false,
+   "vote_sql": "SELECT spart_bez, COUNT(*) AS active_verträge\nFROM t_vertrag\nWHERE spart_id IS NOT NULL\nGROUP BY spart_bez;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT spart_bez, COUNT(*) AS active_verträge\nFROM t_vertrag\nWHERE spart_id IS NOT NULL\nGROUP BY spart_bez;",
+     "error": "OperationalError: no such column: spart_bez",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT spart_bez, COUNT(*) AS active_verträge\nFROM t_vertrag\nWHERE spart_id IS NOT NULL\nGROUP BY spart_bez;",
+     "error": "OperationalError: no such column: spart_bez",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT spart_bez, COUNT(*) AS active_verträge\nFROM t_vertrag\nWHERE spart_id IS NOT NULL\nGROUP BY spart_bez;",
+     "error": "OperationalError: no such column: spart_bez",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.539,
+    "with_retry": 21.123,
+    "with_vote": 21.123
+   }
+  },
+  {
+   "id": "V16",
+   "question": "Wie hoch ist das Prämienvolumen der Sparte Motorfahrzeug?",
+   "gold": "SELECT sum(v.JPRAEMIE) FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'MF' AND v.STAT_CD = 'AKT'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "join",
+    "begriff"
+   ],
+   "greedy_sql": "SELECT SUM(T_SPARTE_BEZ) FROM T_SPARTE WHERE SPARTE_CD = 'Motorfahrzeug';",
+   "greedy_error": "OperationalError: no such column: T_SPARTE_BEZ",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T_SPARTE_BEZ) FROM T_SPARTE;",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T_SPARTE_BEZ) FROM T_SPARTE;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T_SPARTE_BEZ) FROM T_SPARTE WHERE SPARTE_CD = 'Motorfahrzeug';",
+     "error": "OperationalError: no such column: T_SPARTE_BEZ",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_SPARTE_BEZ) FROM T_SPARTE;",
+     "error": "OperationalError: no such column: T_SPARTE_BEZ",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_SPARTE_BEZ) FROM T_SPARTE;",
+     "error": "OperationalError: no such column: T_SPARTE_BEZ",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.57,
+    "with_retry": 16.115,
+    "with_vote": 16.115
+   }
+  },
+  {
+   "id": "V17",
+   "question": "Wie viele Kunden wohnen in der Romandie?",
+   "gold": "SELECT count(*) FROM T_PARTNER p JOIN T_KANTON k ON p.KT_CD = k.KT_CD WHERE k.REGION = 'Romandie'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "join"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_KANTON WHERE REGION = 'Romandie'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": false,
+   "retry_sql": "SELECT COUNT(*) FROM T_KANTON WHERE REGION = 'Romandie'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_KANTON WHERE REGION = 'Romandie'",
+   "vote_confidence": 1.0,
+   "vote_answer_runs": true,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_KANTON WHERE REGION = 'Romandie'",
+     "error": null,
+     "key": "43fe11bec79a",
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.369,
+    "with_retry": 5.369,
+    "with_vote": 5.369
+   }
+  },
+  {
+   "id": "V18",
+   "question": "Wie viel haben wir insgesamt für Hagelschäden ausbezahlt?",
+   "gold": "SELECT sum(z.BETRAG) FROM T_SCH_ZLG z JOIN T_SCHADEN s ON z.SCH_ID = s.SCH_ID WHERE s.URS_CD = 'HAGEL'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "join",
+    "code"
+   ],
+   "greedy_sql": "SELECT SUM(T_SCHADEN.BETRAG) FROM T_SCHADEN WHERE T_SCHADEN.SCH_ID IN (SELECT SCH_ID FROM T_SCH_ZLG)",
+   "greedy_error": "OperationalError: no such column: T_SCHADEN.BETRAG",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T_SCHADEN.BETRAG) FROM T_SCHADEN WHERE T_SCHADEN.SCH_ID IN (SELECT SCH_ID FROM T_SCH_ZLG)",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T_SCHADEN.BETRAG) FROM T_SCHADEN WHERE T_SCHADEN.SCH_ID IN (SELECT SCH_ID FROM T_SCH_ZLG)",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T_SCHADEN.BETRAG) FROM T_SCHADEN WHERE T_SCHADEN.SCH_ID IN (SELECT SCH_ID FROM T_SCH_ZLG)",
+     "error": "OperationalError: no such column: T_SCHADEN.BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_SCHADEN.BETRAG) FROM T_SCHADEN WHERE T_SCHADEN.SCH_ID IN (SELECT SCH_ID FROM T_SCH_ZLG)",
+     "error": "OperationalError: no such column: T_SCHADEN.BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_SCHADEN.BETRAG) FROM T_SCHADEN WHERE T_SCHADEN.SCH_ID IN (SELECT SCH_ID FROM T_SCH_ZLG)",
+     "error": "OperationalError: no such column: T_SCHADEN.BETRAG",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 8.068,
+    "with_retry": 22.143,
+    "with_vote": 22.143
+   }
+  },
+  {
+   "id": "V19",
+   "question": "Wie viele offene Schäden gibt es?",
+   "gold": "SELECT count(*) FROM T_SCHADEN WHERE STAT_CD IN ('OFF', 'PRF')",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "code",
+    "begriff"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": false,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN",
+   "vote_confidence": 1.0,
+   "vote_answer_runs": true,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN",
+     "error": null,
+     "key": "247a946e116d",
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 4.035,
+    "with_retry": 4.035,
+    "with_vote": 4.035
+   }
+  },
+  {
+   "id": "V20",
+   "question": "Welcher Kundenberater betreut die meisten aktiven Verträge? Nenne Vorname und Name.",
+   "gold": "SELECT m.VORNAME, m.NAME FROM T_VERTRAG v JOIN T_MITARBEITER m ON v.MA_ID_BER = m.MA_ID WHERE v.STAT_CD = 'AKT' GROUP BY m.MA_ID ORDER BY count(*) DESC LIMIT 1",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "join",
+    "gruppierung",
+    "sortierung"
+   ],
+   "greedy_sql": "SELECT T_AGT_NAME, T_AGT_VORNAME FROM T_AGENTUR WHERE AGT_ID = (SELECT MAX(AGT_ID) FROM T_AGENTUR)",
+   "greedy_error": "OperationalError: no such column: T_AGT_NAME",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT T_AGT_NAME, T_AGT_VORNAME FROM T_AGENTUR ORDER BY COUNT(*) DESC LIMIT 1",
+   "retry_correct": false,
+   "vote_sql": "SELECT T_AGT_NAME, T_AGT_VORNAME FROM T_AGENTUR ORDER BY COUNT(*) DESC LIMIT 1",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT T_AGT_NAME, T_AGT_VORNAME FROM T_AGENTUR WHERE AGT_ID = (SELECT MAX(AGT_ID) FROM T_AGENTUR)",
+     "error": "OperationalError: no such column: T_AGT_NAME",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT T_AGT_NAME, T_AGT_VORNAME FROM T_AGENTUR ORDER BY COUNT(*) DESC LIMIT 1",
+     "error": "OperationalError: no such column: T_AGT_NAME",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT T_AGT_NAME, T_AGT_VORNAME FROM T_AGENTUR ORDER BY COUNT(*) DESC LIMIT 1",
+     "error": "OperationalError: no such column: T_AGT_NAME",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.473,
+    "with_retry": 20.521,
+    "with_vote": 20.521
+   }
+  },
+  {
+   "id": "V21",
+   "question": "Wie viele Verträge wurden im Jahr 2025 gekündigt?",
+   "gold": "SELECT count(*) FROM T_VERTRAG WHERE STORNO_DAT LIKE '2025%'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "datum"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE YEAR(VERT_DAT) = 2025",
+   "greedy_error": "OperationalError: no such column: VERT_DAT",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE YEAR(VERT_DAT) = 2025 AND VERT_DAT IS NOT NULL",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE YEAR(VERT_DAT) = 2025 AND VERT_DAT IS NOT NULL",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE YEAR(VERT_DAT) = 2025",
+     "error": "OperationalError: no such column: VERT_DAT",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE YEAR(VERT_DAT) = 2025 AND VERT_DAT IS NOT NULL",
+     "error": "OperationalError: no such column: VERT_DAT",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_VERTRAG WHERE YEAR(VERT_DAT) = 2025 AND VERT_DAT IS NOT NULL",
+     "error": "OperationalError: no such column: VERT_DAT",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.591,
+    "with_retry": 19.059,
+    "with_vote": 19.059
+   }
+  },
+  {
+   "id": "V22",
+   "question": "Welche Schadenursache kommt am häufigsten vor? Nenne die Bezeichnung.",
+   "gold": "SELECT c.BEZ_DE FROM T_SCHADEN s JOIN T_CODE c ON c.CD_TYP = 'SCH_URS' AND c.CD = s.URS_CD GROUP BY c.BEZ_DE ORDER BY count(*) DESC LIMIT 1",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "join",
+    "code",
+    "gruppierung",
+    "sortierung"
+   ],
+   "greedy_sql": "SELECT schnr FROM schaden GROUP BY schnr ORDER BY count(*) DESC LIMIT 1",
+   "greedy_error": "OperationalError: no such table: schaden",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT schnr FROM schaden GROUP BY schnr ORDER BY count(*) DESC LIMIT 1",
+   "retry_correct": false,
+   "vote_sql": "SELECT schnr FROM schaden GROUP BY schnr ORDER BY count(*) DESC LIMIT 1",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT schnr FROM schaden GROUP BY schnr ORDER BY count(*) DESC LIMIT 1",
+     "error": "OperationalError: no such table: schaden",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT schnr FROM schaden GROUP BY schnr ORDER BY count(*) DESC LIMIT 1",
+     "error": "OperationalError: no such table: schaden",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT schnr FROM schaden GROUP BY schnr ORDER BY count(*) DESC LIMIT 1",
+     "error": "OperationalError: no such table: schaden",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.187,
+    "with_retry": 16.351,
+    "with_vote": 16.351
+   }
+  },
+  {
+   "id": "V23",
+   "question": "Wie hoch ist der durchschnittliche Katalogpreis der versicherten Tesla-Fahrzeuge?",
+   "gold": "SELECT avg(KATPREIS) FROM T_OBJ_FZG WHERE MARKE = 'Tesla'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [],
+   "greedy_sql": "SELECT AVG(T_OBJ_FZG.KATPREIS) FROM T_OBJ_FZG WHERE T_OBJ_FZG.PROD_BEZ = 'Tesla'",
+   "greedy_error": "OperationalError: no such column: T_OBJ_FZG.PROD_BEZ",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT AVG(T_OBJ_FZG.KATPREIS) FROM T_OBJ_FZG WHERE T_OBJ_FZG.PROD_BEZ = 'Tesla'",
+   "retry_correct": false,
+   "vote_sql": "SELECT AVG(T_OBJ_FZG.KATPREIS) FROM T_OBJ_FZG WHERE T_OBJ_FZG.PROD_BEZ = 'Tesla'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT AVG(T_OBJ_FZG.KATPREIS) FROM T_OBJ_FZG WHERE T_OBJ_FZG.PROD_BEZ = 'Tesla'",
+     "error": "OperationalError: no such column: T_OBJ_FZG.PROD_BEZ",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_OBJ_FZG.KATPREIS) FROM T_OBJ_FZG WHERE T_OBJ_FZG.PROD_BEZ = 'Tesla'",
+     "error": "OperationalError: no such column: T_OBJ_FZG.PROD_BEZ",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_OBJ_FZG.KATPREIS) FROM T_OBJ_FZG WHERE T_OBJ_FZG.PROD_BEZ = 'Tesla'",
+     "error": "OperationalError: no such column: T_OBJ_FZG.PROD_BEZ",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.006,
+    "with_retry": 21.609,
+    "with_vote": 21.609
+   }
+  },
+  {
+   "id": "V24",
+   "question": "Wie viele Rechnungen sind überfällig?",
+   "gold": "SELECT count(*) FROM T_RECHNUNG WHERE BEZ_DAT IS NULL AND FAELLIG_DAT < '2026-06-30'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "begriff",
+    "datum",
+    "null"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'Overdue'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'Overdue'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'Overdue'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'Overdue'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'Overdue'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'Overdue'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.488,
+    "with_retry": 16.458,
+    "with_vote": 16.458
+   }
+  },
+  {
+   "id": "V25",
+   "question": "Wie hoch ist der Gesamtbetrag aller überfälligen Rechnungen?",
+   "gold": "SELECT sum(BETRAG) FROM T_RECHNUNG WHERE BEZ_DAT IS NULL AND FAELLIG_DAT < '2026-06-30'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "begriff",
+    "datum",
+    "null"
+   ],
+   "greedy_sql": "SELECT SUM(T1.BETRAG) FROM T_SCHADEN AS T1 INNER JOIN T_VERTRAG AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.RECHNUNG = 'VERTRAG';",
+   "greedy_error": "OperationalError: no such column: T1.BETRAG",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T1.BETRAG) FROM T_SCHADEN AS T1 INNER JOIN T_VERTRAG AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.RECHNUNG = 'VERTRAG';",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T1.BETRAG) FROM T_SCHADEN AS T1 INNER JOIN T_VERTRAG AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.RECHNUNG = 'VERTRAG';",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T1.BETRAG) FROM T_SCHADEN AS T1 INNER JOIN T_VERTRAG AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.RECHNUNG = 'VERTRAG';",
+     "error": "OperationalError: no such column: T1.BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T1.BETRAG) FROM T_SCHADEN AS T1 INNER JOIN T_VERTRAG AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.RECHNUNG = 'VERTRAG';",
+     "error": "OperationalError: no such column: T1.BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T1.BETRAG) FROM T_SCHADEN AS T1 INNER JOIN T_VERTRAG AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.RECHNUNG = 'VERTRAG';",
+     "error": "OperationalError: no such column: T1.BETRAG",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 9.658,
+    "with_retry": 27.631,
+    "with_vote": 27.631
+   }
+  },
+  {
+   "id": "V26",
+   "question": "Wie viele Schäden hat jeder Schadenbearbeiter? Nenne Vorname, Name und Anzahl.",
+   "gold": "SELECT m.VORNAME, m.NAME, count(*) FROM T_SCHADEN s JOIN T_MITARBEITER m ON s.SB_MA_ID = m.MA_ID GROUP BY m.MA_ID",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "join",
+    "gruppierung"
+   ],
+   "greedy_sql": "SELECT A.VORNAME, A.NAME, COUNT(*) AS ANZAHL\nFROM T_SCHADEN AS A\nJOIN T_SCHADEN_BEARbeiter AS B ON A.SCH_ID = B.SCH_ID\nGROUP BY A.SCH_ID;",
+   "greedy_error": "OperationalError: no such table: T_SCHADEN_BEARbeiter",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT A.VORNAME, A.NAME, COUNT(*) AS ANZAHL\nFROM T_SCHADEN AS A\nJOIN T_SCHADEN_BEARbeiter AS B ON A.SCH_ID = B.SCH_ID\nGROUP BY A.SCH_ID;",
+   "retry_correct": false,
+   "vote_sql": "SELECT A.VORNAME, A.NAME, COUNT(*) AS ANZAHL\nFROM T_SCHADEN AS A\nJOIN T_SCHADEN_BEARbeiter AS B ON A.SCH_ID = B.SCH_ID\nGROUP BY A.SCH_ID;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT A.VORNAME, A.NAME, COUNT(*) AS ANZAHL\nFROM T_SCHADEN AS A\nJOIN T_SCHADEN_BEARbeiter AS B ON A.SCH_ID = B.SCH_ID\nGROUP BY A.SCH_ID;",
+     "error": "OperationalError: no such table: T_SCHADEN_BEARbeiter",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT A.VORNAME, A.NAME, COUNT(*) AS ANZAHL\nFROM T_SCHADEN AS A\nJOIN T_SCHADEN_BEARbeiter AS B ON A.SCH_ID = B.SCH_ID\nGROUP BY A.SCH_ID;",
+     "error": "OperationalError: no such table: T_SCHADEN_BEARbeiter",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT A.VORNAME, A.NAME, COUNT(*) AS ANZAHL\nFROM T_SCHADEN AS A\nJOIN T_SCHADEN_BEARbeiter AS B ON A.SCH_ID = B.SCH_ID\nGROUP BY A.SCH_ID;",
+     "error": "OperationalError: no such table: T_SCHADEN_BEARbeiter",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 9.498,
+    "with_retry": 28.666,
+    "with_vote": 28.666
+   }
+  },
+  {
+   "id": "V27",
+   "question": "Wie viele aktive Verträge haben eine Vollkasko-Deckung?",
+   "gold": "SELECT count(DISTINCT v.VTR_ID) FROM T_VERTRAG v JOIN T_DECKUNG d ON v.VTR_ID = d.VTR_ID WHERE d.DCK_ART_CD = 'VK' AND v.STAT_CD = 'AKT'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "join",
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(T_VTR_ID) FROM T_VERTRAG WHERE VTR_NR LIKE 'VTR_%' AND VTR_BEZ LIKE '%FULLKASKO%'",
+   "greedy_error": "OperationalError: no such column: T_VTR_ID",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(T_VTR_ID) FROM T_VERTRAG WHERE VTR_NR LIKE 'VTR_%' AND VTR_BEZ LIKE '%FULLKASKO%'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(T_VTR_ID) FROM T_VERTRAG WHERE VTR_NR LIKE 'VTR_%' AND VTR_BEZ LIKE '%FULLKASKO%'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(T_VTR_ID) FROM T_VERTRAG WHERE VTR_NR LIKE 'VTR_%' AND VTR_BEZ LIKE '%FULLKASKO%'",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(T_VTR_ID) FROM T_VERTRAG WHERE VTR_NR LIKE 'VTR_%' AND VTR_BEZ LIKE '%FULLKASKO%'",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(T_VTR_ID) FROM T_VERTRAG WHERE VTR_NR LIKE 'VTR_%' AND VTR_BEZ LIKE '%FULLKASKO%'",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.59,
+    "with_retry": 24.326,
+    "with_vote": 24.326
+   }
+  },
+  {
+   "id": "V28",
+   "question": "Wie hoch sind die Rückstellungen für offene Schäden insgesamt?",
+   "gold": "SELECT sum(RESERVE) FROM T_SCHADEN WHERE STAT_CD IN ('OFF', 'PRF')",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "begriff",
+    "code"
+   ],
+   "greedy_sql": "SELECT SUM(T_SCHADEN.BETRAG) AS TOTAL_RETURN_STRENGTH\nFROM T_SCHADEN\nWHERE T_SCHADEN.SCH_ID IN (\n    SELECT SCH_ID\n    FROM T_SCH_STAT_HIST\n    WHERE STAT_CD = 'RETURN'\n);",
+   "greedy_error": "OperationalError: no such column: T_SCHADEN.BETRAG",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T_SCHADEN.BETRAG) AS TOTAL_RETURN_STRENGTH\nFROM T_SCHADEN\nWHERE T_SCHADEN.SCH_ID IN (\n    SELECT SCH_ID\n    FROM T_SCH_STAT_HIST\n    WHERE STAT_CD = 'RETURN'\n);",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T_SCHADEN.BETRAG) AS TOTAL_RETURN_STRENGTH\nFROM T_SCHADEN\nWHERE T_SCHADEN.SCH_ID IN (\n    SELECT SCH_ID\n    FROM T_SCH_STAT_HIST\n    WHERE STAT_CD = 'RETURN'\n);",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T_SCHADEN.BETRAG) AS TOTAL_RETURN_STRENGTH\nFROM T_SCHADEN\nWHERE T_SCHADEN.SCH_ID IN (\n    SELECT SCH_ID\n    FROM T_SCH_STAT_HIST\n    WHERE STAT_CD = 'RETURN'\n);",
+     "error": "OperationalError: no such column: T_SCHADEN.BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_SCHADEN.BETRAG) AS TOTAL_RETURN_STRENGTH\nFROM T_SCHADEN\nWHERE T_SCHADEN.SCH_ID IN (\n    SELECT SCH_ID\n    FROM T_SCH_STAT_HIST\n    WHERE STAT_CD = 'RETURN'\n);",
+     "error": "OperationalError: no such column: T_SCHADEN.BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_SCHADEN.BETRAG) AS TOTAL_RETURN_STRENGTH\nFROM T_SCHADEN\nWHERE T_SCHADEN.SCH_ID IN (\n    SELECT SCH_ID\n    FROM T_SCH_STAT_HIST\n    WHERE STAT_CD = 'RETURN'\n);",
+     "error": "OperationalError: no such column: T_SCHADEN.BETRAG",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 9.647,
+    "with_retry": 30.899,
+    "with_vote": 30.899
+   }
+  },
+  {
+   "id": "V29",
+   "question": "In welchen drei Kantonen wohnen die meisten Kunden? Nenne das Kantonskürzel und die Anzahl.",
+   "gold": "SELECT KT_CD, count(*) FROM T_PARTNER GROUP BY KT_CD ORDER BY count(*) DESC LIMIT 3",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "gruppierung",
+    "sortierung"
+   ],
+   "greedy_sql": "SELECT KT_NAME, COUNT(*) AS ANZAHL\nFROM T_AGENTUR\nGROUP BY KT_CD\nORDER BY COUNT(*) DESC\nLIMIT 3;",
+   "greedy_error": "OperationalError: no such column: KT_NAME",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT KT_NAME, COUNT(*) AS ANZAHL\nFROM T_AGENTUR\nGROUP BY KT_CD\nORDER BY COUNT(*) DESC\nLIMIT 3;",
+   "retry_correct": false,
+   "vote_sql": "SELECT KT_NAME, COUNT(*) AS ANZAHL\nFROM T_AGENTUR\nGROUP BY KT_CD\nORDER BY COUNT(*) DESC\nLIMIT 3;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT KT_NAME, COUNT(*) AS ANZAHL\nFROM T_AGENTUR\nGROUP BY KT_CD\nORDER BY COUNT(*) DESC\nLIMIT 3;",
+     "error": "OperationalError: no such column: KT_NAME",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT KT_NAME, COUNT(*) AS ANZAHL\nFROM T_AGENTUR\nGROUP BY KT_CD\nORDER BY COUNT(*) DESC\nLIMIT 3;",
+     "error": "OperationalError: no such column: KT_NAME",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT KT_NAME, COUNT(*) AS ANZAHL\nFROM T_AGENTUR\nGROUP BY KT_CD\nORDER BY COUNT(*) DESC\nLIMIT 3;",
+     "error": "OperationalError: no such column: KT_NAME",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.889,
+    "with_retry": 21.381,
+    "with_vote": 21.381
+   }
+  },
+  {
+   "id": "V30",
+   "question": "Wie viel wurde im Jahr 2025 an Werkstätten ausbezahlt?",
+   "gold": "SELECT sum(BETRAG) FROM T_SCH_ZLG WHERE EMPF_TYP_CD = 'WERKST' AND ZLG_DAT LIKE '2025%'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "datum",
+    "code"
+   ],
+   "greedy_sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE YEAR(T_VTR_ID) = 2025 AND T_VTR_ID > 0;",
+   "greedy_error": "OperationalError: no such column: T_VTR_ID",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE YEAR(T_VTR_ID) = 2025 AND T_VTR_ID > 0;",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE YEAR(T_VTR_ID) = 2025 AND T_VTR_ID > 0;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE YEAR(T_VTR_ID) = 2025 AND T_VTR_ID > 0;",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE YEAR(T_VTR_ID) = 2025 AND T_VTR_ID > 0;",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE YEAR(T_VTR_ID) = 2025 AND T_VTR_ID > 0;",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.142,
+    "with_retry": 20.825,
+    "with_vote": 20.825
+   }
+  },
+  {
+   "id": "V31",
+   "question": "Wie viele Schäden wurden abgelehnt, obwohl kein Betrugsverdacht bestand?",
+   "gold": "SELECT count(*) FROM T_SCHADEN WHERE STAT_CD = 'ABL' AND BETRUG_VERD_FLG = 0",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRAG = 0 AND STAT_CD = 'AB';",
+   "greedy_error": "OperationalError: no such column: BETRAG",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRAG = 0;",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRAG = 0;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRAG = 0 AND STAT_CD = 'AB';",
+     "error": "OperationalError: no such column: BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRAG = 0;",
+     "error": "OperationalError: no such column: BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE BETRAG = 0;",
+     "error": "OperationalError: no such column: BETRAG",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.104,
+    "with_retry": 17.781,
+    "with_vote": 17.781
+   }
+  },
+  {
+   "id": "V32",
+   "question": "Wie viele Tage vergehen im Durchschnitt zwischen Schadenereignis und Schadenmeldung?",
+   "gold": "SELECT avg(julianday(MELD_DAT) - julianday(EREIG_DAT)) FROM T_SCHADEN",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "de",
+   "skills": [
+    "datum"
+   ],
+   "greedy_sql": "SELECT AVG(T_SCHADEN.SCH_DAT - T_SCHADEN.MELD_DAT) AS AVG_DAYS\nFROM T_SCHADEN;",
+   "greedy_error": "OperationalError: no such column: T_SCHADEN.SCH_DAT",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT AVG(T_SCHADEN.SCH_DAT - T_SCHADEN.MELD_DAT) AS AVG_DAYS\nFROM T_SCHADEN;",
+   "retry_correct": false,
+   "vote_sql": "SELECT AVG(T_SCHADEN.SCH_DAT - T_SCHADEN.MELD_DAT) AS AVG_DAYS\nFROM T_SCHADEN;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT AVG(T_SCHADEN.SCH_DAT - T_SCHADEN.MELD_DAT) AS AVG_DAYS\nFROM T_SCHADEN;",
+     "error": "OperationalError: no such column: T_SCHADEN.SCH_DAT",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_SCHADEN.SCH_DAT - T_SCHADEN.MELD_DAT) AS AVG_DAYS\nFROM T_SCHADEN;",
+     "error": "OperationalError: no such column: T_SCHADEN.SCH_DAT",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_SCHADEN.SCH_DAT - T_SCHADEN.MELD_DAT) AS AVG_DAYS\nFROM T_SCHADEN;",
+     "error": "OperationalError: no such column: T_SCHADEN.SCH_DAT",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.131,
+    "with_retry": 20.608,
+    "with_vote": 20.608
+   }
+  },
+  {
+   "id": "V33",
+   "question": "Wie hoch war die Schadenquote der Sparte Hausrat im Jahr 2025? Als Dezimalzahl, auf zwei Stellen gerundet.",
+   "gold": "SELECT round((SELECT sum(z.BETRAG) FROM T_SCH_ZLG z JOIN T_SCHADEN s ON z.SCH_ID = s.SCH_ID JOIN T_VERTRAG v ON s.VTR_ID = v.VTR_ID JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'HR' AND z.ZLG_DAT LIKE '2025%') / (SELECT sum(v.JPRAEMIE) FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'HR' AND v.STAT_CD = 'AKT'), 2)",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "join",
+    "begriff",
+    "teilabfrage"
+   ],
+   "greedy_sql": "SELECT CAST(SUM(T_SCHADEN.SCH_NR) AS REAL) / 100 FROM T_SCHADEN WHERE T_SCHADEN.SCH_ID IN (SELECT T_SCHADEN.SCH_ID FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2025)) AND T_SCHADEN.SCH_ID NOT IN (SELECT T_SCHADEN.SCH_ID FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2024))",
+   "greedy_error": "OperationalError: no such column: VTR_DAT",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T_SCHADEN.SCH_NR) / 100 FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2025) AND T_SCHADEN.SCH_ID NOT IN (SELECT T_SCHADEN.SCH_ID FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2024))",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T_SCHADEN.SCH_NR) / 100 FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2025) AND T_SCHADEN.SCH_ID NOT IN (SELECT T_SCHADEN.SCH_ID FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2024))",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT CAST(SUM(T_SCHADEN.SCH_NR) AS REAL) / 100 FROM T_SCHADEN WHERE T_SCHADEN.SCH_ID IN (SELECT T_SCHADEN.SCH_ID FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2025)) AND T_SCHADEN.SCH_ID NOT IN (SELECT T_SCHADEN.SCH_ID FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2024))",
+     "error": "OperationalError: no such column: VTR_DAT",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_SCHADEN.SCH_NR) / 100 FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2025) AND T_SCHADEN.SCH_ID NOT IN (SELECT T_SCHADEN.SCH_ID FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2024))",
+     "error": "OperationalError: no such column: VTR_DAT",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_SCHADEN.SCH_NR) / 100 FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2025) AND T_SCHADEN.SCH_ID NOT IN (SELECT T_SCHADEN.SCH_ID FROM T_SCHADEN WHERE VTR_ID IN (SELECT VTR_ID FROM T_VERTRAG WHERE PTR_ID = (SELECT KT_CD FROM T_KANTON WHERE KT_NAME = 'Hausrat') AND YEAR(VTR_DAT) = 2024))",
+     "error": "OperationalError: no such column: VTR_DAT",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 26.456,
+    "with_retry": 73.317,
+    "with_vote": 73.317
+   }
+  },
+  {
+   "id": "V34",
+   "question": "Wie viele Grossschäden hatten wir?",
+   "gold": "SELECT count(*) FROM (SELECT SCH_ID FROM T_SCH_ZLG GROUP BY SCH_ID HAVING sum(BETRAG) > 50000)",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "begriff",
+    "gruppierung",
+    "teilabfrage"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'Grossschäden'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN",
+   "vote_confidence": 1.0,
+   "vote_answer_runs": true,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'Grossschäden'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN",
+     "error": null,
+     "key": "247a946e116d",
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.808,
+    "with_retry": 11.482,
+    "with_vote": 11.482
+   }
+  },
+  {
+   "id": "V35",
+   "question": "Welche Kunden haben mehr als drei Schäden gemeldet? Nenne Vorname, Name und die Anzahl Schäden.",
+   "gold": "SELECT p.VORNAME, p.NAME, count(*) FROM T_SCHADEN s JOIN T_VERTRAG v ON s.VTR_ID = v.VTR_ID JOIN T_PARTNER p ON v.PTR_ID = p.PTR_ID GROUP BY p.PTR_ID HAVING count(*) > 3",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "join",
+    "gruppierung"
+   ],
+   "greedy_sql": "SELECT T1.VORNAME, T1.NAME, COUNT(T2.SCH_ID) AS ANZAHL_SCHADE\nFROM T_SCHADEN AS T1\nJOIN T_SCH_ZLG AS T2 ON T1.SCH_ID = T2.SCH_ID\nGROUP BY T1.VORNAME, T1.NAME\nHAVING COUNT(T2.SCH_ID) > 3;",
+   "greedy_error": "OperationalError: no such column: T1.VORNAME",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT T1.VORNAME, T1.NAME, COUNT(T2.SCH_ID) AS ANZAHL_SCHADE\nFROM T_SCHADEN AS T1\nJOIN T_SCH_ZLG AS T2 ON T1.SCH_ID = T2.SCH_ID\nGROUP BY T1.VORNAME, T1.NAME\nHAVING COUNT(T2.SCH_ID) > 3;",
+   "retry_correct": false,
+   "vote_sql": "SELECT T1.VORNAME, T1.NAME, COUNT(T2.SCH_ID) AS ANZAHL_SCHADE\nFROM T_SCHADEN AS T1\nJOIN T_SCH_ZLG AS T2 ON T1.SCH_ID = T2.SCH_ID\nGROUP BY T1.VORNAME, T1.NAME\nHAVING COUNT(T2.SCH_ID) > 3;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT T1.VORNAME, T1.NAME, COUNT(T2.SCH_ID) AS ANZAHL_SCHADE\nFROM T_SCHADEN AS T1\nJOIN T_SCH_ZLG AS T2 ON T1.SCH_ID = T2.SCH_ID\nGROUP BY T1.VORNAME, T1.NAME\nHAVING COUNT(T2.SCH_ID) > 3;",
+     "error": "OperationalError: no such column: T1.VORNAME",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT T1.VORNAME, T1.NAME, COUNT(T2.SCH_ID) AS ANZAHL_SCHADE\nFROM T_SCHADEN AS T1\nJOIN T_SCH_ZLG AS T2 ON T1.SCH_ID = T2.SCH_ID\nGROUP BY T1.VORNAME, T1.NAME\nHAVING COUNT(T2.SCH_ID) > 3;",
+     "error": "OperationalError: no such column: T1.VORNAME",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT T1.VORNAME, T1.NAME, COUNT(T2.SCH_ID) AS ANZAHL_SCHADE\nFROM T_SCHADEN AS T1\nJOIN T_SCH_ZLG AS T2 ON T1.SCH_ID = T2.SCH_ID\nGROUP BY T1.VORNAME, T1.NAME\nHAVING COUNT(T2.SCH_ID) > 3;",
+     "error": "OperationalError: no such column: T1.VORNAME",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 13.199,
+    "with_retry": 37.914,
+    "with_vote": 37.914
+   }
+  },
+  {
+   "id": "V36",
+   "question": "Wie viele aktive Kunden haben noch nie einen Schaden gemeldet?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE STAT_CD = 'A' AND PTR_ID NOT IN (SELECT v.PTR_ID FROM T_SCHADEN s JOIN T_VERTRAG v ON s.VTR_ID = v.VTR_ID)",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "begriff",
+    "teilabfrage"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE SCH_ID NOT IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'GEMELT')",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": false,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE SCH_ID NOT IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'GEMELT')",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE SCH_ID NOT IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'GEMELT')",
+   "vote_confidence": 1.0,
+   "vote_answer_runs": true,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE SCH_ID NOT IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'GEMELT')",
+     "error": null,
+     "key": "247a946e116d",
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.246,
+    "with_retry": 7.246,
+    "with_vote": 7.246
+   }
+  },
+  {
+   "id": "V37",
+   "question": "Welche Generalagentur hat das höchste Prämienvolumen?",
+   "gold": "SELECT a.AGT_NAME FROM T_VERTRAG v JOIN T_MITARBEITER m ON v.MA_ID_BER = m.MA_ID JOIN T_AGENTUR a ON m.AGT_ID = a.AGT_ID WHERE v.STAT_CD = 'AKT' GROUP BY a.AGT_ID ORDER BY sum(v.JPRAEMIE) DESC LIMIT 1",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "join",
+    "gruppierung",
+    "sortierung",
+    "begriff"
+   ],
+   "greedy_sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE AGT_ID = (SELECT AGT_ID FROM T_SCHADEN ORDER BY BETRAG DESC LIMIT 1)",
+   "greedy_error": "OperationalError: no such column: BETRAG",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE AGT_ID = (SELECT AGT_ID FROM T_SCHADEN ORDER BY BETRAG DESC LIMIT 1)",
+   "retry_correct": false,
+   "vote_sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE AGT_ID = (SELECT AGT_ID FROM T_SCHADEN ORDER BY BETRAG DESC LIMIT 1)",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE AGT_ID = (SELECT AGT_ID FROM T_SCHADEN ORDER BY BETRAG DESC LIMIT 1)",
+     "error": "OperationalError: no such column: BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE AGT_ID = (SELECT AGT_ID FROM T_SCHADEN ORDER BY BETRAG DESC LIMIT 1)",
+     "error": "OperationalError: no such column: BETRAG",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AGT_NAME FROM T_AGENTUR WHERE AGT_ID = (SELECT AGT_ID FROM T_SCHADEN ORDER BY BETRAG DESC LIMIT 1)",
+     "error": "OperationalError: no such column: BETRAG",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.726,
+    "with_retry": 22.285,
+    "with_vote": 22.285
+   }
+  },
+  {
+   "id": "V38",
+   "question": "In welchem Monat des Jahres 2024 gab es die meisten Hagelschäden? Antworte mit der Monatsnummer.",
+   "gold": "SELECT CAST(strftime('%m', EREIG_DAT) AS INTEGER) FROM T_SCHADEN WHERE URS_CD = 'HAGEL' AND EREIG_DAT LIKE '2024%' GROUP BY strftime('%m', EREIG_DAT) ORDER BY count(*) DESC LIMIT 1",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "datum",
+    "gruppierung",
+    "sortierung",
+    "code"
+   ],
+   "greedy_sql": "SELECT MONTH(T_VTR_ID) FROM T_SCHADEN WHERE YEAR(T_VTR_ID) = 2024 GROUP BY MONTH(T_VTR_ID) ORDER BY COUNT(*) DESC LIMIT 1",
+   "greedy_error": "OperationalError: no such column: T_VTR_ID",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT MONTH(T_VTR_ID) FROM T_SCHADEN WHERE YEAR(T_VTR_ID) = 2024 GROUP BY MONTH(T_VTR_ID) ORDER BY COUNT(*) DESC LIMIT 1",
+   "retry_correct": false,
+   "vote_sql": "SELECT MONTH(T_VTR_ID) FROM T_SCHADEN WHERE YEAR(T_VTR_ID) = 2024 GROUP BY MONTH(T_VTR_ID) ORDER BY COUNT(*) DESC LIMIT 1",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT MONTH(T_VTR_ID) FROM T_SCHADEN WHERE YEAR(T_VTR_ID) = 2024 GROUP BY MONTH(T_VTR_ID) ORDER BY COUNT(*) DESC LIMIT 1",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT MONTH(T_VTR_ID) FROM T_SCHADEN WHERE YEAR(T_VTR_ID) = 2024 GROUP BY MONTH(T_VTR_ID) ORDER BY COUNT(*) DESC LIMIT 1",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT MONTH(T_VTR_ID) FROM T_SCHADEN WHERE YEAR(T_VTR_ID) = 2024 GROUP BY MONTH(T_VTR_ID) ORDER BY COUNT(*) DESC LIMIT 1",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 8.866,
+    "with_retry": 27.508,
+    "with_vote": 27.508
+   }
+  },
+  {
+   "id": "V39",
+   "question": "Wie viele Kunden haben gleichzeitig eine aktive Autoversicherung und eine aktive Hausratversicherung?",
+   "gold": "SELECT count(*) FROM (SELECT v.PTR_ID FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'MF' AND v.STAT_CD = 'AKT' INTERSECT SELECT v.PTR_ID FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'HR' AND v.STAT_CD = 'AKT')",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "join",
+    "teilabfrage",
+    "code"
+   ],
+   "greedy_sql": "SELECT COUNT(T1.KT_CD) FROM T_AGENTUR AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.AGT_ID = T2.SCH_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(T1.KT_CD) FROM T_AGENTUR AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.AGT_ID = T2.SCH_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(T1.KT_CD) FROM T_AGENTUR AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.AGT_ID = T2.SCH_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(T1.KT_CD) FROM T_AGENTUR AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.AGT_ID = T2.SCH_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(T1.KT_CD) FROM T_AGENTUR AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.AGT_ID = T2.SCH_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(T1.KT_CD) FROM T_AGENTUR AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.AGT_ID = T2.SCH_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE STAT_CD = 'Aktiv')",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 11.186,
+    "with_retry": 34.086,
+    "with_vote": 34.086
+   }
+  },
+  {
+   "id": "V40",
+   "question": "Wie hoch ist die durchschnittliche Gesamtzahlung pro abgeschlossenem Kollisionsschaden?",
+   "gold": "SELECT avg(t) FROM (SELECT sum(z.BETRAG) AS t FROM T_SCH_ZLG z JOIN T_SCHADEN s ON z.SCH_ID = s.SCH_ID WHERE s.URS_CD = 'KOLL' AND s.STAT_CD = 'ABG' GROUP BY s.SCH_ID)",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "join",
+    "teilabfrage",
+    "code"
+   ],
+   "greedy_sql": "SELECT AVG(T_SCHADEN.GESCHL_CD) FROM T_SCHADEN",
+   "greedy_error": "OperationalError: no such column: T_SCHADEN.GESCHL_CD",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT AVG(T_SCHADEN.GESCHL_CD) FROM T_SCHADEN",
+   "retry_correct": false,
+   "vote_sql": "SELECT AVG(T_SCHADEN.GESCHL_CD) FROM T_SCHADEN",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT AVG(T_SCHADEN.GESCHL_CD) FROM T_SCHADEN",
+     "error": "OperationalError: no such column: T_SCHADEN.GESCHL_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_SCHADEN.GESCHL_CD) FROM T_SCHADEN",
+     "error": "OperationalError: no such column: T_SCHADEN.GESCHL_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_SCHADEN.GESCHL_CD) FROM T_SCHADEN",
+     "error": "OperationalError: no such column: T_SCHADEN.GESCHL_CD",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.139,
+    "with_retry": 18.761,
+    "with_vote": 18.761
+   }
+  },
+  {
+   "id": "V41",
+   "question": "Wie viele Kunden sind schon seit mehr als zehn Jahren bei uns?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE EROEFF_DAT < '2016-06-30'",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "begriff",
+    "datum"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE LEITER_MA_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE EINTRITT_DAT >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH))",
+   "greedy_error": "OperationalError: near \"12\": syntax error",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE LEITER_MA_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE EINTRITT_DAT >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH))",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE LEITER_MA_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE EINTRITT_DAT >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH))",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE LEITER_MA_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE EINTRITT_DAT >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH))",
+     "error": "OperationalError: near \"12\": syntax error",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE LEITER_MA_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE EINTRITT_DAT >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH))",
+     "error": "OperationalError: near \"12\": syntax error",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE LEITER_MA_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE EINTRITT_DAT >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH))",
+     "error": "OperationalError: near \"12\": syntax error",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.64,
+    "with_retry": 23.975,
+    "with_vote": 23.975
+   }
+  },
+  {
+   "id": "V42",
+   "question": "Wie viele unserer Privatkunden sind 80 Jahre alt oder älter?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE PTR_TYP_CD = 'P' AND GEB_DAT <= '1946-06-30'",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "begriff",
+    "datum"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGE > 80",
+   "greedy_error": "OperationalError: no such column: AGE",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGE >= 80",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGE >= 80",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGE > 80",
+     "error": "OperationalError: no such column: AGE",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGE < 80",
+     "error": "OperationalError: no such column: AGE",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGE >= 80",
+     "error": "OperationalError: no such column: AGE",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 4.866,
+    "with_retry": 15.521,
+    "with_vote": 15.521
+   }
+  },
+  {
+   "id": "V43",
+   "question": "Wie viel Prozent der aktiven Verträge werden monatlich bezahlt? Auf eine Nachkommastelle gerundet.",
+   "gold": "SELECT round(100.0 * sum(ZAHLW_CD = 'M') / count(*), 1) FROM T_VERTRAG WHERE STAT_CD = 'AKT'",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "code",
+    "berechnung"
+   ],
+   "greedy_sql": "SELECT CAST(SUM(CASE WHEN T_VERTRAG.STAT_CD = 'MONATLICH' THEN T_VERTRAG.ZAJLW_CD ELSE 0 END) AS REAL) * 100 / COUNT(T_VERTRAG.VTR_ID) FROM T_VERTRAG",
+   "greedy_error": "OperationalError: no such column: T_VERTRAG.ZAJLW_CD",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT CAST(SUM(CASE WHEN T_VERTRAG.STAT_CD = 'MONATLICH' THEN T_VERTRAG.ZAJLW_CD ELSE 0 END) AS REAL) * 100 / COUNT(T_VERTRAG.VTR_ID) FROM T_VERTRAG",
+   "retry_correct": false,
+   "vote_sql": "SELECT CAST(SUM(CASE WHEN T_VERTRAG.STAT_CD = 'MONATLICH' THEN T_VERTRAG.ZAJLW_CD ELSE 0 END) AS REAL) * 100 / COUNT(T_VERTRAG.VTR_ID) FROM T_VERTRAG",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT CAST(SUM(CASE WHEN T_VERTRAG.STAT_CD = 'MONATLICH' THEN T_VERTRAG.ZAJLW_CD ELSE 0 END) AS REAL) * 100 / COUNT(T_VERTRAG.VTR_ID) FROM T_VERTRAG",
+     "error": "OperationalError: no such column: T_VERTRAG.ZAJLW_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT CAST(SUM(CASE WHEN T_VERTRAG.STAT_CD = 'MONATLICH' THEN T_VERTRAG.ZAJLW_CD ELSE 0 END) AS REAL) * 100 / COUNT(T_VERTRAG.VTR_ID) FROM T_VERTRAG",
+     "error": "OperationalError: no such column: T_VERTRAG.ZAJLW_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT CAST(SUM(CASE WHEN T_VERTRAG.STAT_CD = 'MONATLICH' THEN T_VERTRAG.ZAJLW_CD ELSE 0 END) AS REAL) * 100 / COUNT(T_VERTRAG.VTR_ID) FROM T_VERTRAG",
+     "error": "OperationalError: no such column: T_VERTRAG.ZAJLW_CD",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 10.298,
+    "with_retry": 31.439,
+    "with_vote": 31.439
+   }
+  },
+  {
+   "id": "V44",
+   "question": "Wie hoch ist das Prämienvolumen pro Sprachregion? Nenne Region und Betrag.",
+   "gold": "SELECT k.REGION, sum(v.JPRAEMIE) FROM T_VERTRAG v JOIN T_PARTNER p ON v.PTR_ID = p.PTR_ID JOIN T_KANTON k ON p.KT_CD = k.KT_CD WHERE v.STAT_CD = 'AKT' GROUP BY k.REGION",
+   "unanswerable": false,
+   "level": "schwer",
+   "lang": "de",
+   "skills": [
+    "join",
+    "gruppierung",
+    "begriff"
+   ],
+   "greedy_sql": "SELECT T1.KT_NAME, SUM(T2.SPRTE_BEZ) AS PREMIENVOLUMEN\nFROM T_KANTON AS T1\nJOIN T_SPARTE AS T2 ON T1.KT_CD = T2.KT_CD\nGROUP BY T1.KT_NAME;",
+   "greedy_error": "OperationalError: no such column: T2.SPRTE_BEZ",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT T1.KT_NAME, SUM(T2.SPRTE_BEZ) AS PREMIENVOLUMEN\nFROM T_KANTON AS T1\nJOIN T_SPARTE AS T2 ON T1.KT_CD = T2.KT_CD\nGROUP BY T1.KT_NAME;",
+   "retry_correct": false,
+   "vote_sql": "SELECT T1.KT_NAME, SUM(T2.SPRTE_BEZ) AS PREMIENVOLUMEN\nFROM T_KANTON AS T1\nJOIN T_SPARTE AS T2 ON T1.KT_CD = T2.KT_CD\nGROUP BY T1.KT_NAME;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT T1.KT_NAME, SUM(T2.SPRTE_BEZ) AS PREMIENVOLUMEN\nFROM T_KANTON AS T1\nJOIN T_SPARTE AS T2 ON T1.KT_CD = T2.KT_CD\nGROUP BY T1.KT_NAME;",
+     "error": "OperationalError: no such column: T2.SPRTE_BEZ",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT T1.KT_NAME, SUM(T2.SPRTE_BEZ) AS PREMIENVOLUMEN\nFROM T_KANTON AS T1\nJOIN T_SPARTE AS T2 ON T1.KT_CD = T2.KT_CD\nGROUP BY T1.KT_NAME;",
+     "error": "OperationalError: no such column: T2.SPRTE_BEZ",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT T1.KT_NAME, SUM(T2.SPRTE_BEZ) AS PREMIENVOLUMEN\nFROM T_KANTON AS T1\nJOIN T_SPARTE AS T2 ON T1.KT_CD = T2.KT_CD\nGROUP BY T1.KT_NAME;",
+     "error": "OperationalError: no such column: T2.SPRTE_BEZ",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 9.835,
+    "with_retry": 31.448,
+    "with_vote": 31.448
+   }
+  },
+  {
+   "id": "V45",
+   "question": "Combien de clients habitent dans le canton de Vaud ?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE KT_CD = 'VD'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "fr",
+   "skills": [
+    "code",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'Vaud'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'Vaud'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'Vaud'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'Vaud'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'Vaud'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'Vaud'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.471,
+    "with_retry": 16.397,
+    "with_vote": 16.397
+   }
+  },
+  {
+   "id": "V46",
+   "question": "Combien de sinistres ont été déclarés en 2023 ?",
+   "gold": "SELECT count(*) FROM T_SCHADEN WHERE MELD_DAT LIKE '2023%'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "fr",
+   "skills": [
+    "datum",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2023 AND STAT_CD = 'DECLARED';",
+   "greedy_error": "OperationalError: no such function: YEAR",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2023;",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2023;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2023 AND STAT_CD = 'DECLARED';",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2023;",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2023;",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.707,
+    "with_retry": 18.307,
+    "with_vote": 18.307
+   }
+  },
+  {
+   "id": "V47",
+   "question": "Quel est le montant total versé pour les dégâts d'eau ?",
+   "gold": "SELECT sum(z.BETRAG) FROM T_SCH_ZLG z JOIN T_SCHADEN s ON z.SCH_ID = s.SCH_ID WHERE s.URS_CD = 'WASS'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "fr",
+   "skills": [
+    "join",
+    "code",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE VTR_BEZ = 'DEGÄT' AND VTR_NR = 'E'",
+   "greedy_error": "OperationalError: no such column: T_VTR_ID",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE VTR_BEZ = 'DEGÄT' AND VTR_NR = 'E'",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE VTR_BEZ = 'DEGÄT' AND VTR_NR = 'E'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE VTR_BEZ = 'DEGÄT' AND VTR_NR = 'E'",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE VTR_BEZ = 'DEGÄT' AND VTR_NR = 'E'",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T_VTR_ID) FROM T_VERTRAG WHERE VTR_BEZ = 'DEGÄT' AND VTR_NR = 'E'",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 7.037,
+    "with_retry": 20.61,
+    "with_vote": 20.61
+   }
+  },
+  {
+   "id": "V48",
+   "question": "Combien de contrats actifs ont une couverture casco complète ?",
+   "gold": "SELECT count(DISTINCT v.VTR_ID) FROM T_VERTRAG v JOIN T_DECKUNG d ON v.VTR_ID = d.VTR_ID WHERE d.DCK_ART_CD = 'VK' AND v.STAT_CD = 'AKT'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "fr",
+   "skills": [
+    "join",
+    "code",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT COUNT(T1.VTR_ID) FROM T_VERTRAG AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE SCH_STAT_CD = 'ACTIV' AND SCH_NR = 'COCO')",
+   "greedy_error": "OperationalError: no such column: SCH_STAT_CD",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(T1.VTR_ID) FROM T_VERTRAG AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE SCH_STAT_CD = 'ACTIV' AND SCH_NR = 'COCO')",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(T1.VTR_ID) FROM T_VERTRAG AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE SCH_STAT_CD = 'ACTIV' AND SCH_NR = 'COCO')",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(T1.VTR_ID) FROM T_VERTRAG AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE SCH_STAT_CD = 'ACTIV' AND SCH_NR = 'COCO')",
+     "error": "OperationalError: no such column: SCH_STAT_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(T1.VTR_ID) FROM T_VERTRAG AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE SCH_STAT_CD = 'ACTIV' AND SCH_NR = 'COCO')",
+     "error": "OperationalError: no such column: SCH_STAT_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(T1.VTR_ID) FROM T_VERTRAG AS T1 INNER JOIN T_SCHADEN AS T2 ON T1.VTR_ID = T2.VTR_ID WHERE T2.SCH_ID IN (SELECT SCH_ID FROM T_SCHADEN WHERE SCH_STAT_CD = 'ACTIV' AND SCH_NR = 'COCO')",
+     "error": "OperationalError: no such column: SCH_STAT_CD",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 12.494,
+    "with_retry": 35.399,
+    "with_vote": 35.399
+   }
+  },
+  {
+   "id": "V49",
+   "question": "Combien de collaborateurs travaillent à l'agence générale de Lausanne ?",
+   "gold": "SELECT count(*) FROM T_MITARBEITER m JOIN T_AGENTUR a ON m.AGT_ID = a.AGT_ID WHERE a.AGT_NAME = 'Generalagentur Lausanne'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "fr",
+   "skills": [
+    "join",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGT_NAME = 'Lausanne';",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGT_NAME = 'Lausanne';",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGT_NAME = 'Lausanne';",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGT_NAME = 'Lausanne';",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGT_NAME = 'Lausanne';",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE AGT_NAME = 'Lausanne';",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 4.795,
+    "with_retry": 16.991,
+    "with_vote": 16.991
+   }
+  },
+  {
+   "id": "V50",
+   "question": "Quanti clienti abitano in Ticino?",
+   "gold": "SELECT count(*) FROM T_PARTNER WHERE KT_CD = 'TI'",
+   "unanswerable": false,
+   "level": "einfach",
+   "lang": "it",
+   "skills": [
+    "code",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'TICINO'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'TICINO'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'TICINO'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'TICINO'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'TICINO'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_AGENTUR WHERE KT_CD = 'TICINO'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.135,
+    "with_retry": 15.352,
+    "with_vote": 15.352
+   }
+  },
+  {
+   "id": "V51",
+   "question": "Quanti sinistri sono ancora aperti?",
+   "gold": "SELECT count(*) FROM T_SCHADEN WHERE STAT_CD IN ('OFF', 'PRF')",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "it",
+   "skills": [
+    "code",
+    "begriff",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'AP'",
+   "greedy_error": null,
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'AP'",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'AP'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'AP'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'AP'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE STAT_CD = 'AP'",
+     "error": null,
+     "key": null,
+     "degenerate": true
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.147,
+    "with_retry": 16.27,
+    "with_vote": 16.27
+   }
+  },
+  {
+   "id": "V52",
+   "question": "Qual è il premio annuo medio dei contratti attivi di responsabilità civile privata?",
+   "gold": "SELECT avg(v.JPRAEMIE) FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'PH' AND v.STAT_CD = 'AKT'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "it",
+   "skills": [
+    "join",
+    "code",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT AVG(T1.ZAJL) FROM T_SCHADEN AS T1 INNER JOIN T_RECHNUNG AS T2 ON T1.SCH_ID = T2.SCH_ID WHERE T1.STAT_CD = 'AN' AND T1.BETRAG > 0;",
+   "greedy_error": "OperationalError: no such column: T1.ZAJL",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT AVG(T1.ZAJL) FROM T_SCHADEN AS T1 INNER JOIN T_RECHNUNG AS T2 ON T1.SCH_ID = T2.SCH_ID WHERE T1.STAT_CD = 'AN' AND T1.BETRAG > 0;",
+   "retry_correct": false,
+   "vote_sql": "SELECT AVG(T1.ZAJL) FROM T_SCHADEN AS T1 INNER JOIN T_RECHNUNG AS T2 ON T1.SCH_ID = T2.SCH_ID WHERE T1.STAT_CD = 'AN' AND T1.BETRAG > 0;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT AVG(T1.ZAJL) FROM T_SCHADEN AS T1 INNER JOIN T_RECHNUNG AS T2 ON T1.SCH_ID = T2.SCH_ID WHERE T1.STAT_CD = 'AN' AND T1.BETRAG > 0;",
+     "error": "OperationalError: no such column: T1.ZAJL",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T1.ZAJL) FROM T_SCHADEN AS T1 INNER JOIN T_RECHNUNG AS T2 ON T1.SCH_ID = T2.SCH_ID WHERE T1.STAT_CD = 'AN' AND T1.BETRAG > 0;",
+     "error": "OperationalError: no such column: T1.ZAJL",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T1.ZAJL) FROM T_SCHADEN AS T1 INNER JOIN T_RECHNUNG AS T2 ON T1.SCH_ID = T2.SCH_ID WHERE T1.STAT_CD = 'AN' AND T1.BETRAG > 0;",
+     "error": "OperationalError: no such column: T1.ZAJL",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 8.159,
+    "with_retry": 30.467,
+    "with_vote": 30.467
+   }
+  },
+  {
+   "id": "V53",
+   "question": "Quante fatture sono scadute e non ancora pagate?",
+   "gold": "SELECT count(*) FROM T_RECHNUNG WHERE BEZ_DAT IS NULL AND FAELLIG_DAT < '2026-06-30'",
+   "unanswerable": false,
+   "level": "mittel",
+   "lang": "it",
+   "skills": [
+    "begriff",
+    "datum",
+    "null",
+    "sprache"
+   ],
+   "greedy_sql": "SELECT COUNT(T_VTR_ID) FROM T_SCHADEN WHERE STAT_CD = 'SCADU' AND BEZ_DAT IS NULL;",
+   "greedy_error": "OperationalError: no such column: T_VTR_ID",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(T_VTR_ID) FROM T_SCHADEN WHERE STAT_CD = 'SCADU';",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(T_VTR_ID) FROM T_SCHADEN WHERE STAT_CD = 'SCADU';",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(T_VTR_ID) FROM T_SCHADEN WHERE STAT_CD = 'SCADU' AND BEZ_DAT IS NULL;",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(T_VTR_ID) FROM T_SCHADEN WHERE STAT_CD = 'SCADU';",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(T_VTR_ID) FROM T_SCHADEN WHERE STAT_CD = 'SCADU';",
+     "error": "OperationalError: no such column: T_VTR_ID",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.389,
+    "with_retry": 18.567,
+    "with_vote": 18.567
+   }
+  },
+  {
+   "id": "U01",
+   "question": "Wie zufrieden sind unsere Kunden im Durchschnitt?",
+   "gold": null,
+   "unanswerable": true,
+   "level": "nicht beantwortbar",
+   "lang": "de",
+   "skills": [
+    "enthaltung"
+   ],
+   "greedy_sql": "SELECT AVG(T_AGT_ID) FROM T_AGENTUR",
+   "greedy_error": "OperationalError: no such column: T_AGT_ID",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT AVG(T_AGT_ID) FROM T_AGENTUR",
+   "retry_correct": false,
+   "vote_sql": "SELECT AVG(T_AGT_ID) FROM T_AGENTUR",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT AVG(T_AGT_ID) FROM T_AGENTUR",
+     "error": "OperationalError: no such column: T_AGT_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_AGT_ID) FROM T_AGENTUR",
+     "error": "OperationalError: no such column: T_AGT_ID",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT AVG(T_AGT_ID) FROM T_AGENTUR",
+     "error": "OperationalError: no such column: T_AGT_ID",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 4.256,
+    "with_retry": 13.853,
+    "with_vote": 13.853
+   }
+  },
+  {
+   "id": "U02",
+   "question": "Wie viele Schäden gab es im Jahr 2019?",
+   "gold": null,
+   "unanswerable": true,
+   "level": "nicht beantwortbar",
+   "lang": "de",
+   "skills": [
+    "enthaltung"
+   ],
+   "greedy_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2019;",
+   "greedy_error": "OperationalError: no such function: YEAR",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2019;",
+   "retry_correct": false,
+   "vote_sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2019;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2019;",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2019;",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT COUNT(*) FROM T_SCHADEN WHERE YEAR(EREIG_DAT) = 2019;",
+     "error": "OperationalError: no such function: YEAR",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 5.678,
+    "with_retry": 19.314,
+    "with_vote": 19.314
+   }
+  },
+  {
+   "id": "U03",
+   "question": "Wie hoch war der Gewinn der Generalagentur Bern im Jahr 2025?",
+   "gold": null,
+   "unanswerable": true,
+   "level": "nicht beantwortbar",
+   "lang": "de",
+   "skills": [
+    "enthaltung"
+   ],
+   "greedy_sql": "SELECT SUM(T1.JPRAEMIE) FROM T_AGENTUR AS T1 INNER JOIN T_MITARBEITER AS T2 ON T1.AGT_ID = T2.AGT_ID WHERE T2.NAME = 'Bern' AND YEAR(T2.EINTRITT_DAT) = 2025;",
+   "greedy_error": "OperationalError: no such column: T1.JPRAEMIE",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T1.JPRAEMIE) FROM T_AGENTUR AS T1 INNER JOIN T_MITARBEITER AS T2 ON T1.AGT_ID = T2.AGT_ID WHERE T2.NAME = 'Bern' AND YEAR(T2.EINTRITT_DAT) = 2025;",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T1.JPRAEMIE) FROM T_AGENTUR AS T1 INNER JOIN T_MITARBEITER AS T2 ON T1.AGT_ID = T2.AGT_ID WHERE T2.NAME = 'Bern' AND YEAR(T2.EINTRITT_DAT) = 2025;",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T1.JPRAEMIE) FROM T_AGENTUR AS T1 INNER JOIN T_MITARBEITER AS T2 ON T1.AGT_ID = T2.AGT_ID WHERE T2.NAME = 'Bern' AND YEAR(T2.EINTRITT_DAT) = 2025;",
+     "error": "OperationalError: no such column: T1.JPRAEMIE",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T1.JPRAEMIE) FROM T_AGENTUR AS T1 INNER JOIN T_MITARBEITER AS T2 ON T1.AGT_ID = T2.AGT_ID WHERE T2.NAME = 'Bern' AND YEAR(T2.EINTRITT_DAT) = 2025;",
+     "error": "OperationalError: no such column: T1.JPRAEMIE",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T1.JPRAEMIE) FROM T_AGENTUR AS T1 INNER JOIN T_MITARBEITER AS T2 ON T1.AGT_ID = T2.AGT_ID WHERE T2.NAME = 'Bern' AND YEAR(T2.EINTRITT_DAT) = 2025;",
+     "error": "OperationalError: no such column: T1.JPRAEMIE",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 10.881,
+    "with_retry": 34.47,
+    "with_vote": 34.47
+   }
+  },
+  {
+   "id": "U04",
+   "question": "Wie lautet die E-Mail-Adresse von Kunde Meier?",
+   "gold": null,
+   "unanswerable": true,
+   "level": "nicht beantwortbar",
+   "lang": "de",
+   "skills": [
+    "enthaltung"
+   ],
+   "greedy_sql": "SELECT EINTRITT_EMAIL FROM T_AGENTUR WHERE AGT_NAME = 'Meier';",
+   "greedy_error": "OperationalError: no such column: EINTRITT_EMAIL",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT EINTRITT_EMAIL FROM T_AGENTUR WHERE AGT_NAME = 'Meier';",
+   "retry_correct": false,
+   "vote_sql": "SELECT EINTRITT_EMAIL FROM T_AGENTUR WHERE AGT_NAME = 'Meier';",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT EINTRITT_EMAIL FROM T_AGENTUR WHERE AGT_NAME = 'Meier';",
+     "error": "OperationalError: no such column: EINTRITT_EMAIL",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT EINTRITT_EMAIL FROM T_AGENTUR WHERE AGT_NAME = 'Meier';",
+     "error": "OperationalError: no such column: EINTRITT_EMAIL",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT EINTRITT_EMAIL FROM T_AGENTUR WHERE AGT_NAME = 'Meier';",
+     "error": "OperationalError: no such column: EINTRITT_EMAIL",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 6.036,
+    "with_retry": 19.027,
+    "with_vote": 19.027
+   }
+  },
+  {
+   "id": "U05",
+   "question": "Wie viele Kilometer fahren unsere Autokunden pro Jahr?",
+   "gold": null,
+   "unanswerable": true,
+   "level": "nicht beantwortbar",
+   "lang": "de",
+   "skills": [
+    "enthaltung"
+   ],
+   "greedy_sql": "SELECT SUM(T1.KM) FROM T_VERTRAG AS T1 INNER JOIN T_PARTNER AS T2 ON T1.PTR_ID = T2.PTR_ID WHERE T2.AGT_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE AGT_NAME = 'Autokunden')",
+   "greedy_error": "OperationalError: no such column: T1.KM",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T1.KM) FROM T_VERTRAG AS T1 INNER JOIN T_PARTNER AS T2 ON T1.PTR_ID = T2.PTR_ID WHERE T2.AGT_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE AGT_NAME = 'Autokunden')",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T1.KM) FROM T_VERTRAG AS T1 INNER JOIN T_PARTNER AS T2 ON T1.PTR_ID = T2.PTR_ID WHERE T2.AGT_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE AGT_NAME = 'Autokunden')",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T1.KM) FROM T_VERTRAG AS T1 INNER JOIN T_PARTNER AS T2 ON T1.PTR_ID = T2.PTR_ID WHERE T2.AGT_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE AGT_NAME = 'Autokunden')",
+     "error": "OperationalError: no such column: T1.KM",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T1.KM) FROM T_VERTRAG AS T1 INNER JOIN T_PARTNER AS T2 ON T1.PTR_ID = T2.PTR_ID WHERE T2.AGT_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE AGT_NAME = 'Autokunden')",
+     "error": "OperationalError: no such column: T1.KM",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T1.KM) FROM T_VERTRAG AS T1 INNER JOIN T_PARTNER AS T2 ON T1.PTR_ID = T2.PTR_ID WHERE T2.AGT_ID IN (SELECT AGT_ID FROM T_AGENTUR WHERE AGT_NAME = 'Autokunden')",
+     "error": "OperationalError: no such column: T1.KM",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 10.333,
+    "with_retry": 32.888,
+    "with_vote": 32.888
+   }
+  },
+  {
+   "id": "U06",
+   "question": "Wie hoch ist unser Marktanteil im Kanton Zürich?",
+   "gold": null,
+   "unanswerable": true,
+   "level": "nicht beantwortbar",
+   "lang": "de",
+   "skills": [
+    "enthaltung"
+   ],
+   "greedy_sql": "SELECT SUM(T1.ZAHLW_CD) FROM T_MITARBEITER AS T1 INNER JOIN T_KANTON AS T2 ON T1.KT_CD = T2.KT_CD WHERE T2.NAME = 'Zürich'",
+   "greedy_error": "OperationalError: no such column: T1.ZAHLW_CD",
+   "greedy_correct": false,
+   "retry_used": true,
+   "retry_sql": "SELECT SUM(T1.ZAHLW_CD) FROM T_MITARBEITER AS T1 INNER JOIN T_KANTON AS T2 ON T1.KT_CD = T2.KT_CD WHERE T2.NAME = 'Zürich'",
+   "retry_correct": false,
+   "vote_sql": "SELECT SUM(T1.ZAHLW_CD) FROM T_MITARBEITER AS T1 INNER JOIN T_KANTON AS T2 ON T1.KT_CD = T2.KT_CD WHERE T2.NAME = 'Zürich'",
+   "vote_confidence": 0.0,
+   "vote_answer_runs": false,
+   "vote_correct": false,
+   "pass_at_k": false,
+   "candidates": [
+    {
+     "stage": "greedy",
+     "sql": "SELECT SUM(T1.ZAHLW_CD) FROM T_MITARBEITER AS T1 INNER JOIN T_KANTON AS T2 ON T1.KT_CD = T2.KT_CD WHERE T2.NAME = 'Zürich'",
+     "error": "OperationalError: no such column: T1.ZAHLW_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T1.ZAHLW_CD) FROM T_MITARBEITER AS T1 INNER JOIN T_KANTON AS T2 ON T1.KT_CD = T2.KT_CD WHERE T2.NAME = 'Zürich'",
+     "error": "OperationalError: no such column: T1.ZAHLW_CD",
+     "key": null,
+     "degenerate": false
+    },
+    {
+     "stage": "retry",
+     "sql": "SELECT SUM(T1.ZAHLW_CD) FROM T_MITARBEITER AS T1 INNER JOIN T_KANTON AS T2 ON T1.KT_CD = T2.KT_CD WHERE T2.NAME = 'Zürich'",
+     "error": "OperationalError: no such column: T1.ZAHLW_CD",
+     "key": null,
+     "degenerate": false
+    }
+   ],
+   "latency_s": {
+    "greedy": 10.065,
+    "with_retry": 30.488,
+    "with_vote": 30.488
+   }
+  }
+ ]
+}

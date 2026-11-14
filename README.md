@@ -171,6 +171,64 @@ Known issues in mlx-lm-lora 3.1.3 and how `train_local.py` handles them:
 - Scoring prompt + answer with gradients costs memory: prompts are capped at 1,024 tokens
   (dev max is 928) and gradient checkpointing is on by default.
 
+## Presentation (`praesentation/`)
+
+`vortrag.html` is the 5-minute talk: five video tiles (why it matters, how GRPO learns, the
+dashboard concept, results, reward hacking), rendered live in the browser — open the file,
+click a tile, arrow keys switch videos. `demo.html` is the long-form interactive version for
+questions afterwards. The `*.mp4` files are 1080p fallbacks of the five videos (e.g. for
+PowerPoint). Everything works offline; all numbers come from `results/`.
+
+## Part 2: from benchmark to a usable tool
+
+Spider measures whether the model can write SQL. It does not measure whether a business
+department could rely on it. Part 2 adds three things (German write-up: `BERICHT.md`, section 13).
+
+### Case study database (`insurance_db.py`, `insurance_questions.json`)
+
+A synthetic but realistic database of the fictional "Muster Versicherung AG" (15 tables, ~40,000
+rows, fixed seed): legacy column names (`VTR_STAT_CD`, `JPRAEMIE`), a generic code table, status
+codes, NULLs, a claims system that only starts in 2021, loss ratios around 0.65. The 59 test
+questions are written like a business user would ask them: 50 German, 5 French, 4 Italian, three
+difficulty levels, and 6 questions the database **cannot** answer (the right reaction is "I don't
+know"). The model never trains on this database.
+
+```bash
+.venv/bin/python insurance_db.py build    # -> data/versicherung.sqlite
+.venv/bin/python insurance_db.py check    # all gold queries run and return a result
+.venv/bin/python insurance_db.py schema   # prompt schema incl. data catalogue + glossary
+```
+
+`--catalog` puts the data steward's column descriptions and a business glossary
+("Schadenquote", "offener Schaden", "Stichtag") into the prompt, so we can measure how much
+documented metadata is worth.
+
+### Reliability layer (`reliable.py`)
+
+Retry with the SQLite error (or an empty result) as feedback, self-consistency over `--samples`
+answers grouped by their execution result, and abstention below a confidence threshold. Empty
+results, NULL-only results and a single 0 get no vote: many different wrong filters agree on
+"0" and would otherwise look confident. One run reports all strategies, pass@k and the
+coverage/accuracy table for every threshold.
+
+```bash
+.venv/bin/python reliable.py --split versicherung --catalog --adapter checkpoints/grpo_local_binary_lr1e-6_g8_kl --tag rl
+.venv/bin/python reliable.py --split versicherung --catalog --tag base
+.venv/bin/python reliable.py --split val --n 100 --adapter checkpoints/grpo_local_binary_lr1e-6_g8_kl --tag rl
+.venv/bin/python reliable.py --backend hf --model checkpoints/cloud_.../merged --split versicherung --catalog --tag cloud
+```
+
+### Prototype (`app.py`)
+
+Local web app (standard library only plus the model backend): question in, SQL + result +
+confidence out, "unsure" below the threshold, other model answers on request, editable SQL,
+confirm / correct / reject. Every question goes to `logs/audit.jsonl`; confirmed and corrected
+queries go to `logs/feedback.jsonl` as verified (question, SQL) pairs for the next RL round.
+
+```bash
+.venv/bin/python app.py --adapter checkpoints/grpo_local_binary_lr1e-6_g8_kl   # http://127.0.0.1:8000
+```
+
 ## Cloud GRPO training (`train_cloud.py`)
 
 TRL's `GRPOTrainer` with the same reward, data split and defaults as local run 4

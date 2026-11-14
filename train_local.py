@@ -9,6 +9,7 @@ Only goal: show that the mean reward rises. Writes
   results/<run>_reward.png      reward curve
 """
 import argparse
+import contextlib
 import json
 import math
 import random
@@ -27,6 +28,43 @@ from mlx.utils import tree_flatten
 from mlx_lm_lora.trainer.grpo_trainer import GRPOTrainingArgs, train_grpo
 
 from sql_env import REWARD_VARIANTS, ROOT, RewardLog, build_prompt, load_rl_train, within_question_trend
+
+
+def _guard_batch_stats():
+    """Some mlx-lm versions crash in BatchGenerator.stats() with ZeroDivisionError when a
+    batch spends no measurable time in prompt processing (prompt_tps = tokens / 0). The
+    generated texts are already complete at that point, only the speed statistic is lost.
+    Seen after hours into the full-epoch run; this keeps the run alive."""
+    import mlx_lm.generate as gen
+    cls = getattr(gen, "BatchGenerator", None)
+    if cls is None or getattr(cls, "_stats_guarded", False):
+        return
+    original = cls.stats
+
+    @contextlib.contextmanager
+    def stats(self):
+        cm = original(self)
+        value = cm.__enter__()
+        try:
+            yield value
+        except BaseException as e:
+            try:
+                suppress = cm.__exit__(type(e), e, e.__traceback__)
+            except ZeroDivisionError:
+                suppress = False
+            if not suppress:
+                raise
+        else:
+            try:
+                cm.__exit__(None, None, None)
+            except ZeroDivisionError:
+                pass
+
+    cls.stats = stats
+    cls._stats_guarded = True
+
+
+_guard_batch_stats()
 
 
 class SQLReward:
@@ -200,6 +238,9 @@ def main():
     ap.add_argument("--no-grad-checkpoint", action="store_true", help="faster, needs more memory")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--run", default=None, help="run name, default grpo_local_<reward>")
+    ap.add_argument("--init-adapter", default=None, metavar="SAFETENSORS",
+                    help="start from saved LoRA weights, e.g. checkpoints/<run>/0001200_adapters.safetensors "
+                         "(continue an aborted run; the optimizer state starts fresh)")
     ap.add_argument("--plot", metavar="STEPS_JSON", default=None,
                     help="only draw the reward curve of an existing log (e.g. steps.json of a cloud run) and exit")
     args = ap.parse_args()
@@ -238,6 +279,9 @@ def main():
     model.freeze()
     lora = {"rank": args.lora_rank, "scale": args.lora_scale, "dropout": 0.0}
     linear_to_lora_layers(model, len(model.layers), lora)
+    if args.init_adapter:
+        model.load_weights(args.init_adapter, strict=False)
+        print("continuing from", args.init_adapter)
     model.train()
     n_trainable = sum(v.size for _, v in tree_flatten(model.trainable_parameters()))
 
@@ -271,7 +315,7 @@ def main():
         "run": run, "model": args.model, "reward": args.reward, "n_train": args.n_train,
         "iters": args.iters, "batch": args.batch, "group": args.group, "beta": args.beta, "lr": args.lr,
         "lora": lora, "trainable_params": n_trainable, "temperature": args.temperature,
-        "max_tokens": args.max_tokens, "seed": args.seed, "loss": "prompt-conditioned (train_local.make_grpo_loss)",
+        "max_tokens": args.max_tokens, "seed": args.seed, "init_adapter": args.init_adapter, "loss": "prompt-conditioned (train_local.make_grpo_loss)",
         "max_prompt_tokens": args.max_prompt_tokens, "skipped_long_prompts_while_sampling": n_skipped,
         "grad_checkpoint": not args.no_grad_checkpoint,
         f"reward_first{k}": round(statistics.mean(s["reward_mean"] for s in first), 4),

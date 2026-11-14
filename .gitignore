@@ -22,3 +22,6 @@ results/*.jsonl
 .env
 *.log
 wandb/
+
+# Prototype logs (audit trail, feedback) stay local
+logs/

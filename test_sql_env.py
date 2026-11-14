@@ -135,6 +135,41 @@ def test_extract_sql():
     assert extract_sql("Queries go with care.") == ("", False)
 
 
+def test_insurance_case_study_gold_queries():
+    from insurance_db import DB_FILE, build, check
+    if not DB_FILE.exists():
+        build()
+    assert check(), "every answerable gold query must run and return a non-empty result"
+
+
+def test_reliability_layer_votes_retries_and_abstains():
+    """Stub model, real database: voting by result, retry after an SQLite error, no votes for
+    empty results, abstention when nothing usable comes back."""
+    from insurance_db import DB_FILE, build
+    from reliable import answer
+    if not DB_FILE.exists():
+        build()
+    ok = block("SELECT count(*) FROM T_SCHADEN WHERE STAT_CD IN ('OFF', 'PRF')")
+    same = block("SELECT COUNT(SCH_ID) FROM T_SCHADEN WHERE STAT_CD = 'OFF' OR STAT_CD = 'PRF'")
+    wrong_empty = block("SELECT count(*) FROM T_SCHADEN WHERE STAT_CD = 'offen'")   # -> 0, degenerate
+    broken = block("SELECT count(*) FROM T_SCHADEN WHERE STATUS = 'OFF'")             # no such column
+
+    def stub(script):
+        calls = iter(script)
+        return lambda messages, n=1, temperature=0.0: [next(calls) for _ in range(n)]
+
+    msgs = [{"role": "system", "content": ""}, {"role": "user", "content": "offene Schäden?"}]
+    # greedy fails -> retry fixes it; 4 samples: 2 equivalent, 2 empty (no votes)
+    r = answer(stub([broken, ok, same, wrong_empty, same, wrong_empty]), msgs, "versicherung", samples=4, retries=2)
+    assert r["greedy"]["error"] and not r["final"]["error"] and len(r["chain"]) == 2
+    assert r["chosen"]["rows"] == [[211]] or r["chosen"]["key"] == r["final"]["key"]
+    assert r["confidence"] == 3 / 5                                   # final + 2 equivalent samples
+    # many wrong queries agreeing on "0" must not create confidence
+    r = answer(stub([wrong_empty, wrong_empty, wrong_empty, wrong_empty, wrong_empty]), msgs, "versicherung",
+               samples=4, retries=0)
+    assert r["confidence"] == 0.0 and r["chosen"]["degenerate"]
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in list(globals().items()):

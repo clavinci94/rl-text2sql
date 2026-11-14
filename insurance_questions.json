@@ -1,0 +1,645 @@
+[
+ {
+  "id": "V01",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "count"
+  ],
+  "question": "Wie viele Kunden haben wir insgesamt?",
+  "query": "SELECT count(*) FROM T_PARTNER"
+ },
+ {
+  "id": "V02",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "code"
+  ],
+  "question": "Wie viele Kunden wohnen im Kanton Aargau?",
+  "query": "SELECT count(*) FROM T_PARTNER WHERE KT_CD = 'AG'"
+ },
+ {
+  "id": "V03",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "code",
+   "begriff"
+  ],
+  "question": "Wie viele aktive Verträge gibt es?",
+  "query": "SELECT count(*) FROM T_VERTRAG WHERE STAT_CD = 'AKT'"
+ },
+ {
+  "id": "V04",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "code"
+  ],
+  "question": "Wie viele Unternehmen sind bei uns Kunde?",
+  "query": "SELECT count(*) FROM T_PARTNER WHERE PTR_TYP_CD = 'U'"
+ },
+ {
+  "id": "V05",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "code"
+  ],
+  "question": "Wie hoch ist die durchschnittliche Jahresprämie aller aktiven Verträge?",
+  "query": "SELECT avg(JPRAEMIE) FROM T_VERTRAG WHERE STAT_CD = 'AKT'"
+ },
+ {
+  "id": "V06",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [],
+  "question": "Wie viele Schadenfälle stehen unter Betrugsverdacht?",
+  "query": "SELECT count(*) FROM T_SCHADEN WHERE BETRUG_VERD_FLG = 1"
+ },
+ {
+  "id": "V07",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [],
+  "question": "Welche Fahrzeugmarken sind bei uns versichert? Jede Marke nur einmal.",
+  "query": "SELECT DISTINCT MARKE FROM T_OBJ_FZG"
+ },
+ {
+  "id": "V08",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "code"
+  ],
+  "question": "Wie viele Mitarbeitende arbeiten als Schadenbearbeiter?",
+  "query": "SELECT count(*) FROM T_MITARBEITER WHERE FUNKTION_CD = 'SB'"
+ },
+ {
+  "id": "V09",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [],
+  "question": "Wie viele Prämienrechnungen sind in Mahnstufe 3?",
+  "query": "SELECT count(*) FROM T_RECHNUNG WHERE MAHNSTUFE = 3"
+ },
+ {
+  "id": "V10",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "code"
+  ],
+  "question": "Wie heisst unsere Generalagentur im Tessin?",
+  "query": "SELECT AGT_NAME FROM T_AGENTUR WHERE KT_CD = 'TI'"
+ },
+ {
+  "id": "V11",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "datum"
+  ],
+  "question": "Wie viele Schäden wurden im Jahr 2024 gemeldet?",
+  "query": "SELECT count(*) FROM T_SCHADEN WHERE MELD_DAT LIKE '2024%'"
+ },
+ {
+  "id": "V12",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "sortierung"
+  ],
+  "question": "Welches versicherte Fahrzeug hat den höchsten Katalogpreis? Nenne Marke und Modell.",
+  "query": "SELECT MARKE, MODELL FROM T_OBJ_FZG ORDER BY KATPREIS DESC LIMIT 1"
+ },
+ {
+  "id": "V13",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "code"
+  ],
+  "question": "Wie viele Kunden haben Französisch als Korrespondenzsprache?",
+  "query": "SELECT count(*) FROM T_PARTNER WHERE SPR_CD = 'FR'"
+ },
+ {
+  "id": "V14",
+  "lang": "de",
+  "level": "einfach",
+  "skills": [
+   "code"
+  ],
+  "question": "Wie viele Schäden sind im Kanton Genf passiert?",
+  "query": "SELECT count(*) FROM T_SCHADEN WHERE KT_CD_EREIG = 'GE'"
+ },
+ {
+  "id": "V15",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "gruppierung"
+  ],
+  "question": "Wie viele aktive Verträge gibt es pro Sparte? Nenne die Spartenbezeichnung und die Anzahl.",
+  "query": "SELECT s.SPARTE_BEZ, count(*) FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD JOIN T_SPARTE s ON p.SPARTE_CD = s.SPARTE_CD WHERE v.STAT_CD = 'AKT' GROUP BY s.SPARTE_BEZ"
+ },
+ {
+  "id": "V16",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "begriff"
+  ],
+  "question": "Wie hoch ist das Prämienvolumen der Sparte Motorfahrzeug?",
+  "query": "SELECT sum(v.JPRAEMIE) FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'MF' AND v.STAT_CD = 'AKT'"
+ },
+ {
+  "id": "V17",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "join"
+  ],
+  "question": "Wie viele Kunden wohnen in der Romandie?",
+  "query": "SELECT count(*) FROM T_PARTNER p JOIN T_KANTON k ON p.KT_CD = k.KT_CD WHERE k.REGION = 'Romandie'"
+ },
+ {
+  "id": "V18",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "code"
+  ],
+  "question": "Wie viel haben wir insgesamt für Hagelschäden ausbezahlt?",
+  "query": "SELECT sum(z.BETRAG) FROM T_SCH_ZLG z JOIN T_SCHADEN s ON z.SCH_ID = s.SCH_ID WHERE s.URS_CD = 'HAGEL'"
+ },
+ {
+  "id": "V19",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "code",
+   "begriff"
+  ],
+  "question": "Wie viele offene Schäden gibt es?",
+  "query": "SELECT count(*) FROM T_SCHADEN WHERE STAT_CD IN ('OFF', 'PRF')"
+ },
+ {
+  "id": "V20",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "gruppierung",
+   "sortierung"
+  ],
+  "question": "Welcher Kundenberater betreut die meisten aktiven Verträge? Nenne Vorname und Name.",
+  "query": "SELECT m.VORNAME, m.NAME FROM T_VERTRAG v JOIN T_MITARBEITER m ON v.MA_ID_BER = m.MA_ID WHERE v.STAT_CD = 'AKT' GROUP BY m.MA_ID ORDER BY count(*) DESC LIMIT 1"
+ },
+ {
+  "id": "V21",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "datum"
+  ],
+  "question": "Wie viele Verträge wurden im Jahr 2025 gekündigt?",
+  "query": "SELECT count(*) FROM T_VERTRAG WHERE STORNO_DAT LIKE '2025%'"
+ },
+ {
+  "id": "V22",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "code",
+   "gruppierung",
+   "sortierung"
+  ],
+  "question": "Welche Schadenursache kommt am häufigsten vor? Nenne die Bezeichnung.",
+  "query": "SELECT c.BEZ_DE FROM T_SCHADEN s JOIN T_CODE c ON c.CD_TYP = 'SCH_URS' AND c.CD = s.URS_CD GROUP BY c.BEZ_DE ORDER BY count(*) DESC LIMIT 1"
+ },
+ {
+  "id": "V23",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [],
+  "question": "Wie hoch ist der durchschnittliche Katalogpreis der versicherten Tesla-Fahrzeuge?",
+  "query": "SELECT avg(KATPREIS) FROM T_OBJ_FZG WHERE MARKE = 'Tesla'"
+ },
+ {
+  "id": "V24",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "begriff",
+   "datum",
+   "null"
+  ],
+  "question": "Wie viele Rechnungen sind überfällig?",
+  "query": "SELECT count(*) FROM T_RECHNUNG WHERE BEZ_DAT IS NULL AND FAELLIG_DAT < '2026-06-30'"
+ },
+ {
+  "id": "V25",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "begriff",
+   "datum",
+   "null"
+  ],
+  "question": "Wie hoch ist der Gesamtbetrag aller überfälligen Rechnungen?",
+  "query": "SELECT sum(BETRAG) FROM T_RECHNUNG WHERE BEZ_DAT IS NULL AND FAELLIG_DAT < '2026-06-30'"
+ },
+ {
+  "id": "V26",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "gruppierung"
+  ],
+  "question": "Wie viele Schäden hat jeder Schadenbearbeiter? Nenne Vorname, Name und Anzahl.",
+  "query": "SELECT m.VORNAME, m.NAME, count(*) FROM T_SCHADEN s JOIN T_MITARBEITER m ON s.SB_MA_ID = m.MA_ID GROUP BY m.MA_ID"
+ },
+ {
+  "id": "V27",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "code"
+  ],
+  "question": "Wie viele aktive Verträge haben eine Vollkasko-Deckung?",
+  "query": "SELECT count(DISTINCT v.VTR_ID) FROM T_VERTRAG v JOIN T_DECKUNG d ON v.VTR_ID = d.VTR_ID WHERE d.DCK_ART_CD = 'VK' AND v.STAT_CD = 'AKT'"
+ },
+ {
+  "id": "V28",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "begriff",
+   "code"
+  ],
+  "question": "Wie hoch sind die Rückstellungen für offene Schäden insgesamt?",
+  "query": "SELECT sum(RESERVE) FROM T_SCHADEN WHERE STAT_CD IN ('OFF', 'PRF')"
+ },
+ {
+  "id": "V29",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "gruppierung",
+   "sortierung"
+  ],
+  "question": "In welchen drei Kantonen wohnen die meisten Kunden? Nenne das Kantonskürzel und die Anzahl.",
+  "query": "SELECT KT_CD, count(*) FROM T_PARTNER GROUP BY KT_CD ORDER BY count(*) DESC LIMIT 3"
+ },
+ {
+  "id": "V30",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "datum",
+   "code"
+  ],
+  "question": "Wie viel wurde im Jahr 2025 an Werkstätten ausbezahlt?",
+  "query": "SELECT sum(BETRAG) FROM T_SCH_ZLG WHERE EMPF_TYP_CD = 'WERKST' AND ZLG_DAT LIKE '2025%'"
+ },
+ {
+  "id": "V31",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "code"
+  ],
+  "question": "Wie viele Schäden wurden abgelehnt, obwohl kein Betrugsverdacht bestand?",
+  "query": "SELECT count(*) FROM T_SCHADEN WHERE STAT_CD = 'ABL' AND BETRUG_VERD_FLG = 0"
+ },
+ {
+  "id": "V32",
+  "lang": "de",
+  "level": "mittel",
+  "skills": [
+   "datum"
+  ],
+  "question": "Wie viele Tage vergehen im Durchschnitt zwischen Schadenereignis und Schadenmeldung?",
+  "query": "SELECT avg(julianday(MELD_DAT) - julianday(EREIG_DAT)) FROM T_SCHADEN"
+ },
+ {
+  "id": "V33",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "join",
+   "begriff",
+   "teilabfrage"
+  ],
+  "question": "Wie hoch war die Schadenquote der Sparte Hausrat im Jahr 2025? Als Dezimalzahl, auf zwei Stellen gerundet.",
+  "query": "SELECT round((SELECT sum(z.BETRAG) FROM T_SCH_ZLG z JOIN T_SCHADEN s ON z.SCH_ID = s.SCH_ID JOIN T_VERTRAG v ON s.VTR_ID = v.VTR_ID JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'HR' AND z.ZLG_DAT LIKE '2025%') / (SELECT sum(v.JPRAEMIE) FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'HR' AND v.STAT_CD = 'AKT'), 2)"
+ },
+ {
+  "id": "V34",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "begriff",
+   "gruppierung",
+   "teilabfrage"
+  ],
+  "question": "Wie viele Grossschäden hatten wir?",
+  "query": "SELECT count(*) FROM (SELECT SCH_ID FROM T_SCH_ZLG GROUP BY SCH_ID HAVING sum(BETRAG) > 50000)"
+ },
+ {
+  "id": "V35",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "join",
+   "gruppierung"
+  ],
+  "question": "Welche Kunden haben mehr als drei Schäden gemeldet? Nenne Vorname, Name und die Anzahl Schäden.",
+  "query": "SELECT p.VORNAME, p.NAME, count(*) FROM T_SCHADEN s JOIN T_VERTRAG v ON s.VTR_ID = v.VTR_ID JOIN T_PARTNER p ON v.PTR_ID = p.PTR_ID GROUP BY p.PTR_ID HAVING count(*) > 3"
+ },
+ {
+  "id": "V36",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "begriff",
+   "teilabfrage"
+  ],
+  "question": "Wie viele aktive Kunden haben noch nie einen Schaden gemeldet?",
+  "query": "SELECT count(*) FROM T_PARTNER WHERE STAT_CD = 'A' AND PTR_ID NOT IN (SELECT v.PTR_ID FROM T_SCHADEN s JOIN T_VERTRAG v ON s.VTR_ID = v.VTR_ID)"
+ },
+ {
+  "id": "V37",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "join",
+   "gruppierung",
+   "sortierung",
+   "begriff"
+  ],
+  "question": "Welche Generalagentur hat das höchste Prämienvolumen?",
+  "query": "SELECT a.AGT_NAME FROM T_VERTRAG v JOIN T_MITARBEITER m ON v.MA_ID_BER = m.MA_ID JOIN T_AGENTUR a ON m.AGT_ID = a.AGT_ID WHERE v.STAT_CD = 'AKT' GROUP BY a.AGT_ID ORDER BY sum(v.JPRAEMIE) DESC LIMIT 1"
+ },
+ {
+  "id": "V38",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "datum",
+   "gruppierung",
+   "sortierung",
+   "code"
+  ],
+  "question": "In welchem Monat des Jahres 2024 gab es die meisten Hagelschäden? Antworte mit der Monatsnummer.",
+  "query": "SELECT CAST(strftime('%m', EREIG_DAT) AS INTEGER) FROM T_SCHADEN WHERE URS_CD = 'HAGEL' AND EREIG_DAT LIKE '2024%' GROUP BY strftime('%m', EREIG_DAT) ORDER BY count(*) DESC LIMIT 1"
+ },
+ {
+  "id": "V39",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "join",
+   "teilabfrage",
+   "code"
+  ],
+  "question": "Wie viele Kunden haben gleichzeitig eine aktive Autoversicherung und eine aktive Hausratversicherung?",
+  "query": "SELECT count(*) FROM (SELECT v.PTR_ID FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'MF' AND v.STAT_CD = 'AKT' INTERSECT SELECT v.PTR_ID FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'HR' AND v.STAT_CD = 'AKT')"
+ },
+ {
+  "id": "V40",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "join",
+   "teilabfrage",
+   "code"
+  ],
+  "question": "Wie hoch ist die durchschnittliche Gesamtzahlung pro abgeschlossenem Kollisionsschaden?",
+  "query": "SELECT avg(t) FROM (SELECT sum(z.BETRAG) AS t FROM T_SCH_ZLG z JOIN T_SCHADEN s ON z.SCH_ID = s.SCH_ID WHERE s.URS_CD = 'KOLL' AND s.STAT_CD = 'ABG' GROUP BY s.SCH_ID)"
+ },
+ {
+  "id": "V41",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "begriff",
+   "datum"
+  ],
+  "question": "Wie viele Kunden sind schon seit mehr als zehn Jahren bei uns?",
+  "query": "SELECT count(*) FROM T_PARTNER WHERE EROEFF_DAT < '2016-06-30'"
+ },
+ {
+  "id": "V42",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "begriff",
+   "datum"
+  ],
+  "question": "Wie viele unserer Privatkunden sind 80 Jahre alt oder älter?",
+  "query": "SELECT count(*) FROM T_PARTNER WHERE PTR_TYP_CD = 'P' AND GEB_DAT <= '1946-06-30'"
+ },
+ {
+  "id": "V43",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "code",
+   "berechnung"
+  ],
+  "question": "Wie viel Prozent der aktiven Verträge werden monatlich bezahlt? Auf eine Nachkommastelle gerundet.",
+  "query": "SELECT round(100.0 * sum(ZAHLW_CD = 'M') / count(*), 1) FROM T_VERTRAG WHERE STAT_CD = 'AKT'"
+ },
+ {
+  "id": "V44",
+  "lang": "de",
+  "level": "schwer",
+  "skills": [
+   "join",
+   "gruppierung",
+   "begriff"
+  ],
+  "question": "Wie hoch ist das Prämienvolumen pro Sprachregion? Nenne Region und Betrag.",
+  "query": "SELECT k.REGION, sum(v.JPRAEMIE) FROM T_VERTRAG v JOIN T_PARTNER p ON v.PTR_ID = p.PTR_ID JOIN T_KANTON k ON p.KT_CD = k.KT_CD WHERE v.STAT_CD = 'AKT' GROUP BY k.REGION"
+ },
+ {
+  "id": "V45",
+  "lang": "fr",
+  "level": "einfach",
+  "skills": [
+   "code",
+   "sprache"
+  ],
+  "question": "Combien de clients habitent dans le canton de Vaud ?",
+  "query": "SELECT count(*) FROM T_PARTNER WHERE KT_CD = 'VD'"
+ },
+ {
+  "id": "V46",
+  "lang": "fr",
+  "level": "einfach",
+  "skills": [
+   "datum",
+   "sprache"
+  ],
+  "question": "Combien de sinistres ont été déclarés en 2023 ?",
+  "query": "SELECT count(*) FROM T_SCHADEN WHERE MELD_DAT LIKE '2023%'"
+ },
+ {
+  "id": "V47",
+  "lang": "fr",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "code",
+   "sprache"
+  ],
+  "question": "Quel est le montant total versé pour les dégâts d'eau ?",
+  "query": "SELECT sum(z.BETRAG) FROM T_SCH_ZLG z JOIN T_SCHADEN s ON z.SCH_ID = s.SCH_ID WHERE s.URS_CD = 'WASS'"
+ },
+ {
+  "id": "V48",
+  "lang": "fr",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "code",
+   "sprache"
+  ],
+  "question": "Combien de contrats actifs ont une couverture casco complète ?",
+  "query": "SELECT count(DISTINCT v.VTR_ID) FROM T_VERTRAG v JOIN T_DECKUNG d ON v.VTR_ID = d.VTR_ID WHERE d.DCK_ART_CD = 'VK' AND v.STAT_CD = 'AKT'"
+ },
+ {
+  "id": "V49",
+  "lang": "fr",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "sprache"
+  ],
+  "question": "Combien de collaborateurs travaillent à l'agence générale de Lausanne ?",
+  "query": "SELECT count(*) FROM T_MITARBEITER m JOIN T_AGENTUR a ON m.AGT_ID = a.AGT_ID WHERE a.AGT_NAME = 'Generalagentur Lausanne'"
+ },
+ {
+  "id": "V50",
+  "lang": "it",
+  "level": "einfach",
+  "skills": [
+   "code",
+   "sprache"
+  ],
+  "question": "Quanti clienti abitano in Ticino?",
+  "query": "SELECT count(*) FROM T_PARTNER WHERE KT_CD = 'TI'"
+ },
+ {
+  "id": "V51",
+  "lang": "it",
+  "level": "mittel",
+  "skills": [
+   "code",
+   "begriff",
+   "sprache"
+  ],
+  "question": "Quanti sinistri sono ancora aperti?",
+  "query": "SELECT count(*) FROM T_SCHADEN WHERE STAT_CD IN ('OFF', 'PRF')"
+ },
+ {
+  "id": "V52",
+  "lang": "it",
+  "level": "mittel",
+  "skills": [
+   "join",
+   "code",
+   "sprache"
+  ],
+  "question": "Qual è il premio annuo medio dei contratti attivi di responsabilità civile privata?",
+  "query": "SELECT avg(v.JPRAEMIE) FROM T_VERTRAG v JOIN T_PRODUKT p ON v.PROD_CD = p.PROD_CD WHERE p.SPARTE_CD = 'PH' AND v.STAT_CD = 'AKT'"
+ },
+ {
+  "id": "V53",
+  "lang": "it",
+  "level": "mittel",
+  "skills": [
+   "begriff",
+   "datum",
+   "null",
+   "sprache"
+  ],
+  "question": "Quante fatture sono scadute e non ancora pagate?",
+  "query": "SELECT count(*) FROM T_RECHNUNG WHERE BEZ_DAT IS NULL AND FAELLIG_DAT < '2026-06-30'"
+ },
+ {
+  "id": "U01",
+  "lang": "de",
+  "level": "nicht beantwortbar",
+  "skills": [
+   "enthaltung"
+  ],
+  "question": "Wie zufrieden sind unsere Kunden im Durchschnitt?",
+  "query": null,
+  "reason": "Die Datenbank enthält keine Zufriedenheitsdaten."
+ },
+ {
+  "id": "U02",
+  "lang": "de",
+  "level": "nicht beantwortbar",
+  "skills": [
+   "enthaltung"
+  ],
+  "question": "Wie viele Schäden gab es im Jahr 2019?",
+  "query": null,
+  "reason": "Schadendaten sind erst seit der Migration 2021 erfasst. Eine Abfrage liefert 0, die richtige Antwort wäre: nicht bekannt."
+ },
+ {
+  "id": "U03",
+  "lang": "de",
+  "level": "nicht beantwortbar",
+  "skills": [
+   "enthaltung"
+  ],
+  "question": "Wie hoch war der Gewinn der Generalagentur Bern im Jahr 2025?",
+  "query": null,
+  "reason": "Es gibt keine Kosten- oder Ertragsdaten der Agenturen."
+ },
+ {
+  "id": "U04",
+  "lang": "de",
+  "level": "nicht beantwortbar",
+  "skills": [
+   "enthaltung"
+  ],
+  "question": "Wie lautet die E-Mail-Adresse von Kunde Meier?",
+  "query": null,
+  "reason": "Es gibt keine E-Mail-Adressen, und der Name ist nicht eindeutig."
+ },
+ {
+  "id": "U05",
+  "lang": "de",
+  "level": "nicht beantwortbar",
+  "skills": [
+   "enthaltung"
+  ],
+  "question": "Wie viele Kilometer fahren unsere Autokunden pro Jahr?",
+  "query": null,
+  "reason": "Die Fahrleistung wird nicht erfasst."
+ },
+ {
+  "id": "U06",
+  "lang": "de",
+  "level": "nicht beantwortbar",
+  "skills": [
+   "enthaltung"
+  ],
+  "question": "Wie hoch ist unser Marktanteil im Kanton Zürich?",
+  "query": null,
+  "reason": "Dafür braucht es Marktdaten, die nicht in der Datenbank sind."
+ }
+]
