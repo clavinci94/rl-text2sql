@@ -457,6 +457,22 @@ Kurve: `results/grpo_full_binary_combined_reward.png` — im Training steigt der
 
 Auf den 100 Validierungsfragen der Zuverlässigkeitsmessung: eine Antwort 51 → 60 % (McNemar exakt p = 0,02), Mehrheitsentscheid 57 → 62 % (p = 0,23, nicht gesichert). Mehr Training auf Spider wirkt also klar auf Spider.
 
+**Schlusstest** (1'034 Fragen, 20 unbekannte Datenbanken, eine Antwort, greedy). Der Schlusstest wurde damit zum zweiten Mal verwendet, einmal pro finalem Modell; für Entscheidungen diente weiterhin nur die Validierung.
+
+| | Basismodell | kurzes Training | volles Training |
+|---|---|---|---|
+| korrekt | 45,3 % | 52,5 % | **57,4 %** |
+| ohne Fragen mit leerem Referenzresultat | 45,0 % | 51,5 % | 55,8 % |
+| Schemafehler | 33,6 % | 23,3 % | 18,8 % |
+| läuft, falsches Resultat | 19,5 % | 22,8 % | 22,4 % |
+
+- Volles Training gegen Basis: 179 Fragen gewonnen, 54 verloren, z = 8,2. Gegen das kurze Training: 101 gewonnen, 51 verloren, z = 4,1. Beides deutlich gesichert.
+- Schemafehler sind gegenüber der Basis fast halbiert. Genau diese Fehlerklasse bestraft der Reward direkt.
+- 19 der 20 Testdatenbanken werden besser als mit der Basis. Die eine Ausnahme ist car_1 (17 → 9 von 92): Das voll trainierte Modell hat sich kurze Ein-Tabellen-Abfragen angewöhnt und sucht dort Spalten wie `Horsepower` in `car_names` statt in `cars_data` (9 der 10 verlorenen Fragen sind solche Schemafehler). Was im Schnitt hilft, schadet bei dieser Datenbank, deren Fragen fast immer einen JOIN brauchen. Die Regression gehört in den Bericht.
+- Antwortzeit 0,62 s pro Frage (95 % unter 1,07 s), 1,8 GB Speicher, unverändert laptop-tauglich.
+
+Rohdaten: `results/final_grpo_full_Qwen2.5-Coder-0.5B-Instruct.json`.
+
 **Fallstudie Versicherung** (53 beantwortbare Fragen, mit Datenkatalog):
 
 | | kurzes Training | volles Training |
