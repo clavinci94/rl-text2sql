@@ -171,6 +171,14 @@ Known issues in mlx-lm-lora 3.1.3 and how `train_local.py` handles them:
 - Scoring prompt + answer with gradients costs memory: prompts are capped at 1,024 tokens
   (dev max is 928) and gradient checkpointing is on by default.
 
+## Presentation (`praesentation/`)
+
+`vortrag.html` is the 5-minute talk: five video tiles (why it matters, how GRPO learns, the
+dashboard concept, results, reward hacking), rendered live in the browser — open the file,
+click a tile, arrow keys switch videos. `demo.html` is the long-form interactive version for
+questions afterwards. The `*.mp4` files are 1080p fallbacks of the five videos (e.g. for
+PowerPoint). Everything works offline; all numbers come from `results/`.
+
 ## Part 2: from benchmark to a usable tool
 
 Spider measures whether the model can write SQL. It does not measure whether a business
