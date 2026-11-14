@@ -443,12 +443,41 @@ Die 6 nicht beantwortbaren Fragen beantwortet das RL-Modell schon ohne Schwelle 
 
 Rohdaten: `results/reliable_base_versicherung_catalog.json`, `results/reliable_rl_versicherung_catalog.json`, `results/reliable_rl_val.json`.
 
+### Volles Training: eine Epoche über alle 6'076 Trainingsfragen
+
+Statt des geplanten Cloud-Laufs lief das volle Training direkt auf dem MacBook M4: 3'038 Schritte à 2 Fragen × 8 Antworten, eine Epoche über alle 6'076 gefilterten Spider-Trainingsfragen, gleiche Einstellungen wie Anlauf 4 (binärer Reward, Lernrate 1e-6, KL 0,04). Gesamtzeit rund 8,5 Stunden, Spitzenspeicher 9,3 GB.
+Der Lauf brach bei Schritt 1'603 durch einen Fehler in der Bibliothek mlx-lm ab (Division durch null in einer Geschwindigkeitsstatistik) und wurde ab dem Zwischenstand von Schritt 1'500 fortgesetzt; der Optimiererzustand begann dabei neu, die 103 Schritte dazwischen sind verloren. `train_local.py` fängt den Fehler jetzt ab (`--init-adapter` setzt einen Lauf fort).
+Kurve: `results/grpo_full_binary_combined_reward.png` — im Training steigt der Anteil korrekter Antworten von 42 % auf 71 % und ist am Ende der Epoche noch nicht ausgereizt.
+
+**Spider-Validierung** (231 Fragen, eine Antwort, greedy):
+
+| Basismodell | kurzes Training (300 Schritte) | volles Training (3'038 Schritte) |
+|---|---|---|
+| 49,4 % | 56,7 % | **64,5 %** |
+
+Auf den 100 Validierungsfragen der Zuverlässigkeitsmessung: eine Antwort 51 → 60 % (McNemar exakt p = 0,02), Mehrheitsentscheid 57 → 62 % (p = 0,23, nicht gesichert). Mehr Training auf Spider wirkt also klar auf Spider.
+
+**Fallstudie Versicherung** (53 beantwortbare Fragen, mit Datenkatalog):
+
+| | kurzes Training | volles Training |
+|---|---|---|
+| eine Antwort | 26,4 % | 26,4 % |
+| Mehrheitsentscheid | 32,1 % | 32,1 % |
+| mindestens eine von 9 richtig | 34,0 % | 37,7 % |
+| bei der auf der Validierung festgelegten Schwelle beantwortet / davon richtig | 6 / 6 (7 von 9) | **9 / 9 (8 von 9)** |
+
+- **Die Rohgenauigkeit auf der Fallstudie bewegt sich nicht**, obwohl das Modell 46 der 59 Fragen anders beantwortet als nach dem kurzen Training (je 4 Fragen gewonnen und verloren, p = 1,0). Die dreissigfache Trainingsmenge auf englischen Spider-Fragen überträgt sich nicht in mehr Treffer auf der deutschen Altsystem-Datenbank. Der Engpass ist die Domäne und die Sprache, nicht die Trainingsmenge. Das ist das stärkste Argument für Woche 4: Nachtraining auf Fragen aus der Zieldomäne.
+- **Was sich verbessert, ist die Verlässlichkeit der Konfidenz.** Die Schwelle, neu nach derselben Regel auf der Validierung festgelegt (tiefste Stufe mit mindestens 90 % korrekten Antworten: jetzt 8 von 9), beantwortet auf der Fallstudie 9 statt 6 Fragen, weiterhin ohne einen einzigen Fehler, darunter erstmals eine italienische Frage. Die Hälfte mehr sichere Antworten bei gleicher Rohgenauigkeit.
+- **Eine Verschlechterung gehört dazu:** Ohne Schwelle «beantwortet» das voll trainierte Modell 3 der 6 unbeantwortbaren Fragen mit einer lauffähigen, aber sinnlosen Abfrage (das kurz trainierte: keine). Ab 4 von 9 übereinstimmenden Antworten lehnt es wieder alle 6 ab. Die Schwelle ist also nicht Kosmetik, sondern notwendig.
+
+Rohdaten: `results/grpo_full_binary_b.json`, `train_full.log`, `train_full_b.log`, `results/grpo_full_binary_Qwen2.5-Coder-0.5B-Instruct_val.json`, `results/reliable_full_val.json`, `results/reliable_full_versicherung_catalog.json`.
+
 ### Fahrplan
 
 | Woche | Inhalt | Ergebnis |
 |---|---|---|
 | 1 | `reliable.py` auf dem Mac: Basis- und RL-Modell auf Validierung und Fallstudie | **erledigt**, siehe oben. Schwelle 7 von 9 auf der Validierung festgelegt |
-| 2 | Cloud-Lauf mit `train_cloud.py`: volle Epoche 0.5B, danach 1.5B | Effekt von mehr Training und Modellgrösse, Kosten pro Lauf |
+| 2 | Volle Epoche 0.5B (auf dem Mac statt in der Cloud) | **erledigt**, siehe oben. Offen: 1.5B (braucht ~3× Speicher und Zeit, vorher Speichertest) |
 | 3 | Prototyp mit 3 bis 5 Testpersonen als Fachleute, je 10 Fragen | Feedback-Daten, Beobachtungen zu Vertrauen und Bedienung |
 | 4 | Optional zweite GRPO-Runde mit den bestätigten Abfragen, Bericht und Präsentation | Vorher-nachher auf der Fallstudie |
 
