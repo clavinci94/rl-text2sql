@@ -130,6 +130,7 @@ footer{font-size:.8rem;color:var(--muted);margin-top:36px}
     <button id="pPrev" class="opt" aria-label="Vorheriges Video">‹</button>
     <button id="pNext" class="opt" aria-label="Nächstes Video">›</button>
     <button id="pFs" class="opt" aria-label="Vollbild">⛶</button>
+    <button id="pNar" aria-label="Sprecher ein oder aus">🔊</button>
     <button id="pClose" aria-label="Schliessen">✕ <span class="opt">Esc</span></button>
   </div>
 </div>
@@ -454,22 +455,23 @@ SCENES.forEach((sc,i)=>{
   b.addEventListener('click',()=>openPlayer(i,b.querySelector('.thumb')));
 });
 const hint=document.createElement('div');hint.className='side-card';
-hint.innerHTML=`<b>Für den Vortrag</b><span>Kachel anklicken: Das Video öffnet sich gross und startet. Am Ende führt ein Knopf zum nächsten Video.</span><span><kbd>Leertaste</kbd> Pause · <kbd>→</kbd> nächstes Video · <kbd>←</kbd> vorheriges · <kbd>Esc</kbd> schliessen · <kbd>F</kbd> Vollbild</span>`;
+hint.innerHTML=`<b>Für den Vortrag</b><span>Kachel anklicken: Das Video öffnet sich gross und startet. Am Ende führt ein Knopf zum nächsten Video.</span><span><kbd>Leertaste</kbd> Pause · <kbd>→</kbd> nächstes Video · <kbd>←</kbd> vorheriges · <kbd>Esc</kbd> schliessen · <kbd>F</kbd> Vollbild · 🔊 Sprecher stumm schalten</span>`;
 tilesEl.appendChild(hint);
 
 /* ================= player ================= */
 const ov=document.getElementById('ov'),area=document.getElementById('area'),frame=document.getElementById('frame');
 const pPlay=document.getElementById('pPlay'),pTitle=document.getElementById('pTitle'),pBar=document.getElementById('pBar'),pFill=document.getElementById('pFill'),pKnob=document.getElementById('pKnob'),pTime=document.getElementById('pTime');
-let cur=-1,inst=null,T=0,playing=false,last=0,raf=0,srcEl=null,endEl=null;
+let cur=-1,inst=null,T=0,playing=false,last=0,raf=0,srcEl=null,endEl=null,aud=null,narr=true;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function frameRect(){const W=area.clientWidth,Hh=area.clientHeight,pad=Math.min(24,W*.02);let w=W-2*pad,h=w*9/16;if(h>Hh-2*pad){h=Hh-2*pad;w=h*16/9;}return {x:(W-w)/2,y:(Hh-h)/2,w,h};}
 function layout(){const r=frameRect();frame.style.left=px(r.x);frame.style.top=px(r.y);frame.style.width=px(r.w);frame.style.height=px(r.h);if(inst)inst.st.style.transform=`scale(${r.w/1600})`;}
-function load(i){cur=i;const sc=SCENES[i];frame.innerHTML='';endEl=null;inst=mountStage(frame,sc);layout();T=0;inst.render(0);pTitle.textContent=(i+1)+' · '+sc.title;
+function load(i){cur=i;const sc=SCENES[i];frame.innerHTML='';endEl=null;
+  if(aud)aud.pause();aud=null;try{aud=new Audio('audio/'+sc.key+'.mp3');aud.preload='auto';aud.muted=!narr;}catch(e){aud=null}inst=mountStage(frame,sc);layout();T=0;inst.render(0);pTitle.textContent=(i+1)+' · '+sc.title;
   pBar.querySelectorAll('.tick').forEach(e=>e.remove());updateUI();}
 function updateUI(){const sc=SCENES[cur];const p=T/sc.dur;pFill.style.width=(p*100)+'%';pKnob.style.left=(p*100)+'%';pTime.textContent=mm(T)+' / '+mm(sc.dur);pPlay.textContent=playing?'❚❚':'▶';pPlay.setAttribute('aria-label',playing?'Pause':'Abspielen');}
-function loop(now){if(!playing)return;const dt=Math.min(.1,(now-last)/1000);last=now;T+=dt;const sc=SCENES[cur];if(T>=sc.dur){T=sc.dur;playing=false;inst.render(T);updateUI();showEnd();return;}inst.render(T);updateUI();raf=requestAnimationFrame(loop);}
-function play(){if(endEl){endEl.remove();endEl=null;}if(T>=SCENES[cur].dur)T=0;playing=true;last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);updateUI();}
-function pause(){playing=false;cancelAnimationFrame(raf);updateUI();}
+function loop(now){if(!playing)return;const dt=Math.min(.1,(now-last)/1000);last=now;T+=dt;if(aud&&!aud.paused&&Math.abs(aud.currentTime-T)>0.4){try{aud.currentTime=T}catch(e){}}const sc=SCENES[cur];if(T>=sc.dur){T=sc.dur;playing=false;inst.render(T);updateUI();showEnd();return;}inst.render(T);updateUI();raf=requestAnimationFrame(loop);}
+function play(){if(endEl){endEl.remove();endEl=null;}if(T>=SCENES[cur].dur)T=0;playing=true;if(aud){try{if(Math.abs(aud.currentTime-T)>0.3)aud.currentTime=T;aud.play().catch(()=>{});}catch(e){}}last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);updateUI();}
+function pause(){playing=false;if(aud)aud.pause();cancelAnimationFrame(raf);updateUI();}
 function showEnd(){endEl=document.createElement('div');endEl.className='endcard';const nx=SCENES[cur+1];
   endEl.innerHTML=nx?`<div><button class="nx">Weiter: ${cur+2} · ${nx.title} ›</button><button class="again">↻ Nochmals</button></div>`:`<div><button class="nx">✓ Zurück zur Übersicht</button><button class="again">↻ Nochmals</button></div>`;
   frame.appendChild(endEl);endEl.querySelector('.nx').addEventListener('click',()=>{if(nx){load(cur+1);play();}else closePlayer();});endEl.querySelector('.again').addEventListener('click',()=>{T=0;play();});endEl.querySelector('.nx').focus();}
@@ -485,10 +487,11 @@ function closePlayer(){pause();if(document.fullscreenElement)document.exitFullsc
   frame.style.transform=`translate(${tr.left-a.left-r.x}px,${tr.top-a.top-r.y}px) scale(${tr.width/r.w})`;setTimeout(finish,520);th.parentElement.focus();}
 pPlay.addEventListener('click',()=>playing?pause():play());
 document.getElementById('pClose').addEventListener('click',closePlayer);
+document.getElementById('pNar').addEventListener('click',()=>{narr=!narr;if(aud)aud.muted=!narr;document.getElementById('pNar').textContent=narr?'🔊':'🔇';});
 document.getElementById('pNext').addEventListener('click',()=>{if(cur<SCENES.length-1){load(cur+1);play();}});
 document.getElementById('pPrev').addEventListener('click',()=>{if(cur>0){load(cur-1);play();}});
 document.getElementById('pFs').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});else if(ov.requestFullscreen)ov.requestFullscreen().catch(()=>{});});
-let drag=false;const seek=e=>{const r=pBar.getBoundingClientRect();T=clamp((e.clientX-r.left)/r.width)*SCENES[cur].dur;if(endEl&&T<SCENES[cur].dur){endEl.remove();endEl=null;}inst.render(T);updateUI();};
+let drag=false;const seek=e=>{const r=pBar.getBoundingClientRect();T=clamp((e.clientX-r.left)/r.width)*SCENES[cur].dur;if(aud){try{aud.currentTime=T}catch(e2){}}if(endEl&&T<SCENES[cur].dur){endEl.remove();endEl=null;}inst.render(T);updateUI();};
 pBar.addEventListener('pointerdown',e=>{drag=true;pBar.setPointerCapture(e.pointerId);seek(e);});pBar.addEventListener('pointermove',e=>{if(drag)seek(e);});pBar.addEventListener('pointerup',()=>{drag=false;});
 window.addEventListener('resize',()=>{if(!ov.hidden)layout();});
 document.addEventListener('fullscreenchange',()=>setTimeout(layout,50));
